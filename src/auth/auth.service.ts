@@ -5,10 +5,16 @@ import { SignupDto } from './dto';
 import * as argon from 'argon2';
 
 import { SigninDto } from './dto/signinDto';
+import { JwtService } from '@nestjs/jwt/dist';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private jwt: JwtService,
+    private config: ConfigService,
+  ) {}
 
   async signup(dto: SignupDto) {
     try {
@@ -61,12 +67,29 @@ export class AuthService {
 
       delete user.password;
 
-      return user;
+      const token = await this.getSignToken(user.id, user.phone);
+
+      return {
+        user,
+        token,
+      };
     } catch (error) {
       throw new ForbiddenException({
         error,
         status: false,
       });
     }
+  }
+
+  getSignToken(userId: number, phone: string): Promise<string> {
+    const payload = {
+      sub: userId,
+      phone,
+    };
+
+    return this.jwt.signAsync(payload, {
+      expiresIn: '15m',
+      secret: this.config.get('JWT_SECRET'),
+    });
   }
 }
