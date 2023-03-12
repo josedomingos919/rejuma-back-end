@@ -77,6 +77,7 @@ export class AuthService {
       throw new ForbiddenException({
         error,
         status: false,
+        message: 'unexpected error',
       });
     }
   }
