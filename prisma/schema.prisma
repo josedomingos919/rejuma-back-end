@@ -17,8 +17,41 @@ model User {
   access     String
   employeeId Int
   employee   Employee @relation(fields: [employeeId], references: [id])
+  statusId   Int?
+  status     Status?  @relation(fields: [statusId], references: [id])
 
   @@map("users")
+}
+
+model Country {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name     String
+  code     String     @unique
+  Province Province[]
+}
+
+model Province {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name      String
+  countryId Int
+  country   Country    @relation(fields: [countryId], references: [id])
+  Employee  Employee[]
+}
+
+model Office {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name     String
+  code     String     @unique
+  Employee Employee[]
 }
 
 model Employee {
@@ -26,8 +59,24 @@ model Employee {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  email String?
-  users User[]
+  name       String
+  bi         String    @unique
+  birthDay   DateTime?
+  civilState String?
+  gender     String?
+  address    String?
+  salaryType String?
+  salary     Decimal
+  email      String?
+  users      User[]
+  phone1     String
+  phone2     String
+  statusId   Int
+  status     Status    @relation(fields: [statusId], references: [id])
+  officeId   Int
+  office     Office    @relation(fields: [officeId], references: [id])
+  provinceId Int
+  province   Province  @relation(fields: [provinceId], references: [id])
 
   @@map("employees")
 }
@@ -38,8 +87,10 @@ model Status {
   updatedAt DateTime @updatedAt
 
   name        String
-  code        String
+  code        String     @unique
   description String?
+  User        User[]
+  Employee    Employee[]
 
   @@map("status")
 }
