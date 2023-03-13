@@ -5,7 +5,15 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class ProvinceService {
   constructor(private prisma: PrismaService) {}
 
-  getAllProvince() {
+  getAll() {
     return this.prisma.province.findMany();
+  }
+
+  getByCountryId(countryId: number) {
+    return this.prisma.province.findMany({
+      where: {
+        countryId,
+      },
+    });
   }
 }

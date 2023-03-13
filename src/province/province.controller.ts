@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
 import { ProvinceService } from './province.service';
 
 @Controller('province')
@@ -7,6 +7,11 @@ export class ProvinceController {
 
   @Get()
   getAll() {
-    return this.provinceService.getAllProvince();
+    return this.provinceService.getAll();
+  }
+
+  @Get('/:countryId')
+  getByCountryId(@Param('countryId', ParseIntPipe) countryId: number) {
+    return this.provinceService.getByCountryId(countryId);
   }
 }
