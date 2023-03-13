@@ -36,7 +36,6 @@ export class AddEmployeeDto {
   @IsString()
   phone2: string;
 
-  @IsEmail()
   @IsString()
   email: string;
 
