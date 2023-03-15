@@ -16,4 +16,8 @@ export class SignupDto {
   @IsNumber()
   @IsNotEmpty()
   employeeId: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  statusId: number;
 }

@@ -1,4 +1,12 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Get,
+  Param,
+} from '@nestjs/common';
 import { AddEmployeeDto } from './dto';
 import { EmployeeService } from './employee.service';
 
@@ -10,5 +18,10 @@ export class EmployeeController {
   @HttpCode(HttpStatus.OK)
   add(@Body() dto: AddEmployeeDto) {
     return this.employeeService.addEmployee(dto);
+  }
+
+  @Get('search/:keword')
+  search(@Param('keword') keword: string) {
+    return this.employeeService.search(keword);
   }
 }

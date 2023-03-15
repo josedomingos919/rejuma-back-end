@@ -20,4 +20,23 @@ export class EmployeeService {
       });
     }
   }
+
+  async search(keword: string) {
+    try {
+      const employees = await this.prisma.employee.findMany({
+        where: {
+          name: {
+            contains: keword,
+          },
+        },
+      });
+
+      return employees;
+    } catch (error) {
+      throw new ForbiddenException({
+        error,
+        status: false,
+      });
+    }
+  }
 }

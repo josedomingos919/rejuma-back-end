@@ -26,6 +26,7 @@ export class AuthService {
           phone: dto.phone,
           access: dto.access,
           employeeId: dto.employeeId,
+          statusId: dto.statusId,
         },
       });
 
