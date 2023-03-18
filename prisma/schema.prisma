@@ -81,6 +81,15 @@ model Employee {
   @@map("employees")
 }
 
+model Classroom {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name        String  @unique
+  description String?
+}
+
 model Status {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
@@ -93,4 +102,35 @@ model Status {
   Employee    Employee[]
 
   @@map("status")
+}
+
+model Class {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name             String
+  ClassDisciplines ClassDisciplines[]
+}
+
+model ClassDisciplines {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  disciplineId Int
+  discipline   Discipline @relation(fields: [disciplineId], references: [id])
+
+  classId Int
+  class   Class @relation(fields: [classId], references: [id])
+}
+
+model Discipline {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name             String             @unique
+  description      String?
+  ClassDisciplines ClassDisciplines[]
 }

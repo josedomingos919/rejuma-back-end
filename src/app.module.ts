@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
+import { ClassroomModule } from './classroom/classroom.module';
 import { CountryModule } from './country/country.module';
+import { DisciplineModule } from './discipline/discipline.module';
 import { EmployeeModule } from './employee/employee.module';
 import { OfficeModule } from './office/office.module';
 import { PrismaModule } from './prisma/prisma.module';
@@ -20,6 +22,8 @@ import { UserModule } from './user/user.module';
     ProvinceModule,
     OfficeModule,
     EmployeeModule,
+    ClassroomModule,
+    DisciplineModule,
   ],
 })
 export class AppModule {}
