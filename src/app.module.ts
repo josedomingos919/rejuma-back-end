@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { ClassroomModule } from './classroom/classroom.module';
 import { CountryModule } from './country/country.module';
+import { CourseModule } from './course/course.module';
 import { DisciplineModule } from './discipline/discipline.module';
 import { EmployeeModule } from './employee/employee.module';
 import { OfficeModule } from './office/office.module';
@@ -24,6 +25,7 @@ import { UserModule } from './user/user.module';
     EmployeeModule,
     ClassroomModule,
     DisciplineModule,
+    CourseModule,
   ],
 })
 export class AppModule {}

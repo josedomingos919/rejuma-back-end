@@ -30,7 +30,7 @@ model Country {
 
   name     String
   code     String     @unique
-  Province Province[]
+  province Province[]
 }
 
 model Province {
@@ -41,7 +41,7 @@ model Province {
   name      String
   countryId Int
   country   Country    @relation(fields: [countryId], references: [id])
-  Employee  Employee[]
+  employee  Employee[]
 }
 
 model Office {
@@ -51,7 +51,7 @@ model Office {
 
   name     String
   code     String     @unique
-  Employee Employee[]
+  employee Employee[]
 }
 
 model Employee {
@@ -98,8 +98,8 @@ model Status {
   name        String
   code        String     @unique
   description String?
-  User        User[]
-  Employee    Employee[]
+  user        User[]
+  employee    Employee[]
 
   @@map("status")
 }
@@ -110,7 +110,7 @@ model Class {
   updatedAt DateTime @updatedAt
 
   name             String
-  ClassDisciplines ClassDisciplines[]
+  classDisciplines ClassDisciplines[]
 }
 
 model ClassDisciplines {
@@ -130,7 +130,30 @@ model Discipline {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name             String             @unique
-  description      String?
-  ClassDisciplines ClassDisciplines[]
+  name              String              @unique
+  description       String?
+  classDisciplines  ClassDisciplines[]
+  courseDisciplines CourseDisciplines[]
+}
+
+model Course {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name              String              @unique
+  description       String?
+  courseDisciplines CourseDisciplines[]
+}
+
+model CourseDisciplines {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+
+  disciplineId Int
+  discipline   Discipline @relation(fields: [disciplineId], references: [id])
 }
