@@ -9,6 +9,7 @@ import { EmployeeModule } from './employee/employee.module';
 import { OfficeModule } from './office/office.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ProvinceModule } from './province/province.module';
+import { SchoolYearModule } from './schoolYear/schoolYear.module';
 import { StatusModule } from './status/status.module';
 import { UserModule } from './user/user.module';
 
@@ -26,6 +27,7 @@ import { UserModule } from './user/user.module';
     ClassroomModule,
     DisciplineModule,
     CourseModule,
+    SchoolYearModule,
   ],
 })
 export class AppModule {}

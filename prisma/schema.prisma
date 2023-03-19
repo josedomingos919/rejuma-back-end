@@ -157,3 +157,12 @@ model CourseDisciplines {
   disciplineId Int
   discipline   Discipline @relation(fields: [disciplineId], references: [id])
 }
+
+model SchoolYear {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  year        Int    @unique
+  description String
+}
