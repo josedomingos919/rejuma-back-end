@@ -43,8 +43,41 @@ export class EmployeeService {
     }
   }
 
+  private getAllEmployeeFilter(filter: GetAllEmployeeDto) {
+    const where = {};
+
+    const { name } = filter;
+
+    if (name) where['name'] = { contains: name };
+
+    return { where };
+  }
+
+  private async getPagination(page: number, take: number) {
+    const skip = (page - 1) * take;
+    const total = await this.prisma.employee.count();
+    const totalPage = Math.ceil(total / take);
+
+    return {
+      skip,
+      take,
+      total,
+      totalPage,
+    };
+  }
+
   async getAllEmployees(filter: GetAllEmployeeDto) {
+    const { page = 1, size = 10 } = filter;
+    const { where } = this.getAllEmployeeFilter(filter);
+    const { skip, take, totalPage, total } = await this.getPagination(
+      page,
+      size,
+    );
+
     const employees = await this.prisma.employee.findMany({
+      skip,
+      take,
+      where,
       include: {
         office: true,
         status: true,
@@ -53,6 +86,11 @@ export class EmployeeService {
       },
     });
 
-    return employees;
+    return {
+      page,
+      total,
+      totalPage,
+      employees,
+    };
   }
 }
