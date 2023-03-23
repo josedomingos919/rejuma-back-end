@@ -1,0 +1,8 @@
+-- AlterTable
+ALTER TABLE `employees` ADD COLUMN `countryId` INTEGER NOT NULL DEFAULT 0,
+    MODIFY `statusId` INTEGER NOT NULL DEFAULT 0,
+    MODIFY `officeId` INTEGER NOT NULL DEFAULT 0,
+    MODIFY `provinceId` INTEGER NOT NULL DEFAULT 0;
+
+-- AddForeignKey
+ALTER TABLE `employees` ADD CONSTRAINT `employees_countryId_fkey` FOREIGN KEY (`countryId`) REFERENCES `Country`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

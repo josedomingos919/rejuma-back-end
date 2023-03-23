@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE `employees` ALTER COLUMN `statusId` DROP DEFAULT,
+    ALTER COLUMN `officeId` DROP DEFAULT,
+    ALTER COLUMN `provinceId` DROP DEFAULT,
+    MODIFY `countryId` INTEGER NOT NULL DEFAULT 1;

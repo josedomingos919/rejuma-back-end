@@ -31,6 +31,7 @@ model Country {
   name     String
   code     String     @unique
   province Province[]
+  Employee Employee[]
 }
 
 model Province {
@@ -71,6 +72,8 @@ model Employee {
   users      User[]
   phone1     String
   phone2     String?
+  countryId  Int
+  country    Country   @relation(fields: [countryId], references: [id])
   statusId   Int
   status     Status    @relation(fields: [statusId], references: [id])
   officeId   Int

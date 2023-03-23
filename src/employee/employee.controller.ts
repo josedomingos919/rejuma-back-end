@@ -6,8 +6,10 @@ import {
   Post,
   Get,
   Param,
+  Query,
 } from '@nestjs/common';
 import { AddEmployeeDto } from './dto';
+import { GetAllEmployeeDto } from './dto/getAllEmployeeDto';
 import { EmployeeService } from './employee.service';
 
 @Controller('employee')
@@ -23,5 +25,10 @@ export class EmployeeController {
   @Get('search/:keword')
   search(@Param('keword') keword: string) {
     return this.employeeService.search(keword);
+  }
+
+  @Get()
+  getAll(@Query() queryParams: GetAllEmployeeDto) {
+    return this.employeeService.getAllEmployees(queryParams);
   }
 }
