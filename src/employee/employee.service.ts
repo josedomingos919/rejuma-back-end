@@ -53,9 +53,11 @@ export class EmployeeService {
     return { where };
   }
 
-  private async getPagination(page: number, take: number) {
+  private async getPagination(page: number, take: number, where: object) {
     const skip = (page - 1) * take;
-    const total = await this.prisma.employee.count();
+    const total = await this.prisma.employee.count({
+      where,
+    });
     const totalPage = Math.ceil(total / take);
 
     return {
@@ -72,6 +74,7 @@ export class EmployeeService {
     const { skip, take, totalPage, total } = await this.getPagination(
       page,
       size,
+      where,
     );
 
     const employees = await this.prisma.employee.findMany({
@@ -84,6 +87,11 @@ export class EmployeeService {
         province: true,
         country: true,
       },
+      orderBy: [
+        {
+          name: 'asc',
+        },
+      ],
     });
 
     return {
