@@ -1,7 +1,6 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { AddEmployeeDto } from './dto';
-import { GetAllEmployeeDto } from './dto/getAllEmployeeDto';
+import { AddEmployeeDto, UpdateEmployeeDto, GetAllEmployeeDto } from './dto';
 
 @Injectable()
 export class EmployeeService {
@@ -44,7 +43,13 @@ export class EmployeeService {
   }
 
   private getAllEmployeeFilter(filter: GetAllEmployeeDto) {
-    const where = {};
+    const where = {
+      NOT: {
+        status: {
+          code: 'ELIM',
+        },
+      },
+    };
 
     const { name } = filter;
 
@@ -100,5 +105,25 @@ export class EmployeeService {
       totalPage,
       employees,
     };
+  }
+
+  async updateEmployee(dto: UpdateEmployeeDto) {
+    if (!dto?.birthDay) delete dto?.birthDay;
+
+    try {
+      const employee = await this.prisma.employee.update({
+        where: {
+          id: dto.id,
+        },
+        data: dto,
+      });
+
+      return employee;
+    } catch (error) {
+      throw new ForbiddenException({
+        error,
+        status: false,
+      });
+    }
   }
 }

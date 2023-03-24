@@ -6,6 +6,10 @@ export class StatusService {
   constructor(private prisma: PrismaService) {}
 
   getAllStatus() {
-    return this.prisma.status.findMany();
+    return this.prisma.status.findMany({
+      where: {
+        show: true,
+      },
+    });
   }
 }
