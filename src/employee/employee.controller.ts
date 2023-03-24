@@ -8,6 +8,8 @@ import {
   Param,
   Query,
   Put,
+  Delete,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { AddEmployeeDto, GetAllEmployeeDto, UpdateEmployeeDto } from './dto';
 import { EmployeeService } from './employee.service';
@@ -26,6 +28,12 @@ export class EmployeeController {
   @HttpCode(HttpStatus.OK)
   update(@Body() dto: UpdateEmployeeDto) {
     return this.employeeService.updateEmployee(dto);
+  }
+
+  @Delete('/:id')
+  @HttpCode(HttpStatus.OK)
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.employeeService.removeEmployee(id);
   }
 
   @Get('search/:keword')

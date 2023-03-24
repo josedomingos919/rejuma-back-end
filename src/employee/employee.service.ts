@@ -1,6 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AddEmployeeDto, UpdateEmployeeDto, GetAllEmployeeDto } from './dto';
+import { statusTypes } from 'src/helpers';
 
 @Injectable()
 export class EmployeeService {
@@ -116,6 +117,32 @@ export class EmployeeService {
           id: dto.id,
         },
         data: dto,
+      });
+
+      return employee;
+    } catch (error) {
+      throw new ForbiddenException({
+        error,
+        status: false,
+      });
+    }
+  }
+
+  async removeEmployee(id: number) {
+    try {
+      const deletedStatus = await this.prisma.status.findUnique({
+        where: {
+          code: statusTypes.DELETED,
+        },
+      });
+
+      const employee = await this.prisma.employee.update({
+        where: {
+          id,
+        },
+        data: {
+          statusId: deletedStatus.id,
+        },
       });
 
       return employee;
