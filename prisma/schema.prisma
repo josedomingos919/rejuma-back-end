@@ -80,6 +80,7 @@ model Employee {
   office     Office    @relation(fields: [officeId], references: [id])
   provinceId Int
   province   Province  @relation(fields: [provinceId], references: [id])
+  Teacher    Teacher[]
 
   @@map("employees")
 }
@@ -104,6 +105,7 @@ model Status {
   user        User[]
   show        Boolean    @default(true)
   employee    Employee[]
+  teacher     Teacher[]
 
   @@map("status")
 }
@@ -134,10 +136,11 @@ model Discipline {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name              String              @unique
-  description       String?
-  classDisciplines  ClassDisciplines[]
-  courseDisciplines CourseDisciplines[]
+  name               String               @unique
+  description        String?
+  classDisciplines   ClassDisciplines[]
+  courseDisciplines  CourseDisciplines[]
+  teacherDisciplines TeacherDisciplines[]
 }
 
 model Course {
@@ -169,4 +172,35 @@ model SchoolYear {
 
   year        Int    @unique
   description String
+}
+
+model Teacher {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  employeeId         Int                  @unique
+  employee           Employee             @relation(fields: [employeeId], references: [id])
+  teacherDisciplines TeacherDisciplines[]
+  academicLevel      String
+
+  statusId Int?
+  status   Status? @relation(fields: [statusId], references: [id])
+
+  @@map("teachers")
+}
+
+model TeacherDisciplines {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  teacherId    Int
+  teacher      Teacher @relation(fields: [teacherId], references: [id])
+  disciplineId Int
+
+  discipline    Discipline @relation(fields: [disciplineId], references: [id])
+  academicLevel String
+
+  @@map("teacherDisciplines")
 }

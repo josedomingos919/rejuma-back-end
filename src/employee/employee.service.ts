@@ -2,6 +2,7 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AddEmployeeDto, UpdateEmployeeDto, GetAllEmployeeDto } from './dto';
 import { statusTypes } from 'src/helpers';
+import { officeCode } from 'src/helpers/consts/officeCode';
 
 @Injectable()
 export class EmployeeService {
@@ -146,6 +147,30 @@ export class EmployeeService {
       });
 
       return employee;
+    } catch (error) {
+      throw new ForbiddenException({
+        error,
+        status: false,
+      });
+    }
+  }
+
+  async searchTeacher(keword: string) {
+    try {
+      const teacherOffice = await this.prisma.office.findUnique({
+        where: { code: officeCode.TEACHER },
+      });
+
+      const employees = await this.prisma.employee.findMany({
+        where: {
+          name: {
+            contains: keword,
+          },
+          officeId: teacherOffice.id,
+        },
+      });
+
+      return employees;
     } catch (error) {
       throw new ForbiddenException({
         error,

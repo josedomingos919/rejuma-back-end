@@ -41,6 +41,11 @@ export class EmployeeController {
     return this.employeeService.search(keword);
   }
 
+  @Get('search/teacher/:keword')
+  searchTeacher(@Param('keword') keword: string) {
+    return this.employeeService.searchTeacher(keword);
+  }
+
   @Get()
   getAll(@Query() queryParams: GetAllEmployeeDto) {
     return this.employeeService.getAllEmployees(queryParams);

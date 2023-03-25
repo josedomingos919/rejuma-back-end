@@ -20,4 +20,17 @@ export class DisciplineService {
       });
     }
   }
+
+  async getAll() {
+    try {
+      const disciplines = await this.prisma.discipline.findMany();
+
+      return disciplines;
+    } catch (error) {
+      throw new ForbiddenException({
+        error,
+        status: false,
+      });
+    }
+  }
 }

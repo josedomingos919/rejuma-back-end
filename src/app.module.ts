@@ -11,6 +11,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ProvinceModule } from './province/province.module';
 import { SchoolYearModule } from './schoolYear/schoolYear.module';
 import { StatusModule } from './status/status.module';
+import { TeacherModule } from './teacher/teacher.module';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -28,6 +29,7 @@ import { UserModule } from './user/user.module';
     DisciplineModule,
     CourseModule,
     SchoolYearModule,
+    TeacherModule,
   ],
 })
 export class AppModule {}

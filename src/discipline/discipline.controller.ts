@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get } from '@nestjs/common';
 import { DisciplineService } from './discipline.service';
 import { AddDisciplineDto } from './dto/addDisciplineDto';
 
@@ -9,5 +9,10 @@ export class DisciplineController {
   @Post()
   addDiscipline(@Body() dto: AddDisciplineDto) {
     return this.disciplineServcie.addDiscipline(dto);
+  }
+
+  @Get('all')
+  getAll() {
+    return this.disciplineServcie.getAll();
   }
 }
