@@ -196,11 +196,9 @@ model TeacherDisciplines {
   updatedAt DateTime @updatedAt
 
   teacherId    Int
-  teacher      Teacher @relation(fields: [teacherId], references: [id])
+  teacher      Teacher    @relation(fields: [teacherId], references: [id])
   disciplineId Int
-
-  discipline    Discipline @relation(fields: [disciplineId], references: [id])
-  academicLevel String
+  discipline   Discipline @relation(fields: [disciplineId], references: [id])
 
   @@map("teacherDisciplines")
 }
