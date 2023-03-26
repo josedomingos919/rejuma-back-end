@@ -1,7 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AddEmployeeDto, UpdateEmployeeDto, GetAllEmployeeDto } from './dto';
-import { statusTypes } from 'src/helpers';
+import { getPagination, statusTypes } from 'src/helpers';
 import { officeCode } from 'src/helpers/consts/officeCode';
 
 @Injectable()
@@ -60,29 +60,15 @@ export class EmployeeService {
     return { where };
   }
 
-  private async getPagination(page: number, take: number, where: object) {
-    const skip = (page - 1) * take;
-    const total = await this.prisma.employee.count({
-      where,
-    });
-    const totalPage = Math.ceil(total / take);
-
-    return {
-      skip,
-      take,
-      total,
-      totalPage,
-    };
-  }
-
   async getAllEmployees(filter: GetAllEmployeeDto) {
     const { page = 1, size = 10 } = filter;
     const { where } = this.getAllEmployeeFilter(filter);
-    const { skip, take, totalPage, total } = await this.getPagination(
-      page,
-      size,
+
+    const total = await this.prisma.employee.count({
       where,
-    );
+    });
+
+    const { skip, take, totalPage } = getPagination({ page, size, total });
 
     const employees = await this.prisma.employee.findMany({
       skip,
