@@ -20,4 +20,17 @@ export class ClassroomService {
       });
     }
   }
+
+  async getAllClassroom() {
+    try {
+      const classrooms = await this.prisma.classroom.findMany();
+
+      return classrooms;
+    } catch (error) {
+      throw new ForbiddenException({
+        error,
+        status: false,
+      });
+    }
+  }
 }

@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get } from '@nestjs/common';
 import { ClassroomService } from './classroom.service';
 import { AddClassrommDto } from './dto';
 
@@ -9,5 +9,10 @@ export class ClassroomController {
   @Post()
   add(@Body() dto: AddClassrommDto) {
     return this.classroomService.addClassromm(dto);
+  }
+
+  @Get('all')
+  getAll() {
+    return this.classroomService.getAllClassroom();
   }
 }

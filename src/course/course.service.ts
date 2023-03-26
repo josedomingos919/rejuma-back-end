@@ -33,4 +33,17 @@ export class CourseService {
       });
     }
   }
+
+  async getAllCourses() {
+    try {
+      const courses = await this.prisma.course.findMany();
+
+      return courses;
+    } catch (error) {
+      throw new ForbiddenException({
+        error,
+        status: false,
+      });
+    }
+  }
 }
