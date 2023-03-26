@@ -11,8 +11,7 @@ export function getPagination({ page, size, total }: GetPaginationsProps) {
 
   return {
     skip,
-    take: size,
-    total,
     totalPage,
+    take: size,
   };
 }

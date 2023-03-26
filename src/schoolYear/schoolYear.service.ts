@@ -1,6 +1,8 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
+import { getPagination } from 'src/helpers';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AddSchoolYearDto } from './dto';
+import { GetAllSchoolYearDto } from './dto/getAllSchoolYearDto';
 
 @Injectable()
 export class SchoolYearService {
@@ -19,5 +21,41 @@ export class SchoolYearService {
         status: false,
       });
     }
+  }
+
+  private getAllSchoolYearFilter(filter: GetAllSchoolYearDto) {
+    const where = {};
+
+    const { year } = filter;
+
+    if (year) where['year'] = { equals: year };
+
+    return { where };
+  }
+
+  async getAllSchoolYears(filter: GetAllSchoolYearDto) {
+    const { page = 1, size = 10 } = filter;
+    const { where } = this.getAllSchoolYearFilter(filter);
+
+    const total = await this.prisma.schoolYear.count({ where });
+
+    const { skip, take, totalPage } = getPagination({
+      page,
+      size,
+      total,
+    });
+
+    const schoolYears = await this.prisma.schoolYear.findMany({
+      skip,
+      take,
+      where,
+    });
+
+    return {
+      page,
+      total,
+      totalPage,
+      schoolYears,
+    };
   }
 }
