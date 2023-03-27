@@ -93,7 +93,14 @@ export class TeacherService {
       where,
       include: {
         status: true,
-        employee: true,
+        employee: {
+          include: {
+            office: true,
+            status: true,
+            province: true,
+            country: true,
+          },
+        },
         teacherDisciplines: true,
       },
       orderBy: [

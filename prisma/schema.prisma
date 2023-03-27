@@ -31,7 +31,8 @@ model Country {
   name     String
   code     String     @unique
   province Province[]
-  Employee Employee[]
+  employee Employee[]
+  student  Student[]
 }
 
 model Province {
@@ -43,6 +44,7 @@ model Province {
   countryId Int
   country   Country    @relation(fields: [countryId], references: [id])
   employee  Employee[]
+  student   Student[]
 }
 
 model Office {
@@ -53,6 +55,28 @@ model Office {
   name     String
   code     String     @unique
   employee Employee[]
+}
+
+model Student {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name       String
+  bi         String    @unique
+  birthDay   DateTime?
+  civilState String?
+  gender     String?
+  address    String?
+  email      String?
+  phone1     String
+  phone2     String?
+  countryId  Int
+  country    Country   @relation(fields: [countryId], references: [id])
+  statusId   Int
+  status     Status    @relation(fields: [statusId], references: [id])
+  provinceId Int
+  province   Province  @relation(fields: [provinceId], references: [id])
 }
 
 model Employee {
@@ -80,7 +104,7 @@ model Employee {
   office     Office    @relation(fields: [officeId], references: [id])
   provinceId Int
   province   Province  @relation(fields: [provinceId], references: [id])
-  Teacher    Teacher[]
+  teacher    Teacher[]
 
   @@map("employees")
 }
@@ -106,6 +130,7 @@ model Status {
   show        Boolean    @default(true)
   employee    Employee[]
   teacher     Teacher[]
+  student     Student[]
 
   @@map("status")
 }

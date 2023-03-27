@@ -11,6 +11,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ProvinceModule } from './province/province.module';
 import { SchoolYearModule } from './schoolYear/schoolYear.module';
 import { StatusModule } from './status/status.module';
+import { StudentModule } from './student/student.module';
 import { TeacherModule } from './teacher/teacher.module';
 import { UserModule } from './user/user.module';
 
@@ -30,6 +31,7 @@ import { UserModule } from './user/user.module';
     CourseModule,
     SchoolYearModule,
     TeacherModule,
+    StudentModule,
   ],
 })
 export class AppModule {}
