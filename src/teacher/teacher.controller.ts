@@ -7,6 +7,9 @@ import {
   Get,
   Query,
   HttpStatus,
+  Delete,
+  Param,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { GetAllEmployeeDto } from 'src/employee/dto';
 import { UpdateTeacherDto } from './dto';
@@ -32,5 +35,11 @@ export class TeacherController {
   @Get()
   getAll(@Query() dto: GetAllEmployeeDto) {
     return this.teacherService.getAllTeacher(dto);
+  }
+
+  @Delete('/:id')
+  @HttpCode(HttpStatus.OK)
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.teacherService.removeTeacher(id);
   }
 }

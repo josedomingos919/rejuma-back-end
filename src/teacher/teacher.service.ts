@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ForbiddenException } from '@nestjs/common/exceptions';
-import { getPagination } from 'src/helpers';
+import { getPagination, statusTypes } from 'src/helpers';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GetAllTeacherDto, UpdateTeacherDto } from './dto';
 import { AddTeacherDto } from './dto/addTeacherDto';
@@ -65,7 +65,7 @@ export class TeacherService {
     let where: any = {
       NOT: {
         status: {
-          code: 'ELIM',
+          code: statusTypes.DELETED,
         },
       },
     };
@@ -101,7 +101,11 @@ export class TeacherService {
             country: true,
           },
         },
-        teacherDisciplines: true,
+        teacherDisciplines: {
+          include: {
+            discipline: true,
+          },
+        },
       },
       orderBy: [
         {
@@ -118,5 +122,31 @@ export class TeacherService {
       totalPage,
       teachers,
     };
+  }
+
+  async removeTeacher(id: number) {
+    try {
+      const deletedStatus = await this.prisma.status.findUnique({
+        where: {
+          code: statusTypes.DELETED,
+        },
+      });
+
+      const teacher = await this.prisma.teacher.update({
+        where: {
+          id,
+        },
+        data: {
+          statusId: deletedStatus.id,
+        },
+      });
+
+      return teacher;
+    } catch (error) {
+      throw new ForbiddenException({
+        error,
+        status: false,
+      });
+    }
   }
 }
