@@ -1,6 +1,6 @@
 import { IsString, IsNotEmpty } from 'class-validator';
 
-export class AddClassrommDto {
+export class AddClassroomDto {
   @IsNotEmpty()
   @IsString()
   name: string;

@@ -1,14 +1,32 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { AddClassrommDto } from './dto';
+import { AddClassroomDto, UpdateClassroomDto } from './dto';
 
 @Injectable()
 export class ClassroomService {
   constructor(private prisma: PrismaService) {}
 
-  async addClassromm(dto: AddClassrommDto) {
+  async addClassromm(dto: AddClassroomDto) {
     try {
       const classroom = await this.prisma.classroom.create({
+        data: dto,
+      });
+
+      return classroom;
+    } catch (error) {
+      throw new ForbiddenException({
+        error,
+        status: false,
+      });
+    }
+  }
+
+  async updateClassroom(dto: UpdateClassroomDto) {
+    try {
+      const classroom = await this.prisma.classroom.update({
+        where: {
+          id: dto.id,
+        },
         data: dto,
       });
 
@@ -32,5 +50,11 @@ export class ClassroomService {
         status: false,
       });
     }
+  }
+
+  async removeClassroom(id: number) {
+    const response = this.prisma.classroom.delete({ where: { id } });
+
+    return response;
   }
 }

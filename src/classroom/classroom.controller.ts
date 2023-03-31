@@ -1,18 +1,37 @@
-import { Controller, Post, Body, Get } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Delete,
+  Param,
+  ParseIntPipe,
+  Put,
+} from '@nestjs/common';
 import { ClassroomService } from './classroom.service';
-import { AddClassrommDto } from './dto';
+import { AddClassroomDto, UpdateClassroomDto } from './dto';
 
 @Controller('classroom')
 export class ClassroomController {
   constructor(private classroomService: ClassroomService) {}
 
   @Post()
-  add(@Body() dto: AddClassrommDto) {
+  add(@Body() dto: AddClassroomDto) {
     return this.classroomService.addClassromm(dto);
+  }
+
+  @Put()
+  update(@Body() dto: UpdateClassroomDto) {
+    return this.classroomService.updateClassroom(dto);
   }
 
   @Get('all')
   getAll() {
     return this.classroomService.getAllClassroom();
+  }
+
+  @Delete('/:id')
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.classroomService.removeClassroom(id);
   }
 }
