@@ -114,8 +114,9 @@ model Classroom {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name        String  @unique
+  name        String      @unique
   description String?
+  ClassTeam   ClassTeam[]
 }
 
 model Status {
@@ -140,8 +141,10 @@ model Class {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name             String
-  classDisciplines ClassDisciplines[]
+  name              String
+  classDisciplines  ClassDisciplines[]
+  RegistrationPrice RegistrationPrice[]
+  ClassTeam         ClassTeam[]
 }
 
 model ClassDisciplines {
@@ -161,11 +164,13 @@ model Discipline {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name               String               @unique
-  description        String?
-  classDisciplines   ClassDisciplines[]
-  courseDisciplines  CourseDisciplines[]
-  teacherDisciplines TeacherDisciplines[]
+  name                 String                 @unique
+  description          String?
+  classDisciplines     ClassDisciplines[]
+  courseDisciplines    CourseDisciplines[]
+  teacherDisciplines   TeacherDisciplines[]
+  ClassTeamDisciplines ClassTeamDisciplines[]
+  ClassTeamTeacher     ClassTeamTeacher[]
 }
 
 model Course {
@@ -176,6 +181,8 @@ model Course {
   name              String              @unique
   description       String?
   courseDisciplines CourseDisciplines[]
+  RegistrationPrice RegistrationPrice[]
+  ClassTeam         ClassTeam[]
 }
 
 model CourseDisciplines {
@@ -195,8 +202,9 @@ model SchoolYear {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  year        Int    @unique
+  year        Int         @unique
   description String
+  ClassTeam   ClassTeam[]
 }
 
 model Teacher {
@@ -209,8 +217,9 @@ model Teacher {
   teacherDisciplines TeacherDisciplines[]
   academicLevel      String
 
-  statusId Int?
-  status   Status? @relation(fields: [statusId], references: [id])
+  statusId         Int?
+  status           Status?            @relation(fields: [statusId], references: [id])
+  ClassTeamTeacher ClassTeamTeacher[]
 
   @@map("teachers")
 }
@@ -226,4 +235,74 @@ model TeacherDisciplines {
   discipline   Discipline @relation(fields: [disciplineId], references: [id])
 
   @@map("teacherDisciplines")
+}
+
+model RegistrationPrice {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  registrationPrice   Decimal
+  reregistrationPrice Decimal
+  monthPrice          Decimal
+
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+  classId  Int
+  class    Class  @relation(fields: [classId], references: [id])
+}
+
+model ClassTeam {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name String @unique
+
+  period String
+
+  schoolYearId Int
+  schoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id])
+
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+
+  classId Int
+  class   Class @relation(fields: [classId], references: [id])
+
+  classroomId          Int
+  classroom            Classroom              @relation(fields: [classroomId], references: [id])
+  ClassTeamDisciplines ClassTeamDisciplines[]
+  ClassTeamTeacher     ClassTeamTeacher[]
+
+  @@unique([classroomId, period])
+}
+
+model ClassTeamTeacher {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  teacherId Int
+  teacher   Teacher @relation(fields: [teacherId], references: [id])
+
+  disciplineId Int
+  discipline   Discipline @relation(fields: [disciplineId], references: [id])
+
+  classTeamId Int
+  classTeam   ClassTeam @relation(fields: [classTeamId], references: [id])
+
+  @@unique([teacherId, disciplineId, classTeamId])
+}
+
+model ClassTeamDisciplines {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  classTeamId Int
+  classTeam   ClassTeam @relation(fields: [classTeamId], references: [id])
+
+  disciplineId Int
+  discipline   Discipline @relation(fields: [disciplineId], references: [id])
 }
