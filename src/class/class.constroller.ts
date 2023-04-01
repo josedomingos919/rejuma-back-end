@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 
 import { AddClassDto, UpdateClassDto } from './dto';
-import { ClassService } from './course.service';
+import { ClassService } from './class.service';
 
 @Controller('class')
 export class ClassController {
