@@ -1,12 +1,12 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { AddDisciplineDto } from './dto/addDisciplineDto';
+import { UpdateDisciplineDto, AddDisciplineDto } from './dto';
 
 @Injectable()
 export class DisciplineService {
   constructor(private prisma: PrismaService) {}
 
-  async addDiscipline(dto: AddDisciplineDto) {
+  async add(dto: AddDisciplineDto) {
     try {
       const discipline = await this.prisma.discipline.create({
         data: dto,
@@ -32,5 +32,26 @@ export class DisciplineService {
         status: false,
       });
     }
+  }
+
+  async update(dto: UpdateDisciplineDto) {
+    try {
+      const discipline = await this.prisma.discipline.create({
+        data: dto,
+      });
+
+      return discipline;
+    } catch (error) {
+      throw new ForbiddenException({
+        error,
+        status: false,
+      });
+    }
+  }
+
+  async remove(id: number) {
+    const response = this.prisma.discipline.delete({ where: { id } });
+
+    return response;
   }
 }
