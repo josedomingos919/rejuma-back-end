@@ -14,6 +14,7 @@ import { StatusModule } from './status/status.module';
 import { StudentModule } from './student/student.module';
 import { TeacherModule } from './teacher/teacher.module';
 import { UserModule } from './user/user.module';
+import { ClassModule } from './class/course.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { UserModule } from './user/user.module';
     SchoolYearModule,
     TeacherModule,
     StudentModule,
+    ClassModule,
   ],
 })
 export class AppModule {}

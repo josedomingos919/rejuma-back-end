@@ -141,10 +141,10 @@ model Class {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name              String
+  name              String              @unique
   classDisciplines  ClassDisciplines[]
-  RegistrationPrice RegistrationPrice[]
-  ClassTeam         ClassTeam[]
+  registrationPrice RegistrationPrice[]
+  classTeam         ClassTeam[]
 }
 
 model ClassDisciplines {
@@ -169,8 +169,8 @@ model Discipline {
   classDisciplines     ClassDisciplines[]
   courseDisciplines    CourseDisciplines[]
   teacherDisciplines   TeacherDisciplines[]
-  ClassTeamDisciplines ClassTeamDisciplines[]
-  ClassTeamTeacher     ClassTeamTeacher[]
+  classTeamDisciplines ClassTeamDisciplines[]
+  classTeamTeacher     ClassTeamTeacher[]
 }
 
 model Course {
@@ -181,8 +181,8 @@ model Course {
   name              String              @unique
   description       String?
   courseDisciplines CourseDisciplines[]
-  RegistrationPrice RegistrationPrice[]
-  ClassTeam         ClassTeam[]
+  registrationPrice RegistrationPrice[]
+  classTeam         ClassTeam[]
 }
 
 model CourseDisciplines {
@@ -204,7 +204,7 @@ model SchoolYear {
 
   year        Int         @unique
   description String
-  ClassTeam   ClassTeam[]
+  classTeam   ClassTeam[]
 }
 
 model Teacher {
@@ -272,8 +272,8 @@ model ClassTeam {
 
   classroomId          Int
   classroom            Classroom              @relation(fields: [classroomId], references: [id])
-  ClassTeamDisciplines ClassTeamDisciplines[]
-  ClassTeamTeacher     ClassTeamTeacher[]
+  classTeamDisciplines ClassTeamDisciplines[]
+  classTeamTeacher     ClassTeamTeacher[]
 
   @@unique([classroomId, period])
 }
