@@ -59,7 +59,11 @@ export class ClassService {
     try {
       const classes = await this.prisma.class.findMany({
         include: {
-          classDisciplines: true,
+          classDisciplines: {
+            include: {
+              discipline: true,
+            },
+          },
         },
       });
 

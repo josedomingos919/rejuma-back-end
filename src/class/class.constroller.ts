@@ -7,6 +7,8 @@ import {
   Delete,
   ParseIntPipe,
   Param,
+  HttpStatus,
+  HttpCode,
 } from '@nestjs/common';
 
 import { AddClassDto, UpdateClassDto } from './dto';
@@ -16,6 +18,7 @@ import { ClassService } from './class.service';
 export class ClassController {
   constructor(private classService: ClassService) {}
 
+  @HttpCode(HttpStatus.OK)
   @Post()
   add(@Body() dto: AddClassDto) {
     return this.classService.addClass(dto);

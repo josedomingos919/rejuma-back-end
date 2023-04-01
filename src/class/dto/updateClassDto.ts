@@ -17,9 +17,6 @@ export class UpdateClassDto {
   @IsString()
   name: string;
 
-  @IsString()
-  description: string;
-
   @IsArray()
   @IsNumber({}, { each: true })
   @IsNotEmpty({ each: true })
