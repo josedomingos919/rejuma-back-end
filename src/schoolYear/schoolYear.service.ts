@@ -58,4 +58,14 @@ export class SchoolYearService {
       schoolYears,
     };
   }
+
+  async remove(id: number) {
+    const response = await this.prisma.schoolYear.delete({
+      where: {
+        id,
+      },
+    });
+
+    return response;
+  }
 }

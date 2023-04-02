@@ -1,4 +1,15 @@
-import { Controller, Post, Body, Get, Query } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Query,
+  Delete,
+  HttpCode,
+  Param,
+  HttpStatus,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { AddSchoolYearDto } from './dto';
 import { GetAllSchoolYearDto } from './dto/getAllSchoolYearDto';
 import { SchoolYearService } from './schoolYear.service';
@@ -15,5 +26,11 @@ export class SchoolYearController {
   @Get('all')
   getAll(@Query() dto: GetAllSchoolYearDto) {
     return this.schoolYearService.getAllSchoolYears(dto);
+  }
+
+  @Delete('/:id')
+  @HttpCode(HttpStatus.OK)
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.schoolYearService.remove(id);
   }
 }
