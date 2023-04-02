@@ -23,7 +23,11 @@ export class DisciplineService {
 
   async getAll() {
     try {
-      const disciplines = await this.prisma.discipline.findMany();
+      const disciplines = await this.prisma.discipline.findMany({
+        orderBy: {
+          name: 'asc',
+        },
+      });
 
       return disciplines;
     } catch (error) {
@@ -36,7 +40,10 @@ export class DisciplineService {
 
   async update(dto: UpdateDisciplineDto) {
     try {
-      const discipline = await this.prisma.discipline.create({
+      const discipline = await this.prisma.discipline.update({
+        where: {
+          id: dto.id,
+        },
         data: dto,
       });
 

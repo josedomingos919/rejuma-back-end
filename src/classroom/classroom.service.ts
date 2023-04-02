@@ -41,7 +41,11 @@ export class ClassroomService {
 
   async getAllClassroom() {
     try {
-      const classrooms = await this.prisma.classroom.findMany();
+      const classrooms = await this.prisma.classroom.findMany({
+        orderBy: {
+          id: 'asc',
+        },
+      });
 
       return classrooms;
     } catch (error) {

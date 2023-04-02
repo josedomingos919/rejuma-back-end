@@ -7,6 +7,8 @@ import {
   Delete,
   Param,
   ParseIntPipe,
+  HttpStatus,
+  HttpCode,
 } from '@nestjs/common';
 import { DisciplineService } from './discipline.service';
 import { AddDisciplineDto } from './dto/addDisciplineDto';
@@ -16,6 +18,7 @@ import { UpdateDisciplineDto } from './dto/updateDisciplineDto';
 export class DisciplineController {
   constructor(private disciplineServcie: DisciplineService) {}
 
+  @HttpCode(HttpStatus.OK)
   @Post()
   addDiscipline(@Body() dto: AddDisciplineDto) {
     return this.disciplineServcie.add(dto);

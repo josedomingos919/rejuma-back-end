@@ -58,6 +58,9 @@ export class ClassService {
   async getAllClasses() {
     try {
       const classes = await this.prisma.class.findMany({
+        orderBy: {
+          name: 'asc',
+        },
         include: {
           classDisciplines: {
             include: {
@@ -77,6 +80,12 @@ export class ClassService {
   }
 
   async removeClass(id: number) {
+    await this.prisma.classDisciplines.deleteMany({
+      where: {
+        classId: id,
+      },
+    });
+
     const response = await this.prisma.class.delete({
       where: {
         id,
