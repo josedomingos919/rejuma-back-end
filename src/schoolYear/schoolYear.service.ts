@@ -1,8 +1,11 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { getPagination } from 'src/helpers';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { AddSchoolYearDto } from './dto';
-import { GetAllSchoolYearDto } from './dto/getAllSchoolYearDto';
+import {
+  AddSchoolYearDto,
+  UpdateSchoolYearDto,
+  GetAllSchoolYearDto,
+} from './dto';
 
 @Injectable()
 export class SchoolYearService {
@@ -11,6 +14,24 @@ export class SchoolYearService {
   async addSchoolYear(dto: AddSchoolYearDto) {
     try {
       const year = await this.prisma.schoolYear.create({
+        data: dto,
+      });
+
+      return year;
+    } catch (error) {
+      throw new ForbiddenException({
+        error,
+        status: false,
+      });
+    }
+  }
+
+  async update(dto: UpdateSchoolYearDto) {
+    try {
+      const year = await this.prisma.schoolYear.update({
+        where: {
+          id: dto.id,
+        },
         data: dto,
       });
 

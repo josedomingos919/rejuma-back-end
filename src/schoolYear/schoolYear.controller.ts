@@ -9,8 +9,9 @@ import {
   Param,
   HttpStatus,
   ParseIntPipe,
+  Put,
 } from '@nestjs/common';
-import { AddSchoolYearDto } from './dto';
+import { AddSchoolYearDto, UpdateSchoolYearDto } from './dto';
 import { GetAllSchoolYearDto } from './dto/getAllSchoolYearDto';
 import { SchoolYearService } from './schoolYear.service';
 
@@ -19,8 +20,15 @@ export class SchoolYearController {
   constructor(private schoolYearService: SchoolYearService) {}
 
   @Post()
+  @HttpCode(HttpStatus.OK)
   add(@Body() dto: AddSchoolYearDto) {
     return this.schoolYearService.addSchoolYear(dto);
+  }
+
+  @Put()
+  @HttpCode(HttpStatus.OK)
+  update(@Body() dto: UpdateSchoolYearDto) {
+    return this.schoolYearService.update(dto);
   }
 
   @Get('all')
