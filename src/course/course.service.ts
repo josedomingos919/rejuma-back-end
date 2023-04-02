@@ -1,6 +1,6 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { AddCourseDto } from './dto/addCourseDto';
+import { AddCourseDto, UpdateCourseDto } from './dto';
 
 @Injectable()
 export class CourseService {
@@ -12,20 +12,13 @@ export class CourseService {
         data: {
           description: dto.description,
           name: dto.name,
+          courseDisciplines: {
+            create: dto.disciplines.map((disciplineId) => ({ disciplineId })),
+          },
         },
       });
 
-      const disciplines = await this.prisma.courseDisciplines.createMany({
-        data: dto.disciplines.map((disciplineId) => ({
-          courseId: course.id,
-          disciplineId,
-        })),
-      });
-
-      return {
-        course,
-        disciplines,
-      };
+      return course;
     } catch (error) {
       throw new ForbiddenException({
         status: false,
@@ -36,7 +29,18 @@ export class CourseService {
 
   async getAllCourses() {
     try {
-      const courses = await this.prisma.course.findMany();
+      const courses = await this.prisma.course.findMany({
+        orderBy: {
+          name: 'asc',
+        },
+        include: {
+          courseDisciplines: {
+            include: {
+              discipline: true,
+            },
+          },
+        },
+      });
 
       return courses;
     } catch (error) {
@@ -45,5 +49,51 @@ export class CourseService {
         status: false,
       });
     }
+  }
+
+  async update(dto: UpdateCourseDto) {
+    try {
+      await this.prisma.courseDisciplines.deleteMany({
+        where: {
+          courseId: dto.id,
+        },
+      });
+
+      const course = await this.prisma.course.update({
+        where: {
+          id: dto.id,
+        },
+        data: {
+          description: dto.description,
+          name: dto.name,
+          courseDisciplines: {
+            create: dto.disciplines.map((disciplineId) => ({ disciplineId })),
+          },
+        },
+      });
+
+      return course;
+    } catch (error) {
+      throw new ForbiddenException({
+        status: false,
+        error,
+      });
+    }
+  }
+
+  async remove(id: number) {
+    await this.prisma.courseDisciplines.deleteMany({
+      where: {
+        courseId: id,
+      },
+    });
+
+    const response = await this.prisma.course.delete({
+      where: {
+        id,
+      },
+    });
+
+    return response;
   }
 }
