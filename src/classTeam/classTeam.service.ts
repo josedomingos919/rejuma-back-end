@@ -101,7 +101,12 @@ export class ClassTeamService {
 
     const { name } = filter;
 
-    if (name) where = { employee: { name: { contains: name } } };
+    if (name)
+      where = {
+        AND: {
+          name: { contains: name },
+        },
+      };
 
     return { where };
   }
@@ -110,7 +115,7 @@ export class ClassTeamService {
     const { page = 1, size = 10 } = filter;
     const { where } = this.getAllFilter(filter);
 
-    const total = await this.prisma.teacher.count({
+    const total = await this.prisma.classTeam.count({
       where,
     });
 
