@@ -247,10 +247,12 @@ model RegistrationPrice {
   reregistrationPrice Decimal
   monthPrice          Decimal
 
-  courseId Int
-  course   Course @relation(fields: [courseId], references: [id])
+  courseId Int?
+  course   Course? @relation(fields: [courseId], references: [id])
   classId  Int
-  class    Class  @relation(fields: [classId], references: [id])
+  class    Class   @relation(fields: [classId], references: [id])
+
+  @@unique([classId, courseId])
 }
 
 model ClassTeam {
