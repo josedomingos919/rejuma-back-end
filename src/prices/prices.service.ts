@@ -6,6 +6,23 @@ import { AddPricesDto, UpdatePricesDto } from './dto';
 export class PriceService {
   constructor(private prisma: PrismaService) {}
 
+  async isExistingPrice(dto: AddPricesDto) {
+    const where = {
+      classId: dto.classId,
+      courseId: null,
+    };
+
+    if (dto?.courseId) {
+      where.courseId = dto.courseId;
+    }
+
+    const price = await this.prisma.registrationPrice.findFirst({
+      where,
+    });
+
+    return price?.id > 0;
+  }
+
   async update(dto: UpdatePricesDto) {
     try {
       const price = await this.prisma.registrationPrice.update({
@@ -25,6 +42,15 @@ export class PriceService {
   }
 
   async add(dto: AddPricesDto) {
+    if (await this.isExistingPrice(dto)) {
+      throw new ForbiddenException({
+        status: false,
+        error: 'existing',
+      });
+    }
+
+    if (!dto?.courseId) delete dto.courseId;
+
     try {
       const price = await this.prisma.registrationPrice.create({
         data: dto,
@@ -41,7 +67,12 @@ export class PriceService {
 
   async getAll() {
     try {
-      const prices = await this.prisma.registrationPrice.findMany();
+      const prices = await this.prisma.registrationPrice.findMany({
+        include: {
+          class: true,
+          course: true,
+        },
+      });
 
       return prices;
     } catch (error) {
