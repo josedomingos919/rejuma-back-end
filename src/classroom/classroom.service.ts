@@ -39,6 +39,32 @@ export class ClassroomService {
     }
   }
 
+  async getAvaliable(period: string) {
+    try {
+      const classrooms = await this.prisma.classroom.findMany({
+        where: {
+          NOT: {
+            ClassTeam: {
+              some: {
+                period,
+              },
+            },
+          },
+        },
+        orderBy: {
+          id: 'asc',
+        },
+      });
+
+      return classrooms;
+    } catch (error) {
+      throw new ForbiddenException({
+        error,
+        status: false,
+      });
+    }
+  }
+
   async getAllClassroom() {
     try {
       const classrooms = await this.prisma.classroom.findMany({

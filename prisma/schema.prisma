@@ -267,8 +267,8 @@ model ClassTeam {
   schoolYearId Int
   schoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id])
 
-  courseId Int
-  course   Course @relation(fields: [courseId], references: [id])
+  courseId Int?
+  course   Course? @relation(fields: [courseId], references: [id])
 
   classId Int
   class   Class @relation(fields: [classId], references: [id])

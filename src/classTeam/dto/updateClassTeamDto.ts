@@ -1,5 +1,11 @@
 import { Transform } from 'class-transformer';
-import { IsNotEmpty, IsString, IsArray, IsInt } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  IsArray,
+  IsInt,
+  IsOptional,
+} from 'class-validator';
 
 export class UpdateClassTeamDto {
   @IsInt()
@@ -24,6 +30,7 @@ export class UpdateClassTeamDto {
 
   @IsInt()
   @IsNotEmpty()
+  @IsOptional()
   courseId: number;
 
   @IsInt()
