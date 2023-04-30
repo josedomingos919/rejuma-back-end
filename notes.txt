@@ -1,0 +1,6 @@
+host database: https://www.freesqldatabase.com/
+video: https://www.youtube.com/watch?v=TMGHOW8Hzvw
+
+nodejs: vercell
+
+react: netlyfy
