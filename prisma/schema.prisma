@@ -33,6 +33,7 @@ model Country {
   province Province[]
   employee Employee[]
   student  Student[]
+  @@map("country")
 }
 
 model Province {
@@ -45,6 +46,7 @@ model Province {
   country   Country    @relation(fields: [countryId], references: [id])
   employee  Employee[]
   student   Student[]
+  @@map("province")
 }
 
 model Office {
@@ -55,6 +57,7 @@ model Office {
   name     String
   code     String     @unique
   employee Employee[]
+  @@map("office")
 }
 
 model Student {
@@ -77,6 +80,7 @@ model Student {
   status     Status    @relation(fields: [statusId], references: [id])
   provinceId Int
   province   Province  @relation(fields: [provinceId], references: [id])
+  @@map("student")
 }
 
 model Employee {
@@ -117,6 +121,7 @@ model Classroom {
   name        String      @unique
   description String?
   ClassTeam   ClassTeam[]
+  @@map("classroom")
 }
 
 model Status {
@@ -146,6 +151,7 @@ model Class {
   classDisciplines  ClassDisciplines[]
   registrationPrice RegistrationPrice[]
   classTeam         ClassTeam[]
+  @@map("class")
 }
 
 model ClassDisciplines {
@@ -158,6 +164,7 @@ model ClassDisciplines {
 
   classId Int
   class   Class @relation(fields: [classId], references: [id])
+  @@map("classdisciplines")
 }
 
 model Discipline {
@@ -172,6 +179,7 @@ model Discipline {
   teacherDisciplines   TeacherDisciplines[]
   classTeamDisciplines ClassTeamDisciplines[]
   classTeamTeacher     ClassTeamTeacher[]
+  @@map("discipline")
 }
 
 model Course {
@@ -184,6 +192,7 @@ model Course {
   courseDisciplines CourseDisciplines[]
   registrationPrice RegistrationPrice[]
   classTeam         ClassTeam[]
+  @@map("course")
 }
 
 model CourseDisciplines {
@@ -196,6 +205,7 @@ model CourseDisciplines {
 
   disciplineId Int
   discipline   Discipline @relation(fields: [disciplineId], references: [id])
+  @@map("coursedisciplines")
 }
 
 model SchoolYear {
@@ -206,6 +216,7 @@ model SchoolYear {
   year        Int         @unique
   description String
   classTeam   ClassTeam[]
+  @@map("schoolyear")
 }
 
 model Teacher {
@@ -235,7 +246,7 @@ model TeacherDisciplines {
   disciplineId Int
   discipline   Discipline @relation(fields: [disciplineId], references: [id])
 
-  @@map("teacherDisciplines")
+  @@map("teacherdisciplines")
 }
 
 model RegistrationPrice {
@@ -251,6 +262,7 @@ model RegistrationPrice {
   course   Course @relation(fields: [courseId], references: [id])
   classId  Int
   class    Class  @relation(fields: [classId], references: [id])
+  @@map("registrationprice")
 }
 
 model ClassTeam {
@@ -281,6 +293,7 @@ model ClassTeam {
 
   @@unique([classroomId, period])
   @@unique([name, schoolYearId, classId])
+  @@map("classteam")
 }
 
 model ClassTeamTeacher {
@@ -298,6 +311,7 @@ model ClassTeamTeacher {
   classTeam   ClassTeam @relation(fields: [classTeamId], references: [id])
 
   @@unique([teacherId, disciplineId, classTeamId])
+  @@map("classteamteacher")
 }
 
 model ClassTeamDisciplines {
@@ -310,4 +324,5 @@ model ClassTeamDisciplines {
 
   disciplineId Int
   discipline   Discipline @relation(fields: [disciplineId], references: [id])
+  @@map("classteamdisciplines")
 }
