@@ -30,6 +30,11 @@ export class ClassroomController {
     return this.classroomService.getAllClassroom();
   }
 
+  @Get('avaliable/:period')
+  getAvaliable(@Param('period') period: string) {
+    return this.classroomService.getAvaliable(period);
+  }
+
   @Delete('/:id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.classroomService.removeClassroom(id);

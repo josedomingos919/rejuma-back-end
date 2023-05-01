@@ -5,6 +5,7 @@ import {
   IsArray,
   IsInt,
   IsNumber,
+  IsOptional,
 } from 'class-validator';
 
 export class AddClassTeamDto {
@@ -26,6 +27,7 @@ export class AddClassTeamDto {
 
   @IsInt()
   @IsNotEmpty()
+  @IsOptional()
   courseId: number;
 
   @IsInt()

@@ -65,21 +65,22 @@ model Student {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name       String
-  bi         String    @unique
-  birthDay   DateTime?
-  civilState String?
-  gender     String?
-  address    String?
-  email      String?
-  phone1     String
-  phone2     String?
-  countryId  Int
-  country    Country   @relation(fields: [countryId], references: [id])
-  statusId   Int
-  status     Status    @relation(fields: [statusId], references: [id])
-  provinceId Int
-  province   Province  @relation(fields: [provinceId], references: [id])
+  name         String
+  bi           String         @unique
+  birthDay     DateTime?
+  civilState   String?
+  gender       String?
+  address      String?
+  email        String?
+  phone1       String
+  phone2       String?
+  countryId    Int
+  country      Country        @relation(fields: [countryId], references: [id])
+  statusId     Int
+  status       Status         @relation(fields: [statusId], references: [id])
+  provinceId   Int
+  province     Province       @relation(fields: [provinceId], references: [id])
+  registration Registration[]
   @@map("student")
 }
 
@@ -129,15 +130,16 @@ model Status {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name        String
-  code        String      @unique
-  description String?
-  user        User[]
-  show        Boolean     @default(true)
-  employee    Employee[]
-  teacher     Teacher[]
-  student     Student[]
-  ClassTeam   ClassTeam[]
+  name         String
+  code         String         @unique
+  description  String?
+  user         User[]
+  show         Boolean        @default(true)
+  employee     Employee[]
+  teacher      Teacher[]
+  student      Student[]
+  ClassTeam    ClassTeam[]
+  Registration Registration[]
 
   @@map("status")
 }
@@ -151,6 +153,7 @@ model Class {
   classDisciplines  ClassDisciplines[]
   registrationPrice RegistrationPrice[]
   classTeam         ClassTeam[]
+  registration      Registration[]
   @@map("class")
 }
 
@@ -192,6 +195,7 @@ model Course {
   courseDisciplines CourseDisciplines[]
   registrationPrice RegistrationPrice[]
   classTeam         ClassTeam[]
+  registration      Registration[]
   @@map("course")
 }
 
@@ -213,9 +217,10 @@ model SchoolYear {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  year        Int         @unique
-  description String
-  classTeam   ClassTeam[]
+  year         Int            @unique
+  description  String
+  classTeam    ClassTeam[]
+  registration Registration[]
   @@map("schoolyear")
 }
 
@@ -258,10 +263,11 @@ model RegistrationPrice {
   reregistrationPrice Decimal
   monthPrice          Decimal
 
-  courseId Int
-  course   Course @relation(fields: [courseId], references: [id])
+  courseId Int?
+  course   Course? @relation(fields: [courseId], references: [id])
   classId  Int
-  class    Class  @relation(fields: [classId], references: [id])
+  class    Class   @relation(fields: [classId], references: [id])
+  @@unique([classId, courseId])
   @@map("registrationprice")
 }
 
@@ -277,8 +283,8 @@ model ClassTeam {
   schoolYearId Int
   schoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id])
 
-  courseId Int
-  course   Course @relation(fields: [courseId], references: [id])
+  courseId Int?
+  course   Course? @relation(fields: [courseId], references: [id])
 
   classId Int
   class   Class @relation(fields: [classId], references: [id])
@@ -288,8 +294,9 @@ model ClassTeam {
   classTeamDisciplines ClassTeamDisciplines[]
   classTeamTeacher     ClassTeamTeacher[]
 
-  statusId Int?
-  status   Status? @relation(fields: [statusId], references: [id])
+  statusId     Int?
+  status       Status?        @relation(fields: [statusId], references: [id])
+  Registration Registration[]
 
   @@unique([classroomId, period])
   @@unique([name, schoolYearId, classId])
@@ -325,4 +332,33 @@ model ClassTeamDisciplines {
   disciplineId Int
   discipline   Discipline @relation(fields: [disciplineId], references: [id])
   @@map("classteamdisciplines")
+}
+
+model Registration {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  type  String
+  price Decimal
+
+  classTeamId Int
+  classTeam   ClassTeam @relation(fields: [classTeamId], references: [id])
+
+  courseId Int
+  course   Course? @relation(fields: [courseId], references: [id])
+
+  classId Int
+  class   Class @relation(fields: [classId], references: [id])
+
+  SchoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id])
+  schoolYearId Int
+
+  statusId Int
+  status   Status @relation(fields: [statusId], references: [id])
+
+  student   Student @relation(fields: [studentId], references: [id])
+  studentId Int
+
+  @@unique([studentId, classTeamId])
 }
