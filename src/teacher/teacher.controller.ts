@@ -42,4 +42,9 @@ export class TeacherController {
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.teacherService.removeTeacher(id);
   }
+
+  @Get('test')
+  getTest() {
+    return 'Teste';
+  }
 }

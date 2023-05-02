@@ -10,9 +10,4 @@ export class UserController {
   getMe(@GetUser() user: User) {
     return user;
   }
-
-  @Get('test')
-  getTest() {
-    return 'Teste';
-  }
 }
