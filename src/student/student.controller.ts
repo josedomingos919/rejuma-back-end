@@ -45,4 +45,9 @@ export class StudentController {
   getAll(@Query() queryParams: GetAllStudentDto) {
     return this.studentService.getAllStudents(queryParams);
   }
+
+  @Get('autocomplete/:search')
+  autocomplete(@Param('search') search: string) {
+    return this.studentService.autocomplete(search);
+  }
 }

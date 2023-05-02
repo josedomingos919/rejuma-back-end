@@ -1,6 +1,11 @@
-import { Decimal } from '@prisma/client/runtime';
 import { Transform } from 'class-transformer';
-import { IsInt, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class AddMatriculationDto {
   @Transform(({ value }) => Number.parseInt(value))
@@ -9,7 +14,7 @@ export class AddMatriculationDto {
   schoolYear: number;
 
   @IsInt()
-  @IsNotEmpty()
+  @IsOptional()
   courseId: number;
 
   @IsInt()
@@ -26,9 +31,13 @@ export class AddMatriculationDto {
 
   @IsInt()
   @IsNotEmpty()
+  studentId: number;
+
+  @IsNumber()
+  @IsNotEmpty()
   price: number;
 
-  @IsInt()
   @IsString()
+  @IsNotEmpty()
   type: string;
 }

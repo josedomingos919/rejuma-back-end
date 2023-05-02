@@ -6,23 +6,6 @@ export class UpdateMatriculationDto {
   @IsNotEmpty()
   id: number;
 
-  @Transform(({ value }) => Number.parseInt(value))
-  @IsNotEmpty()
-  @IsNumber()
-  schoolYear: number;
-
-  @IsInt()
-  @IsNotEmpty()
-  courseId: number;
-
-  @IsInt()
-  @IsNotEmpty()
-  classId: number;
-
-  @IsInt()
-  @IsNotEmpty()
-  classteamId: number;
-
   @IsInt()
   @IsNotEmpty()
   statusId: number;

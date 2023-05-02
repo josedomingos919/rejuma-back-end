@@ -7,6 +7,8 @@ import {
   Param,
   ParseIntPipe,
   Put,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { ClassroomService } from './classroom.service';
 import { AddClassroomDto, UpdateClassroomDto } from './dto';
@@ -15,11 +17,13 @@ import { AddClassroomDto, UpdateClassroomDto } from './dto';
 export class ClassroomController {
   constructor(private classroomService: ClassroomService) {}
 
+  @HttpCode(HttpStatus.OK)
   @Post()
   add(@Body() dto: AddClassroomDto) {
     return this.classroomService.addClassromm(dto);
   }
 
+  @HttpCode(HttpStatus.OK)
   @Put()
   update(@Body() dto: UpdateClassroomDto) {
     return this.classroomService.updateClassroom(dto);

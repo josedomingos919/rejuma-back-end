@@ -13,6 +13,9 @@ import {
 } from '@nestjs/common';
 import { MatriculationService } from './matriculation.service';
 import { GetClassTeamDto } from './dto';
+import { UpdateMatriculationDto } from './dto/updateMatriculationDto';
+import { AddMatriculationDto } from './dto/addMatriculationDto';
+import { GetAllMatriculationDto } from './dto/getAllMatriculationDto';
 
 @Controller('matriculation')
 export class MatriculationController {
@@ -20,17 +23,17 @@ export class MatriculationController {
 
   @HttpCode(HttpStatus.OK)
   @Post()
-  addDiscipline(@Body() dto: AddDisciplineDto) {
+  addDiscipline(@Body() dto: AddMatriculationDto) {
     return this.matriculationService.add(dto);
   }
 
   @Get('all')
-  getAll() {
-    return this.matriculationService.getAll();
+  getAll(@Query() dto: GetAllMatriculationDto) {
+    return this.matriculationService.getAllMatriculation(dto);
   }
 
   @Put()
-  update(@Body() dto: UpdateDisciplineDto) {
+  update(@Body() dto: UpdateMatriculationDto) {
     return this.matriculationService.update(dto);
   }
 

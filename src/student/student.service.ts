@@ -7,6 +7,18 @@ import { getPagination, statusTypes } from 'src/helpers';
 export class StudentService {
   constructor(private prisma: PrismaService) {}
 
+  async autocomplete(search = '') {
+    const response = await this.prisma.student.findMany({
+      where: {
+        name: {
+          contains: search,
+        },
+      },
+    });
+
+    return response;
+  }
+
   async addStudent(dto: AddStudentDto) {
     if (!dto?.birthDay) delete dto?.birthDay;
 
