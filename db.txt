@@ -1,0 +1,5 @@
+Server: sql8.freemysqlhosting.net
+Name: sql8615409
+Username: sql8615409
+Password: FEGzV4LDek
+Port number: 3306
