@@ -4,7 +4,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { AddMatriculationDto } from './dto/addMatriculationDto';
 import { UpdateMatriculationDto } from './dto/updateMatriculationDto';
 import { GetAllMatriculationDto } from './dto/getAllMatriculationDto';
-import { getPagination } from 'src/helpers';
+import { getPagination, statusTypes } from 'src/helpers';
 
 @Injectable()
 export class MatriculationService {
@@ -72,8 +72,40 @@ export class MatriculationService {
     }
   }
 
+  async checkStudentActiveMatriculation(dto: UpdateMatriculationDto) {
+    const passedStatus = await this.prisma.status.findFirst({
+      where: {
+        id: dto.statusId,
+      },
+    });
+
+    if (passedStatus?.code == statusTypes.ACTIVE) {
+      const studentActiveMatriculation =
+        await this.prisma.registration.findFirst({
+          where: {
+            studentId: dto.studentId,
+            status: {
+              code: statusTypes.ACTIVE,
+            },
+          },
+        });
+
+      if (
+        studentActiveMatriculation?.id &&
+        studentActiveMatriculation?.id != dto?.id
+      ) {
+        throw new ForbiddenException({
+          status: false,
+          error: 'try_active_more_then_one_matriculation',
+        });
+      }
+    }
+  }
+
   async update(dto: UpdateMatriculationDto) {
     try {
+      await this.checkStudentActiveMatriculation(dto);
+
       const matriculation = await this.prisma.registration.update({
         where: {
           id: dto.id,
@@ -133,8 +165,19 @@ export class MatriculationService {
         status: true,
         course: true,
         student: true,
-        classTeam: true,
+        classTeam: {
+          include: {
+            class: {
+              include: {
+                registrationPrice: true,
+              },
+            },
+          },
+        },
         SchoolYear: true,
+      },
+      orderBy: {
+        id: 'desc',
       },
     });
 

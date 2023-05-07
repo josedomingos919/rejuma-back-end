@@ -8,5 +8,9 @@ export class UpdateMatriculationDto {
 
   @IsInt()
   @IsNotEmpty()
+  studentId: number;
+
+  @IsInt()
+  @IsNotEmpty()
   statusId: number;
 }
