@@ -14,6 +14,15 @@ export class StudentService {
           contains: search,
         },
       },
+      include: {
+        registration: {
+          where: {
+            status: {
+              code: statusTypes.ACTIVE,
+            },
+          },
+        },
+      },
     });
 
     return response;
