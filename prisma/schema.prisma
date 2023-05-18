@@ -123,9 +123,10 @@ model Classroom {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name        String      @unique
-  description String?
-  ClassTeam   ClassTeam[]
+  name          String      @unique
+  description   String?
+  ClassTeam     ClassTeam[]
+  studentNumber Int?
 
   @@map("classroom")
 }

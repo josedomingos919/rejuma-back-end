@@ -13,6 +13,9 @@ export class StudentService {
         name: {
           contains: search,
         },
+        status: {
+          code: statusTypes.ACTIVE,
+        },
       },
       include: {
         registration: {

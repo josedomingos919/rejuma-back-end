@@ -25,6 +25,14 @@ export class MatriculationService {
     const response = await this.prisma.classTeam.findMany({
       where,
       include: {
+        Registration: {
+          where: {
+            status: {
+              code: statusTypes.ACTIVE,
+            },
+          },
+        },
+        classroom: true,
         class: {
           include: {
             registrationPrice: true,
