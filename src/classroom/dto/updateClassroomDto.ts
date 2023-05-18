@@ -1,4 +1,10 @@
-import { IsString, IsNotEmpty, IsOptional, IsNumber } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsOptional,
+  IsNumber,
+  IsInt,
+} from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export class UpdateClassroomDto {
@@ -14,4 +20,9 @@ export class UpdateClassroomDto {
   @IsString()
   @IsOptional()
   description: string;
+
+  @Transform(({ value }) => Number.parseInt(value))
+  @IsNotEmpty()
+  @IsInt()
+  studentNumber: number;
 }
