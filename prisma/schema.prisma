@@ -375,4 +375,5 @@ model Registration {
   studentId Int
 
   @@unique([studentId, classTeamId])
+  @@map("registration")
 }
