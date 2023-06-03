@@ -9,6 +9,11 @@ export class GetAllStudentDto {
   @Transform(({ value }) => Number.parseInt(value))
   @IsNumber()
   @IsOptional()
+  classteamId: number;
+
+  @Transform(({ value }) => Number.parseInt(value))
+  @IsNumber()
+  @IsOptional()
   page: number;
 
   @Transform(({ value }) => Number.parseInt(value))

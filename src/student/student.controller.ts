@@ -50,4 +50,9 @@ export class StudentController {
   autocomplete(@Param('search') search: string) {
     return this.studentService.autocomplete(search);
   }
+
+  @Get('all/:classteamId')
+  getAllByClassTeam(@Param('classteamId', ParseIntPipe) classteamId: number) {
+    return this.studentService.getAllStudentsByClassTeam({ classteamId });
+  }
 }
