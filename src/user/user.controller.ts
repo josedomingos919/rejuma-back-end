@@ -1,13 +1,18 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
-import { User } from '@prisma/client';
-import { GetUser } from 'src/auth/decorator';
-import { JwtGuard } from 'src/auth/guard';
+import { GetAllUserDTO } from './dto';
+import { UserService } from './user.service';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 
-@UseGuards(JwtGuard)
 @Controller('users')
 export class UserController {
-  @Get('me')
-  getMe(@GetUser() user: User) {
-    return user;
+  constructor(private userService: UserService) {}
+
+  @Get()
+  getAll(@Query() queryParams: GetAllUserDTO) {
+    return this.userService.getAll(queryParams);
+  }
+
+  @Get('search/:keword')
+  search(@Param('keword') keword: string) {
+    return this.userService.search(keword);
   }
 }
