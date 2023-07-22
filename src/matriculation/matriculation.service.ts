@@ -172,7 +172,12 @@ export class MatriculationService {
         class: true,
         status: true,
         course: true,
-        student: true,
+        student: {
+          include: {
+            province: true,
+            country: true,
+          },
+        },
         classTeam: {
           include: {
             class: {
