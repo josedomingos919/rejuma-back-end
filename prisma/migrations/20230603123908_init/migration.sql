@@ -102,6 +102,7 @@ CREATE TABLE `classroom` (
     `updatedAt` DATETIME(3) NOT NULL,
     `name` VARCHAR(191) NOT NULL,
     `description` VARCHAR(191) NULL,
+    `studentNumber` INTEGER NULL,
 
     UNIQUE INDEX `classroom_name_key`(`name`),
     PRIMARY KEY (`id`)
@@ -272,20 +273,20 @@ CREATE TABLE `classteamdisciplines` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Registration` (
+CREATE TABLE `registration` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `type` VARCHAR(191) NOT NULL,
     `price` DECIMAL(65, 30) NOT NULL,
     `classTeamId` INTEGER NOT NULL,
-    `courseId` INTEGER NOT NULL,
+    `courseId` INTEGER NULL,
     `classId` INTEGER NOT NULL,
     `schoolYearId` INTEGER NOT NULL,
     `statusId` INTEGER NOT NULL,
     `studentId` INTEGER NOT NULL,
 
-    UNIQUE INDEX `Registration_studentId_classTeamId_key`(`studentId`, `classTeamId`),
+    UNIQUE INDEX `registration_studentId_classTeamId_key`(`studentId`, `classTeamId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -380,19 +381,19 @@ ALTER TABLE `classteamdisciplines` ADD CONSTRAINT `classteamdisciplines_classTea
 ALTER TABLE `classteamdisciplines` ADD CONSTRAINT `classteamdisciplines_disciplineId_fkey` FOREIGN KEY (`disciplineId`) REFERENCES `discipline`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Registration` ADD CONSTRAINT `Registration_classTeamId_fkey` FOREIGN KEY (`classTeamId`) REFERENCES `classteam`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `registration` ADD CONSTRAINT `registration_classTeamId_fkey` FOREIGN KEY (`classTeamId`) REFERENCES `classteam`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Registration` ADD CONSTRAINT `Registration_courseId_fkey` FOREIGN KEY (`courseId`) REFERENCES `course`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `registration` ADD CONSTRAINT `registration_courseId_fkey` FOREIGN KEY (`courseId`) REFERENCES `course`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Registration` ADD CONSTRAINT `Registration_classId_fkey` FOREIGN KEY (`classId`) REFERENCES `class`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `registration` ADD CONSTRAINT `registration_classId_fkey` FOREIGN KEY (`classId`) REFERENCES `class`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Registration` ADD CONSTRAINT `Registration_schoolYearId_fkey` FOREIGN KEY (`schoolYearId`) REFERENCES `schoolyear`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `registration` ADD CONSTRAINT `registration_schoolYearId_fkey` FOREIGN KEY (`schoolYearId`) REFERENCES `schoolyear`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Registration` ADD CONSTRAINT `Registration_statusId_fkey` FOREIGN KEY (`statusId`) REFERENCES `status`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `registration` ADD CONSTRAINT `registration_statusId_fkey` FOREIGN KEY (`statusId`) REFERENCES `status`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Registration` ADD CONSTRAINT `Registration_studentId_fkey` FOREIGN KEY (`studentId`) REFERENCES `student`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `registration` ADD CONSTRAINT `registration_studentId_fkey` FOREIGN KEY (`studentId`) REFERENCES `student`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
