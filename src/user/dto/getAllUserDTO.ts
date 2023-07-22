@@ -1,15 +1,10 @@
 import { Transform } from 'class-transformer';
 import { IsNumber, IsOptional, IsString } from 'class-validator';
 
-export class GetAllStudentDto {
+export class GetAllUserDTO {
   @IsString()
   @IsOptional()
   name: string;
-
-  @Transform(({ value }) => Number.parseInt(value))
-  @IsNumber()
-  @IsOptional()
-  classteamId: number;
 
   @Transform(({ value }) => Number.parseInt(value))
   @IsNumber()

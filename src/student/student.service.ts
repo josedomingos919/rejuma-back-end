@@ -2,6 +2,7 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AddStudentDto, UpdateStudentDto, GetAllStudentDto } from './dto';
 import { getPagination, statusTypes } from 'src/helpers';
+import { GetAllStudentsByClassTeamDto } from './dto/getAllStudentsByClassTeamDto';
 
 @Injectable()
 export class StudentService {
@@ -67,18 +68,68 @@ export class StudentService {
     }
   }
 
+  async getAllStudentsByClassTeam(dto: GetAllStudentsByClassTeamDto) {
+    const students = await this.prisma.student.findMany({
+      where: {
+        NOT: {
+          status: {
+            code: statusTypes.DELETED,
+          },
+        },
+        registration: {
+          some: {
+            classTeamId: dto.classteamId,
+            status: {
+              code: statusTypes.ACTIVE,
+            },
+          },
+        },
+      },
+      include: {
+        status: true,
+        province: true,
+        country: true,
+        registration: {
+          where: {
+            status: {
+              code: statusTypes.ACTIVE,
+            },
+          },
+        },
+      },
+      orderBy: [
+        {
+          name: 'asc',
+        },
+      ],
+    });
+
+    return students;
+  }
+
   private getAllStudentFilter(filter: GetAllStudentDto) {
     const where = {
       NOT: {
         status: {
-          code: 'ELIM',
+          code: statusTypes.DELETED,
         },
       },
     };
 
-    const { name } = filter;
+    const { name, classteamId } = filter;
 
     if (name) where['name'] = { contains: name };
+
+    if (classteamId > 0) {
+      where['registration'] = {
+        some: {
+          classTeamId: classteamId,
+          status: {
+            code: statusTypes.ACTIVE,
+          },
+        },
+      };
+    }
 
     return { where };
   }
@@ -101,6 +152,13 @@ export class StudentService {
         status: true,
         province: true,
         country: true,
+        registration: {
+          where: {
+            status: {
+              code: statusTypes.ACTIVE,
+            },
+          },
+        },
       },
       orderBy: [
         {
