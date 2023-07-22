@@ -52,4 +52,48 @@ export class UpdateStudentDto {
   @IsNumber()
   @IsOptional()
   statusId: number;
+
+  @IsString()
+  @IsOptional()
+  parentAffiliation: string;
+
+  @IsString()
+  @IsOptional()
+  maternalAffiliation: string;
+
+  @IsString()
+  @IsOptional()
+  residence: string;
+
+  @IsString()
+  @IsOptional()
+  municipality: string;
+
+  @IsString()
+  @IsOptional()
+  natural: string;
+
+  @IsString()
+  @IsOptional()
+  emitOn: string;
+
+  @IsString()
+  @IsOptional()
+  validUntil: string;
+
+  @IsString()
+  @IsOptional()
+  isWorking: string;
+
+  @IsString()
+  @IsOptional()
+  work: string;
+
+  @IsString()
+  @IsOptional()
+  workStation: string;
+
+  @IsString()
+  @IsOptional()
+  sponsorOfEducation: string;
 }

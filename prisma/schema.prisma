@@ -85,6 +85,18 @@ model Student {
   province     Province       @relation(fields: [provinceId], references: [id])
   registration Registration[]
 
+  parentAffiliation   String?
+  maternalAffiliation String?
+  residence           String?
+  municipality        String?
+  natural             String?
+  emitOn              String?
+  validUntil          String?
+  isWorking           String?
+  work                String?
+  workStation         String?
+  sponsorOfEducation  String?
+
   @@map("student")
 }
 
@@ -375,4 +387,5 @@ model Registration {
   studentId Int
 
   @@unique([studentId, classTeamId])
+  @@map("registration")
 }
