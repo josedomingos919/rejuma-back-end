@@ -69,6 +69,27 @@ export class MatriculationService {
           price: dto.price,
           type: dto.type,
         },
+        include: {
+          class: true,
+          status: true,
+          course: true,
+          student: {
+            include: {
+              province: true,
+              country: true,
+            },
+          },
+          classTeam: {
+            include: {
+              class: {
+                include: {
+                  registrationPrice: true,
+                },
+              },
+            },
+          },
+          SchoolYear: true,
+        },
       });
 
       return matriculation;
