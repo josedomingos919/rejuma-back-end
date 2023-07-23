@@ -65,6 +65,17 @@ CREATE TABLE `student` (
     `countryId` INTEGER NOT NULL,
     `statusId` INTEGER NOT NULL,
     `provinceId` INTEGER NOT NULL,
+    `parentAffiliation` VARCHAR(191) NULL,
+    `maternalAffiliation` VARCHAR(191) NULL,
+    `residence` VARCHAR(191) NULL,
+    `municipality` VARCHAR(191) NULL,
+    `natural` VARCHAR(191) NULL,
+    `emitOn` VARCHAR(191) NULL,
+    `validUntil` VARCHAR(191) NULL,
+    `isWorking` VARCHAR(191) NULL,
+    `work` VARCHAR(191) NULL,
+    `workStation` VARCHAR(191) NULL,
+    `sponsorOfEducation` VARCHAR(191) NULL,
 
     UNIQUE INDEX `student_bi_key`(`bi`),
     PRIMARY KEY (`id`)
