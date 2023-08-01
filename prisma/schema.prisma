@@ -416,4 +416,6 @@ model ProductSale {
   productId      Int?
   quantity       Int           @default(1)
   price          Int?
+
+  @@map("productSale")
 }
