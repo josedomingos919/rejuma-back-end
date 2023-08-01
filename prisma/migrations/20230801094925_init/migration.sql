@@ -65,6 +65,17 @@ CREATE TABLE `student` (
     `countryId` INTEGER NOT NULL,
     `statusId` INTEGER NOT NULL,
     `provinceId` INTEGER NOT NULL,
+    `parentAffiliation` VARCHAR(191) NULL,
+    `maternalAffiliation` VARCHAR(191) NULL,
+    `residence` VARCHAR(191) NULL,
+    `municipality` VARCHAR(191) NULL,
+    `natural` VARCHAR(191) NULL,
+    `emitOn` VARCHAR(191) NULL,
+    `validUntil` VARCHAR(191) NULL,
+    `isWorking` VARCHAR(191) NULL,
+    `work` VARCHAR(191) NULL,
+    `workStation` VARCHAR(191) NULL,
+    `sponsorOfEducation` VARCHAR(191) NULL,
 
     UNIQUE INDEX `student_bi_key`(`bi`),
     PRIMARY KEY (`id`)
@@ -290,6 +301,34 @@ CREATE TABLE `registration` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- CreateTable
+CREATE TABLE `product` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+    `name` VARCHAR(191) NOT NULL,
+    `price` DECIMAL(65, 30) NULL,
+    `code` VARCHAR(191) NOT NULL,
+    `quantity` INTEGER NOT NULL DEFAULT 0,
+    `useQuantity` VARCHAR(191) NOT NULL DEFAULT 'Sim',
+
+    UNIQUE INDEX `product_code_key`(`code`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `ProductSale` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+    `registrationId` INTEGER NULL,
+    `productId` INTEGER NULL,
+    `quantity` INTEGER NOT NULL DEFAULT 1,
+    `price` INTEGER NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- AddForeignKey
 ALTER TABLE `users` ADD CONSTRAINT `users_employeeId_fkey` FOREIGN KEY (`employeeId`) REFERENCES `employees`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -397,3 +436,9 @@ ALTER TABLE `registration` ADD CONSTRAINT `registration_statusId_fkey` FOREIGN K
 
 -- AddForeignKey
 ALTER TABLE `registration` ADD CONSTRAINT `registration_studentId_fkey` FOREIGN KEY (`studentId`) REFERENCES `student`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `ProductSale` ADD CONSTRAINT `ProductSale_registrationId_fkey` FOREIGN KEY (`registrationId`) REFERENCES `registration`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `ProductSale` ADD CONSTRAINT `ProductSale_productId_fkey` FOREIGN KEY (`productId`) REFERENCES `product`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;

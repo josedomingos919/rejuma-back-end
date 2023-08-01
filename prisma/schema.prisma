@@ -112,7 +112,7 @@ model Employee {
   gender     String?
   address    String?
   salaryType String
-  salary     Decimal
+  salary     Float
   email      String?
   users      User[]
   phone1     String
@@ -283,9 +283,9 @@ model RegistrationPrice {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  registrationPrice   Decimal
-  reregistrationPrice Decimal
-  monthPrice          Decimal
+  registrationPrice   Float
+  reregistrationPrice Float
+  monthPrice          Float
 
   courseId Int?
   course   Course? @relation(fields: [courseId], references: [id])
@@ -366,7 +366,7 @@ model Registration {
   updatedAt DateTime @updatedAt
 
   type  String
-  price Decimal
+  price Float
 
   classTeamId Int
   classTeam   ClassTeam @relation(fields: [classTeamId], references: [id])
@@ -383,9 +383,37 @@ model Registration {
   statusId Int
   status   Status @relation(fields: [statusId], references: [id])
 
-  student   Student @relation(fields: [studentId], references: [id])
-  studentId Int
+  student     Student       @relation(fields: [studentId], references: [id])
+  studentId   Int
+  ProductSale ProductSale[]
 
   @@unique([studentId, classTeamId])
   @@map("registration")
+}
+
+model Product {
+  id          Int           @id @default(autoincrement())
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  name        String
+  price       Float?
+  code        String        @unique
+  quantity    Int           @default(0)
+  useQuantity String        @default("Sim")
+  ProductSale ProductSale[]
+
+  @@map("product")
+}
+
+model ProductSale {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  registrationId Int?
+  registration   Registration? @relation(fields: [registrationId], references: [id])
+  product        Product?      @relation(fields: [productId], references: [id])
+  productId      Int?
+  quantity       Int           @default(1)
+  price          Int?
 }
