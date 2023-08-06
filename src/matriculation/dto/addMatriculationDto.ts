@@ -40,4 +40,8 @@ export class AddMatriculationDto {
   @IsString()
   @IsNotEmpty()
   type: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  cardPrice: number;
 }
