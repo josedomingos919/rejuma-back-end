@@ -365,8 +365,9 @@ model Registration {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  type  String
-  price Float
+  type      String
+  price     Float
+  cardPrice Float
 
   classTeamId Int
   classTeam   ClassTeam @relation(fields: [classTeamId], references: [id])
@@ -385,7 +386,7 @@ model Registration {
 
   student     Student       @relation(fields: [studentId], references: [id])
   studentId   Int
-  ProductSale ProductSale[]
+  productSale ProductSale[]
 
   @@unique([studentId, classTeamId])
   @@map("registration")

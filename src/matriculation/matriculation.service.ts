@@ -60,6 +60,7 @@ export class MatriculationService {
     try {
       const matriculation = await this.prisma.registration.create({
         data: {
+          cardPrice: dto.cardPrice,
           classTeamId: dto.classteamId,
           schoolYearId: year?.id,
           studentId: dto.studentId,
