@@ -194,6 +194,7 @@ export class MatriculationService {
       where,
       include: {
         class: true,
+        employee: true,
         status: true,
         course: true,
         student: {
