@@ -105,27 +105,28 @@ model Employee {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name       String
-  bi         String    @unique
-  birthDay   DateTime?
-  civilState String?
-  gender     String?
-  address    String?
-  salaryType String
-  salary     Float
-  email      String?
-  users      User[]
-  phone1     String
-  phone2     String?
-  countryId  Int
-  country    Country   @relation(fields: [countryId], references: [id])
-  statusId   Int
-  status     Status    @relation(fields: [statusId], references: [id])
-  officeId   Int
-  office     Office    @relation(fields: [officeId], references: [id])
-  provinceId Int
-  province   Province  @relation(fields: [provinceId], references: [id])
-  teacher    Teacher[]
+  name         String
+  bi           String         @unique
+  birthDay     DateTime?
+  civilState   String?
+  gender       String?
+  address      String?
+  salaryType   String
+  salary       Float
+  email        String?
+  users        User[]
+  phone1       String
+  phone2       String?
+  countryId    Int
+  country      Country        @relation(fields: [countryId], references: [id])
+  statusId     Int
+  status       Status         @relation(fields: [statusId], references: [id])
+  officeId     Int
+  office       Office         @relation(fields: [officeId], references: [id])
+  provinceId   Int
+  province     Province       @relation(fields: [provinceId], references: [id])
+  teacher      Teacher[]
+  Registration Registration[]
 
   @@map("employees")
 }
@@ -383,6 +384,9 @@ model Registration {
 
   statusId Int
   status   Status @relation(fields: [statusId], references: [id])
+
+  employeeId Int?
+  employee   Employee? @relation(fields: [employeeId], references: [id])
 
   student     Student       @relation(fields: [studentId], references: [id])
   studentId   Int
