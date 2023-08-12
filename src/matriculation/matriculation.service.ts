@@ -69,10 +69,12 @@ export class MatriculationService {
           classId: dto.classId,
           price: dto.price,
           type: dto.type,
+          employeeId: dto.employeeId,
         },
         include: {
           class: true,
           status: true,
+          employee: true,
           course: true,
           student: {
             include: {
@@ -192,6 +194,7 @@ export class MatriculationService {
       where,
       include: {
         class: true,
+        employee: true,
         status: true,
         course: true,
         student: {

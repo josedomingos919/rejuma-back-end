@@ -44,4 +44,9 @@ export class AddMatriculationDto {
   @IsNumber()
   @IsNotEmpty()
   cardPrice: number;
+
+  @Transform(({ value }) => Number.parseInt(value))
+  @IsInt()
+  @IsNotEmpty()
+  employeeId: number;
 }

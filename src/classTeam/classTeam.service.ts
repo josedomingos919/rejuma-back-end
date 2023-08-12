@@ -155,6 +155,23 @@ export class ClassTeamService {
         },
       });
 
+      const responseActiveMatriculation =
+        await this.prisma.registration.findFirst({
+          where: {
+            classTeamId: id,
+            status: {
+              code: statusTypes.ACTIVE,
+            },
+          },
+        });
+
+      if (responseActiveMatriculation) {
+        throw new ForbiddenException({
+          error: 'has-active-students',
+          status: false,
+        });
+      }
+
       const classTeam = await this.prisma.classTeam.update({
         where: {
           id,
