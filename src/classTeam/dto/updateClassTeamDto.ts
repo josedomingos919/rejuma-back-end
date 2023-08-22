@@ -42,8 +42,8 @@ export class UpdateClassTeamDto {
   @IsNotEmpty()
   schoolYear: number;
 
-  @IsArray()
-  @IsInt({ each: true })
-  @IsNotEmpty({ each: true })
-  disciplines: number[];
+  // @IsArray()
+  // @IsInt({ each: true })
+  // @IsNotEmpty({ each: true })
+  // disciplines: number[];
 }

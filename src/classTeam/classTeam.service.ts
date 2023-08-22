@@ -39,9 +39,6 @@ export class ClassTeamService {
           courseId: dto.courseId,
           schoolYearId: schoolYear.id,
           statusId: dto.statusId,
-          classTeamDisciplines: {
-            create: dto.disciplines.map((disciplineId) => ({ disciplineId })),
-          },
         },
       });
 
@@ -58,12 +55,6 @@ export class ClassTeamService {
     try {
       const schoolYear = await this.getSchoolYear(dto.schoolYear);
 
-      await this.prisma.classTeamDisciplines.deleteMany({
-        where: {
-          classTeamId: dto.id,
-        },
-      });
-
       const classTeam = await this.prisma.classTeam.update({
         where: {
           id: dto.id,
@@ -75,9 +66,6 @@ export class ClassTeamService {
           classroomId: dto.classroomId,
           courseId: dto.courseId,
           schoolYearId: schoolYear.id,
-          classTeamDisciplines: {
-            create: dto.disciplines.map((disciplineId) => ({ disciplineId })),
-          },
         },
       });
 

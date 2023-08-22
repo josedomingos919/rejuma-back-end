@@ -2,7 +2,6 @@ import { Transform } from 'class-transformer';
 import {
   IsNotEmpty,
   IsString,
-  IsArray,
   IsInt,
   IsNumber,
   IsOptional,
@@ -39,8 +38,8 @@ export class AddClassTeamDto {
   @IsNumber()
   schoolYear: number;
 
-  @IsArray()
-  @IsInt({ each: true })
-  @IsNotEmpty({ each: true })
-  disciplines: number[];
+  // @IsArray()
+  // @IsInt({ each: true })
+  // @IsNotEmpty({ each: true })
+  // disciplines: number[];
 }
