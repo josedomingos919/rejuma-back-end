@@ -1,6 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AddClassroomDto, UpdateClassroomDto } from './dto';
+import { statusTypes } from 'src/helpers';
 
 @Injectable()
 export class ClassroomService {
@@ -46,6 +47,9 @@ export class ClassroomService {
           NOT: {
             ClassTeam: {
               some: {
+                status: {
+                  code: statusTypes.ACTIVE,
+                },
                 period,
               },
             },

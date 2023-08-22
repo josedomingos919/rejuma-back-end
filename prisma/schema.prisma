@@ -324,7 +324,6 @@ model ClassTeam {
   status       Status?        @relation(fields: [statusId], references: [id])
   Registration Registration[]
 
-  @@unique([classroomId, period])
   @@unique([name, schoolYearId, classId])
   @@map("classteam")
 }
