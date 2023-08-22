@@ -93,7 +93,7 @@ CREATE TABLE `employees` (
     `gender` VARCHAR(191) NULL,
     `address` VARCHAR(191) NULL,
     `salaryType` VARCHAR(191) NOT NULL,
-    `salary` DECIMAL(65, 30) NOT NULL,
+    `salary` DOUBLE NOT NULL,
     `email` VARCHAR(191) NULL,
     `phone1` VARCHAR(191) NOT NULL,
     `phone2` VARCHAR(191) NULL,
@@ -231,9 +231,9 @@ CREATE TABLE `registrationprice` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
-    `registrationPrice` DECIMAL(65, 30) NOT NULL,
-    `reregistrationPrice` DECIMAL(65, 30) NOT NULL,
-    `monthPrice` DECIMAL(65, 30) NOT NULL,
+    `registrationPrice` DOUBLE NOT NULL,
+    `reregistrationPrice` DOUBLE NOT NULL,
+    `monthPrice` DOUBLE NOT NULL,
     `courseId` INTEGER NULL,
     `classId` INTEGER NOT NULL,
 
@@ -254,7 +254,6 @@ CREATE TABLE `classteam` (
     `classroomId` INTEGER NOT NULL,
     `statusId` INTEGER NULL,
 
-    UNIQUE INDEX `classteam_classroomId_period_key`(`classroomId`, `period`),
     UNIQUE INDEX `classteam_name_schoolYearId_classId_key`(`name`, `schoolYearId`, `classId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -289,12 +288,14 @@ CREATE TABLE `registration` (
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `type` VARCHAR(191) NOT NULL,
-    `price` DECIMAL(65, 30) NOT NULL,
+    `price` DOUBLE NOT NULL,
+    `cardPrice` DOUBLE NOT NULL,
     `classTeamId` INTEGER NOT NULL,
     `courseId` INTEGER NULL,
     `classId` INTEGER NOT NULL,
     `schoolYearId` INTEGER NOT NULL,
     `statusId` INTEGER NOT NULL,
+    `employeeId` INTEGER NULL,
     `studentId` INTEGER NOT NULL,
 
     UNIQUE INDEX `registration_studentId_classTeamId_key`(`studentId`, `classTeamId`),
@@ -307,7 +308,7 @@ CREATE TABLE `product` (
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `name` VARCHAR(191) NOT NULL,
-    `price` DECIMAL(65, 30) NULL,
+    `price` DOUBLE NULL,
     `code` VARCHAR(191) NOT NULL,
     `quantity` INTEGER NOT NULL DEFAULT 0,
     `useQuantity` VARCHAR(191) NOT NULL DEFAULT 'Sim',
@@ -317,7 +318,7 @@ CREATE TABLE `product` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `ProductSale` (
+CREATE TABLE `productSale` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
@@ -435,10 +436,13 @@ ALTER TABLE `registration` ADD CONSTRAINT `registration_schoolYearId_fkey` FOREI
 ALTER TABLE `registration` ADD CONSTRAINT `registration_statusId_fkey` FOREIGN KEY (`statusId`) REFERENCES `status`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `registration` ADD CONSTRAINT `registration_employeeId_fkey` FOREIGN KEY (`employeeId`) REFERENCES `employees`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `registration` ADD CONSTRAINT `registration_studentId_fkey` FOREIGN KEY (`studentId`) REFERENCES `student`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `ProductSale` ADD CONSTRAINT `ProductSale_registrationId_fkey` FOREIGN KEY (`registrationId`) REFERENCES `registration`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `productSale` ADD CONSTRAINT `productSale_registrationId_fkey` FOREIGN KEY (`registrationId`) REFERENCES `registration`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `ProductSale` ADD CONSTRAINT `ProductSale_productId_fkey` FOREIGN KEY (`productId`) REFERENCES `product`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `productSale` ADD CONSTRAINT `productSale_productId_fkey` FOREIGN KEY (`productId`) REFERENCES `product`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
