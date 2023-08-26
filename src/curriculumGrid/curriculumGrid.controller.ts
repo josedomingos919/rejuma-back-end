@@ -7,6 +7,8 @@ import {
   ParseIntPipe,
   Post,
   Query,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { CurriculumGridService } from './curriculumGrid.service';
 import { AddCurriculumGridDto, GetCurriculumGridDto } from './dto';
@@ -16,6 +18,7 @@ export class CurriculumGridController {
   constructor(private curriculumGridService: CurriculumGridService) {}
 
   @Post()
+  @HttpCode(HttpStatus.OK)
   add(@Body() dto: AddCurriculumGridDto) {
     return this.curriculumGridService.add(dto);
   }
