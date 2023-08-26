@@ -20,9 +20,24 @@ export class CurriculumGridService {
 
   async getAll(dto: GetCurriculumGridDto) {
     const response = await this.prisma.curriculumGrid.findMany({
+      include: {
+        class: true,
+        course: true,
+        discipline: true,
+      },
       where: {
         classId: dto.classId,
         courseId: dto.courseId ?? null,
+      },
+    });
+
+    return response;
+  }
+
+  async remove(id: number) {
+    const response = await this.prisma.curriculumGrid.delete({
+      where: {
+        id,
       },
     });
 
