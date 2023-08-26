@@ -8,8 +8,8 @@ export class AddCourseDto {
   @IsString()
   description: string;
 
-  @IsArray()
-  @IsNumber({}, { each: true })
-  @IsNotEmpty({ each: true })
-  disciplines: number[];
+  // @IsArray()
+  // @IsNumber({}, { each: true })
+  // @IsNotEmpty({ each: true })
+  // disciplines: number[];
 }

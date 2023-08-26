@@ -119,11 +119,6 @@ export class ClassTeamService {
         classroom: true,
         course: true,
         schoolYear: true,
-        classTeamDisciplines: {
-          include: {
-            discipline: true,
-          },
-        },
       },
     });
 

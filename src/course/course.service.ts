@@ -12,9 +12,6 @@ export class CourseService {
         data: {
           description: dto.description,
           name: dto.name,
-          courseDisciplines: {
-            create: dto.disciplines.map((disciplineId) => ({ disciplineId })),
-          },
         },
       });
 
@@ -33,13 +30,6 @@ export class CourseService {
         orderBy: {
           name: 'asc',
         },
-        include: {
-          courseDisciplines: {
-            include: {
-              discipline: true,
-            },
-          },
-        },
       });
 
       return courses;
@@ -53,12 +43,6 @@ export class CourseService {
 
   async update(dto: UpdateCourseDto) {
     try {
-      await this.prisma.courseDisciplines.deleteMany({
-        where: {
-          courseId: dto.id,
-        },
-      });
-
       const course = await this.prisma.course.update({
         where: {
           id: dto.id,
@@ -66,9 +50,6 @@ export class CourseService {
         data: {
           description: dto.description,
           name: dto.name,
-          courseDisciplines: {
-            create: dto.disciplines.map((disciplineId) => ({ disciplineId })),
-          },
         },
       });
 
@@ -82,12 +63,6 @@ export class CourseService {
   }
 
   async remove(id: number) {
-    await this.prisma.courseDisciplines.deleteMany({
-      where: {
-        courseId: id,
-      },
-    });
-
     const response = await this.prisma.course.delete({
       where: {
         id,

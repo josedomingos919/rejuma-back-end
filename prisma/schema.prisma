@@ -169,26 +169,12 @@ model Class {
   updatedAt DateTime @updatedAt
 
   name              String              @unique
-  classDisciplines  ClassDisciplines[]
   registrationPrice RegistrationPrice[]
   classTeam         ClassTeam[]
   registration      Registration[]
+  CurriculumGrid    CurriculumGrid[]
 
   @@map("class")
-}
-
-model ClassDisciplines {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  disciplineId Int
-  discipline   Discipline @relation(fields: [disciplineId], references: [id])
-
-  classId Int
-  class   Class @relation(fields: [classId], references: [id])
-
-  @@map("classdisciplines")
 }
 
 model Discipline {
@@ -196,13 +182,11 @@ model Discipline {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name                 String                 @unique
-  description          String?
-  classDisciplines     ClassDisciplines[]
-  courseDisciplines    CourseDisciplines[]
-  teacherDisciplines   TeacherDisciplines[]
-  classTeamDisciplines ClassTeamDisciplines[]
-  classTeamTeacher     ClassTeamTeacher[]
+  name               String               @unique
+  description        String?
+  teacherDisciplines TeacherDisciplines[]
+  classTeamTeacher   ClassTeamTeacher[]
+  CurriculumGrid     CurriculumGrid[]
 
   @@map("discipline")
 }
@@ -212,28 +196,15 @@ model Course {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name              String              @unique
-  description       String?
-  courseDisciplines CourseDisciplines[]
+  name        String  @unique
+  description String?
+
   registrationPrice RegistrationPrice[]
   classTeam         ClassTeam[]
   registration      Registration[]
+  CurriculumGrid    CurriculumGrid[]
 
   @@map("course")
-}
-
-model CourseDisciplines {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  courseId Int
-  course   Course @relation(fields: [courseId], references: [id])
-
-  disciplineId Int
-  discipline   Discipline @relation(fields: [disciplineId], references: [id])
-
-  @@map("coursedisciplines")
 }
 
 model SchoolYear {
@@ -315,10 +286,9 @@ model ClassTeam {
   classId Int
   class   Class @relation(fields: [classId], references: [id])
 
-  classroomId          Int
-  classroom            Classroom              @relation(fields: [classroomId], references: [id])
-  classTeamDisciplines ClassTeamDisciplines[]
-  classTeamTeacher     ClassTeamTeacher[]
+  classroomId      Int
+  classroom        Classroom          @relation(fields: [classroomId], references: [id])
+  classTeamTeacher ClassTeamTeacher[]
 
   statusId     Int?
   status       Status?        @relation(fields: [statusId], references: [id])
@@ -344,20 +314,6 @@ model ClassTeamTeacher {
 
   @@unique([teacherId, disciplineId, classTeamId])
   @@map("classteamteacher")
-}
-
-model ClassTeamDisciplines {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  classTeamId Int
-  classTeam   ClassTeam @relation(fields: [classTeamId], references: [id])
-
-  disciplineId Int
-  discipline   Discipline @relation(fields: [disciplineId], references: [id])
-
-  @@map("classteamdisciplines")
 }
 
 model Registration {
@@ -422,4 +378,21 @@ model ProductSale {
   price          Int?
 
   @@map("productSale")
+}
+
+model CurriculumGrid {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  class   Class @relation(fields: [classId], references: [id])
+  classId Int
+
+  course   Course? @relation(fields: [courseId], references: [id])
+  courseId Int?
+
+  discipline   Discipline @relation(fields: [disciplineId], references: [id])
+  disciplineId Int
+
+  @@map("curriculumGrid")
 }

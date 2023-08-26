@@ -8,21 +8,12 @@ export class ClassService {
 
   async updateClass(dto: UpdateClassDto) {
     try {
-      await this.prisma.classDisciplines.deleteMany({
-        where: {
-          classId: dto.id,
-        },
-      });
-
       const classs = await this.prisma.class.update({
         where: {
           id: dto.id,
         },
         data: {
           name: dto.name,
-          classDisciplines: {
-            create: dto.disciplines.map((disciplineId) => ({ disciplineId })),
-          },
         },
       });
 
@@ -40,9 +31,6 @@ export class ClassService {
       const classs = await this.prisma.class.create({
         data: {
           name: dto.name,
-          classDisciplines: {
-            create: dto.disciplines.map((disciplineId) => ({ disciplineId })),
-          },
         },
       });
 
@@ -61,13 +49,6 @@ export class ClassService {
         orderBy: {
           name: 'asc',
         },
-        include: {
-          classDisciplines: {
-            include: {
-              discipline: true,
-            },
-          },
-        },
       });
 
       return classes;
@@ -80,12 +61,6 @@ export class ClassService {
   }
 
   async removeClass(id: number) {
-    await this.prisma.classDisciplines.deleteMany({
-      where: {
-        classId: id,
-      },
-    });
-
     const response = await this.prisma.class.delete({
       where: {
         id,
