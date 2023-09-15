@@ -69,7 +69,7 @@ model Student {
   updatedAt DateTime @updatedAt
 
   name         String
-  bi           String         @unique
+  bi           String?         @unique
   birthDay     DateTime?
   civilState   String?
   gender       String?
