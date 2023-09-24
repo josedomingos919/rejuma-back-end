@@ -127,6 +127,7 @@ model Employee {
   province     Province       @relation(fields: [provinceId], references: [id])
   teacher      Teacher[]
   Registration Registration[]
+  payment      Payment[]
 
   @@map("employees")
 }
@@ -159,6 +160,7 @@ model Status {
   student      Student[]
   ClassTeam    ClassTeam[]
   Registration Registration[]
+  payment      Payment[]
 
   @@map("status")
 }
@@ -187,6 +189,8 @@ model Discipline {
   teacherDisciplines TeacherDisciplines[]
   classTeamTeacher   ClassTeamTeacher[]
   CurriculumGrid     CurriculumGrid[]
+  Exam               Exam[]
+  SchoolResource     SchoolResource[]
 
   @@map("discipline")
 }
@@ -346,6 +350,7 @@ model Registration {
   student     Student       @relation(fields: [studentId], references: [id])
   studentId   Int
   productSale ProductSale[]
+  payment     Payment[]
 
   @@unique([studentId, classTeamId])
   @@map("registration")
@@ -395,4 +400,78 @@ model CurriculumGrid {
   disciplineId Int
 
   @@map("curriculumGrid")
+}
+
+model Months {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name       String
+  number     Int
+  SchoolFees SchoolFees[]
+
+  @@map("months")
+}
+
+model Payment {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  type           String
+  value          Float
+  employee       Employee         @relation(fields: [employeeId], references: [id])
+  status         Status           @relation(fields: [statusId], references: [id])
+  registration   Registration     @relation(fields: [registrationId], references: [id])
+  employeeId     Int
+  statusId       Int
+  registrationId Int
+  SchoolFees     SchoolFees[]
+  Exam           Exam[]
+  SchoolResource SchoolResource[]
+
+  @@map("payment")
+}
+
+model SchoolFees {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  payment   Payment @relation(fields: [paymentId], references: [id])
+  paymentId Int
+
+  month    Months @relation(fields: [monthsId], references: [id])
+  monthsId Int
+
+  @@map("schoolFees")
+}
+
+model Exam {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  payment   Payment @relation(fields: [paymentId], references: [id])
+  paymentId Int
+
+  discipline   Discipline @relation(fields: [disciplineId], references: [id])
+  disciplineId Int
+
+  @@map("exam")
+}
+
+model SchoolResource {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  payment   Payment @relation(fields: [paymentId], references: [id])
+  paymentId Int
+
+  discipline   Discipline @relation(fields: [disciplineId], references: [id])
+  disciplineId Int
+
+  @@map("schoolResource")
 }
