@@ -410,6 +410,7 @@ model Months {
   name       String
   number     Int
   SchoolFees SchoolFees[]
+  schoolFine String
 
   @@map("months")
 }
@@ -474,4 +475,16 @@ model SchoolResource {
   disciplineId Int
 
   @@map("schoolResource")
+}
+
+model Setting {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  key       String @unique()
+  descricao String
+  value     String
+
+  @@map("setting")
 }
