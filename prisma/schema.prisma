@@ -410,7 +410,6 @@ model Months {
   name       String
   number     Int
   SchoolFees SchoolFees[]
-  schoolFine String
 
   @@map("months")
 }
@@ -445,6 +444,8 @@ model SchoolFees {
 
   month    Months @relation(fields: [monthsId], references: [id])
   monthsId Int
+
+  schoolFine String
 
   @@map("schoolFees")
 }
