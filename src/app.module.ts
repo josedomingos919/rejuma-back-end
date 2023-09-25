@@ -21,6 +21,7 @@ import { MatriculationModule } from './matriculation/matriculation.module';
 import { ProductModule } from './product/product.module';
 import { CurriculumGridModule } from './curriculumGrid/curriculumGrid.module';
 import { MonthsModule } from './months/months.module';
+import { SettingModule } from './setting/setting.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { MonthsModule } from './months/months.module';
     ProductModule,
     CurriculumGridModule,
     MonthsModule,
+    SettingModule,
   ],
 })
 export class AppModule {}
