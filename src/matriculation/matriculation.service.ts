@@ -12,6 +12,9 @@ export class MatriculationService {
 
   async getClassTeam(dto: GetClassTeamDto) {
     const where = {
+      status: {
+        code: statusTypes.ACTIVE,
+      },
       classId: dto.classId,
       schoolYear: {
         year: dto.schoolYear,
