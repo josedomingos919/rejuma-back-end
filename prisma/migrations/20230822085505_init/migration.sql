@@ -54,7 +54,7 @@ CREATE TABLE `student` (
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `name` VARCHAR(191) NOT NULL,
-    `bi` VARCHAR(191) NOT NULL,
+    `bi` VARCHAR(191) NULL,
     `birthDay` DATETIME(3) NULL,
     `civilState` VARCHAR(191) NULL,
     `gender` VARCHAR(191) NULL,
