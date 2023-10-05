@@ -5,6 +5,7 @@ import { PrismaClient } from '@prisma/client';
 @Global()
 @Injectable()
 export class PrismaService extends PrismaClient {
+  payment: any;
   constructor(config: ConfigService) {
     super({
       datasources: {
