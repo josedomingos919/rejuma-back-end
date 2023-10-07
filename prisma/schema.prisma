@@ -69,7 +69,7 @@ model Student {
   updatedAt DateTime @updatedAt
 
   name         String
-  bi           String?         @unique
+  bi           String?        
   birthDay     DateTime?
   civilState   String?
   gender       String?
@@ -352,7 +352,6 @@ model Registration {
   productSale ProductSale[]
   payment     Payment[]
 
-  @@unique([studentId, classTeamId])
   @@map("registration")
 }
 
