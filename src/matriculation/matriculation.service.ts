@@ -176,7 +176,37 @@ export class MatriculationService {
 
     const { name } = filter;
 
-    if (name) where['name'] = { contains: name };
+    if (name) {
+      const OR: any = [
+        {
+          student: {
+            name: {
+              contains: name,
+            },
+          },
+        },
+        {
+          student: {
+            bi: {
+              contains: name,
+            },
+          },
+        },
+      ];
+
+      const nameInNumber = Number(name);
+
+      if (nameInNumber >= 0)
+        OR.push({
+          student: {
+            id: {
+              equals: nameInNumber,
+            },
+          },
+        });
+
+      where['OR'] = OR;
+    }
 
     return { where };
   }
