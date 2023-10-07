@@ -24,7 +24,6 @@ import { MonthsModule } from './months/months.module';
 import { SettingModule } from './setting/setting.module';
 import { SchoolFeesModule } from './schoolFees/schoolFees.module';
 import { ExamModule } from './exam/exam.module';
-import { PaymentModule } from './payment/payment.module';
 import { SchoolResourceModule } from './schoolResource/school-resource.module';
 import { PaymentModule } from './payment/payment.module';
 
