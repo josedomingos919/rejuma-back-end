@@ -23,6 +23,7 @@ import { CurriculumGridModule } from './curriculumGrid/curriculumGrid.module';
 import { MonthsModule } from './months/months.module';
 import { SettingModule } from './setting/setting.module';
 import { SchoolFeesModule } from './schoolFees/schoolFees.module';
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { SchoolFeesModule } from './schoolFees/schoolFees.module';
     MonthsModule,
     SettingModule,
     SchoolFeesModule,
+    PaymentModule,
   ],
 })
 export class AppModule {}
