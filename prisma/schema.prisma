@@ -69,7 +69,7 @@ model Student {
   updatedAt DateTime @updatedAt
 
   name         String
-  bi           String?        
+  bi           String?
   birthDay     DateTime?
   civilState   String?
   gender       String?
@@ -259,9 +259,11 @@ model RegistrationPrice {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  registrationPrice   Float
-  reregistrationPrice Float
-  monthPrice          Float
+  registrationPrice   Float?
+  reregistrationPrice Float?
+  monthPrice          Float?
+  examePrice          Float?
+  registrationMulta   Float?
 
   courseId Int?
   course   Course? @relation(fields: [courseId], references: [id])
