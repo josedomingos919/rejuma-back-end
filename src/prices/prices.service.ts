@@ -24,6 +24,8 @@ export class PriceService {
   }
 
   async update(dto: UpdatePricesDto) {
+    if (dto?.examePrice) dto.examePrice = Number(dto.examePrice);
+
     try {
       const price = await this.prisma.registrationPrice.update({
         where: {
@@ -42,6 +44,8 @@ export class PriceService {
   }
 
   async add(dto: AddPricesDto) {
+    if (dto?.examePrice) dto.examePrice = Number(dto.examePrice);
+
     if (await this.isExistingPrice(dto)) {
       throw new ForbiddenException({
         status: false,
