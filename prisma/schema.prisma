@@ -97,6 +97,8 @@ model Student {
   workStation         String?
   sponsorOfEducation  String?
 
+  balance Float?
+
   @@map("student")
 }
 
