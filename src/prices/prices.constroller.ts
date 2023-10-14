@@ -9,10 +9,12 @@ import {
   Param,
   HttpStatus,
   HttpCode,
+  Query,
 } from '@nestjs/common';
 
 import { AddPricesDto, UpdatePricesDto } from './dto';
 import { PriceService } from './prices.service';
+import { GetPriceDto } from './dto/getPriceDto';
 
 @Controller('price')
 export class PriceController {
@@ -32,6 +34,11 @@ export class PriceController {
   @Get('all')
   getAll() {
     return this.pricesService.getAll();
+  }
+
+  @Get('filter')
+  getPrice(@Query() query: GetPriceDto) {
+    return this.pricesService.getPrice(query);
   }
 
   @Delete('/:id')
