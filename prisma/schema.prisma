@@ -130,8 +130,7 @@ model Employee {
   teacher      Teacher[]
   Registration Registration[]
   payment      Payment[]
-  Invoice      Invoice?       @relation(fields: [invoiceId], references: [id])
-  invoiceId    Int?
+  Invoice      Invoice[]
 
   @@map("employees")
 }
@@ -503,9 +502,10 @@ model Setting {
 }
 
 model Invoice {
-  id             Int          @id @default(autoincrement())
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   number         String?
   registration   Registration @relation(fields: [registrationId], references: [id])
   registrationId Int
@@ -515,10 +515,13 @@ model Invoice {
   valorDado      Float
   troco          Float
 
-  status   Status     @relation(fields: [statusId], references: [id])
+  status   Status @relation(fields: [statusId], references: [id])
   statusId Int
-  Employee Employee[]
-  Payment  Payment[]
+
+  employee   Employee @relation(fields: [employeeId], references: [id])
+  employeeId Int
+
+  Payment Payment[]
 
   @@map("invoice")
 }
