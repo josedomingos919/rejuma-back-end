@@ -1,9 +1,10 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { statusTypes } from 'src/helpers';
+import { getPagination, statusTypes } from 'src/helpers';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AddPaymentDto } from './dto/addPaymentDto';
 import { CartDto } from './dto/cartDto';
 import { PaymentCodeType } from 'src/helpers/consts/paymentCodeType';
+import { GetPaymentDto } from './dto/getPaymentDto';
 
 @Injectable()
 export class PaymentService {
@@ -139,5 +140,101 @@ export class PaymentService {
     }
 
     return paymentResponse;
+  }
+
+  //Estou comentando
+  private getAllPaymentFilter(filter: GetPaymentDto) {
+    const where = {
+      NOT: {
+        status: {
+          code: 'ELIM',
+        },
+      },
+    };
+
+    const { name } = filter;
+
+    if (name) {
+      const OR: any = [
+        {
+          registration: {
+            student: {
+              name: { contains: name },
+            },
+          },
+        },
+        {
+          registration: {
+            student: {
+              bi: { contains: name },
+            },
+          },
+        },
+        {},
+      ];
+
+      const nameInNumber = Number(name);
+
+      if (nameInNumber >= 0) {
+        OR.push({
+          id: {
+            equals: nameInNumber,
+          },
+        });
+      }
+
+      where['OR'] = OR;
+    }
+
+    return { where };
+  }
+
+  async getAllPayment(filter: GetPaymentDto) {
+    const { page = 1, size = 10 } = filter;
+    const { where } = this.getAllPaymentFilter(filter);
+
+    const total = await this.prisma.invoice.count({
+      where,
+    });
+
+    const { skip, take, totalPage } = getPagination({ page, size, total });
+
+    const payment = await this.prisma.invoice.findMany({
+      skip,
+      take,
+      where,
+      include: {
+        Payment: {
+          include: {
+            Exam: true,
+            status: true,
+            SchoolFees: true,
+            SchoolResource: true,
+          },
+        },
+        employee: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        registration: {
+          include: {
+            status: true,
+            student: true,
+          },
+        },
+      },
+      orderBy: {
+        id: 'desc',
+      },
+    });
+
+    return {
+      page,
+      total,
+      totalPage,
+      payment,
+    };
   }
 }
