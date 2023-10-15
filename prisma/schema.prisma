@@ -355,6 +355,7 @@ model Registration {
   studentId   Int
   productSale ProductSale[]
   payment     Payment[]
+  Invoice     Invoice[]
 
   @@map("registration")
 }
@@ -424,6 +425,8 @@ model Payment {
 
   type           String
   value          Float
+  multa          Float
+  total          Float
   employee       Employee         @relation(fields: [employeeId], references: [id])
   status         Status           @relation(fields: [statusId], references: [id])
   registration   Registration     @relation(fields: [registrationId], references: [id])
@@ -491,4 +494,20 @@ model Setting {
   value     String
 
   @@map("setting")
+}
+
+model Invoice {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  registration   Registration @relation(fields: [registrationId], references: [id])
+  registrationId Int
+  subTotal       Float
+  descontoSaldo  Float
+  total          Float
+  valorDado      Float
+  troco          Float
+
+  @@map("invoice")
 }
