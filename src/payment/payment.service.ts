@@ -19,9 +19,10 @@ export class PaymentService {
           include: {
             payment: {
               include: {
-                SchoolResource: true,
-                SchoolFees: true,
                 Exam: true,
+                status: true,
+                SchoolFees: true,
+                SchoolResource: true,
               },
             },
           },
