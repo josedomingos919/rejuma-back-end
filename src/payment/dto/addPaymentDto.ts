@@ -21,12 +21,17 @@ export class AddPaymentDto {
   @Transform(({ value }) => Number(value))
   @IsNotEmpty()
   @IsNumber()
-  troco: number;
+  balance: number;
 
   @Transform(({ value }) => Number(value))
   @IsNotEmpty()
   @IsNumber()
   descontoSaldo: number;
+
+  @Transform(({ value }) => Number(value))
+  @IsNotEmpty()
+  @IsNumber()
+  troco: number;
 
   @IsNotEmpty()
   @IsInt()
@@ -35,6 +40,10 @@ export class AddPaymentDto {
   @IsNotEmpty()
   @IsInt()
   employeeId: number;
+
+  @IsNotEmpty()
+  @IsInt()
+  studentId: number;
 
   @IsArray()
   @IsNotEmpty()

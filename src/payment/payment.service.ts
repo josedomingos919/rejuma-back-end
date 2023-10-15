@@ -71,6 +71,15 @@ export class PaymentService {
       );
     }
 
+    await this.prisma.student.update({
+      where: {
+        id: dto.studentId,
+      },
+      data: {
+        balance: dto.balance - dto.descontoSaldo + dto.troco,
+      },
+    });
+
     return invoice;
   }
 
