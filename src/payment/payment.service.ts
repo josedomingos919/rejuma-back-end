@@ -16,6 +16,15 @@ export class PaymentService {
       },
       include: {
         registration: {
+          include: {
+            payment: {
+              include: {
+                SchoolResource: true,
+                SchoolFees: true,
+                Exam: true,
+              },
+            },
+          },
           where: {
             status: {
               code: statusTypes.ACTIVE,
