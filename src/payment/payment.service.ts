@@ -224,6 +224,7 @@ export class PaymentService {
             student: true,
           },
         },
+        status: true,
       },
       orderBy: {
         id: 'desc',
