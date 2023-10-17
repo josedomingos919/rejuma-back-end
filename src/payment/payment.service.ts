@@ -39,6 +39,13 @@ export class PaymentService {
     return response;
   }
 
+  getInvoiceNumber({ id, date }) {
+    const invoiceYear = `${new Date(date).getFullYear()}`;
+    const zeroNumber = '000000'.substring(0, 6 - `${id}`.length);
+
+    return `${invoiceYear}${zeroNumber}${id}`;
+  }
+
   async addPayment(dto: AddPaymentDto) {
     const status = await this.prisma.status.findFirst({
       where: {
@@ -72,6 +79,20 @@ export class PaymentService {
         error: 'invoice-not-created',
       });
 
+    // set invoice number
+    await this.prisma.invoice.update({
+      data: {
+        number: this.getInvoiceNumber({
+          id: invoice.id,
+          date: invoice.createdAt,
+        }),
+      },
+      where: {
+        id: invoice.id,
+      },
+    });
+
+    // register invoice payment
     for (const payment of dto.cart) {
       await this.addInvoicePayment(
         payment,
@@ -170,7 +191,9 @@ export class PaymentService {
             },
           },
         },
-        {},
+        {
+          number: { contains: name },
+        },
       ];
 
       const nameInNumber = Number(name);
