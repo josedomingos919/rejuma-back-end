@@ -22,8 +22,16 @@ export class PaymentService {
               include: {
                 Exam: true,
                 status: true,
-                SchoolFees: true,
-                SchoolResource: true,
+                SchoolFees: {
+                  include: {
+                    month: true,
+                  },
+                },
+                SchoolResource: {
+                  include: {
+                    discipline: true,
+                  },
+                },
               },
             },
           },
@@ -122,8 +130,16 @@ export class PaymentService {
           include: {
             Exam: true,
             status: true,
-            SchoolFees: true,
-            SchoolResource: true,
+            SchoolFees: {
+              include: {
+                month: true,
+              },
+            },
+            SchoolResource: {
+              include: {
+                discipline: true,
+              },
+            },
           },
         },
         employee: {
@@ -264,8 +280,16 @@ export class PaymentService {
           include: {
             Exam: true,
             status: true,
-            SchoolFees: true,
-            SchoolResource: true,
+            SchoolFees: {
+              include: {
+                month: true,
+              },
+            },
+            SchoolResource: {
+              include: {
+                discipline: true,
+              },
+            },
           },
         },
         employee: {
