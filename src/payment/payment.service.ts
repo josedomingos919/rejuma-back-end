@@ -112,7 +112,40 @@ export class PaymentService {
       },
     });
 
-    return invoice;
+    // payment
+    const payment = await this.prisma.invoice.findFirst({
+      where: {
+        id: invoice?.id,
+      },
+      include: {
+        Payment: {
+          include: {
+            Exam: true,
+            status: true,
+            SchoolFees: true,
+            SchoolResource: true,
+          },
+        },
+        employee: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        registration: {
+          include: {
+            status: true,
+            student: true,
+          },
+        },
+        status: true,
+      },
+      orderBy: {
+        id: 'desc',
+      },
+    });
+
+    return payment;
   }
 
   async addInvoicePayment(
