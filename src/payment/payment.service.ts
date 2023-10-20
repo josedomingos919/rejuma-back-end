@@ -1,64 +1,297 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
+import { getPagination, statusTypes } from 'src/helpers';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { UpdatePaymentDto, AddPaymentDto, GetAllPaymentsDto } from './dto';
+import { AddPaymentDto } from './dto/addPaymentDto';
+import { CartDto } from './dto/cartDto';
+import { PaymentCodeType } from 'src/helpers/consts/paymentCodeType';
+import { GetPaymentDto } from './dto/getPaymentDto';
 
 @Injectable()
 export class PaymentService {
   constructor(private prisma: PrismaService) {}
 
-  async add(dto: AddPaymentDto) {
-    try {
-      const payment = await this.prisma.payment.create({
-        data: dto,
-      });
-
-      return payment;
-    } catch (error) {
-      throw new ForbiddenException({
-        error,
-        status: false,
-      });
-    }
-  }
-
-  async update(dto: UpdatePaymentDto) {
-    try {
-      const payment = await this.prisma.payment.update({
-        where: {
-          id: dto.id,
-        },
-        data: dto,
-      });
-
-      return payment;
-    } catch (error) {
-      throw new ForbiddenException({
-        error,
-        status: false,
-      });
-    }
-  }
-
-  async getAll(dto: GetAllPaymentsDto) {
-    try {
-      const payments = await this.prisma.payment.findMany({});
-
-      return payments;
-    } catch (error) {
-      throw new ForbiddenException({
-        error,
-        status: false,
-      });
-    }
-  }
-
-  async remove(id: number) {
-    const response = await this.prisma.payment.delete({
+  async searchStudent(search: string) {
+    const response = await this.prisma.student.findMany({
       where: {
-        id,
+        OR: [{ name: { contains: search } }, { bi: { contains: search } }],
+      },
+      include: {
+        registration: {
+          include: {
+            payment: {
+              include: {
+                Exam: true,
+                status: true,
+                SchoolFees: true,
+                SchoolResource: true,
+              },
+            },
+          },
+          where: {
+            status: {
+              code: statusTypes.ACTIVE,
+            },
+          },
+        },
       },
     });
 
     return response;
+  }
+
+  getInvoiceNumber({ id, date }) {
+    const invoiceYear = `${new Date(date).getFullYear()}`;
+    const zeroNumber = '000000'.substring(0, 6 - `${id}`.length);
+
+    return `${invoiceYear}${zeroNumber}${id}`;
+  }
+
+  async addPayment(dto: AddPaymentDto) {
+    const status = await this.prisma.status.findFirst({
+      where: {
+        code: statusTypes.ACTIVE,
+      },
+    });
+
+    if (!status?.id)
+      throw new ForbiddenException({
+        message: 'Estado não encontrado',
+        error: 'error-status-not-found',
+      });
+
+    const invoice = await this.prisma.invoice.create({
+      data: {
+        number: '',
+        total: dto.total,
+        descontoSaldo: dto.descontoSaldo,
+        subTotal: dto.subTotal,
+        troco: dto.troco,
+        valorDado: dto.valorDado,
+        registrationId: dto.registrationId,
+        statusId: status.id,
+        employeeId: dto.employeeId,
+      },
+    });
+
+    if (!invoice?.id)
+      throw new ForbiddenException({
+        message: 'Falha ao criar a fatura',
+        error: 'invoice-not-created',
+      });
+
+    // set invoice number
+    await this.prisma.invoice.update({
+      data: {
+        number: this.getInvoiceNumber({
+          id: invoice.id,
+          date: invoice.createdAt,
+        }),
+      },
+      where: {
+        id: invoice.id,
+      },
+    });
+
+    // register invoice payment
+    for (const payment of dto.cart) {
+      await this.addInvoicePayment(
+        payment,
+        status.id,
+        invoice.id,
+        dto.employeeId,
+        dto.registrationId,
+      );
+    }
+
+    await this.prisma.student.update({
+      where: {
+        id: dto.studentId,
+      },
+      data: {
+        balance: dto.balance - dto.descontoSaldo + dto.troco,
+      },
+    });
+
+    // payment
+    const payment = await this.prisma.invoice.findFirst({
+      where: {
+        id: invoice?.id,
+      },
+      include: {
+        Payment: {
+          include: {
+            Exam: true,
+            status: true,
+            SchoolFees: true,
+            SchoolResource: true,
+          },
+        },
+        employee: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        registration: {
+          include: {
+            status: true,
+            student: true,
+          },
+        },
+        status: true,
+      },
+      orderBy: {
+        id: 'desc',
+      },
+    });
+
+    return payment;
+  }
+
+  async addInvoicePayment(
+    payment: CartDto,
+    statusId: number,
+    invoiceId: number,
+    employeeId: number,
+    registrationId: number,
+  ) {
+    const paymentResponse = await this.prisma.payment.create({
+      data: {
+        statusId,
+        invoiceId,
+        employeeId,
+        registrationId,
+        type: payment.type,
+        value: payment.value,
+        multa: payment.multa,
+        total: payment.total,
+      },
+    });
+
+    // add extra data
+    if (payment.type == PaymentCodeType.Propina) {
+      await this.prisma.schoolFees.create({
+        data: {
+          monthsId: payment.monthsId,
+          schoolFine: payment.hasMulta,
+          paymentId: paymentResponse.id,
+        },
+      });
+    } else if (payment.type == PaymentCodeType.Recurso) {
+      await this.prisma.schoolResource.create({
+        data: {
+          disciplineId: payment.disciplineId,
+          paymentId: paymentResponse.id,
+        },
+      });
+    } else if (payment.type == PaymentCodeType.ExameEspecial) {
+      await this.prisma.exam.create({
+        data: {
+          disciplineId: payment.disciplineId,
+          paymentId: paymentResponse.id,
+        },
+      });
+    }
+
+    return paymentResponse;
+  }
+
+  //Estou comentando
+  private getAllPaymentFilter(filter: GetPaymentDto) {
+    const where = {
+      NOT: {
+        status: {
+          code: 'ELIM',
+        },
+      },
+    };
+
+    const { name } = filter;
+
+    if (name) {
+      const OR: any = [
+        {
+          registration: {
+            student: {
+              name: { contains: name },
+            },
+          },
+        },
+        {
+          registration: {
+            student: {
+              bi: { contains: name },
+            },
+          },
+        },
+        {
+          number: { contains: name },
+        },
+      ];
+
+      const nameInNumber = Number(name);
+
+      if (nameInNumber >= 0) {
+        OR.push({
+          id: {
+            equals: nameInNumber,
+          },
+        });
+      }
+
+      where['OR'] = OR;
+    }
+
+    return { where };
+  }
+
+  async getAllPayment(filter: GetPaymentDto) {
+    const { page = 1, size = 10 } = filter;
+    const { where } = this.getAllPaymentFilter(filter);
+
+    const total = await this.prisma.invoice.count({
+      where,
+    });
+
+    const { skip, take, totalPage } = getPagination({ page, size, total });
+
+    const payment = await this.prisma.invoice.findMany({
+      skip,
+      take,
+      where,
+      include: {
+        Payment: {
+          include: {
+            Exam: true,
+            status: true,
+            SchoolFees: true,
+            SchoolResource: true,
+          },
+        },
+        employee: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        registration: {
+          include: {
+            status: true,
+            student: true,
+          },
+        },
+        status: true,
+      },
+      orderBy: {
+        id: 'desc',
+      },
+    });
+
+    return {
+      page,
+      total,
+      totalPage,
+      payment,
+    };
   }
 }

@@ -1,6 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AddPricesDto, UpdatePricesDto } from './dto';
+import { GetPriceDto } from './dto/getPriceDto';
 
 @Injectable()
 export class PriceService {
@@ -24,6 +25,8 @@ export class PriceService {
   }
 
   async update(dto: UpdatePricesDto) {
+    if (dto?.examePrice) dto.examePrice = Number(dto.examePrice);
+
     try {
       const price = await this.prisma.registrationPrice.update({
         where: {
@@ -42,6 +45,8 @@ export class PriceService {
   }
 
   async add(dto: AddPricesDto) {
+    if (dto?.examePrice) dto.examePrice = Number(dto.examePrice);
+
     if (await this.isExistingPrice(dto)) {
       throw new ForbiddenException({
         status: false,
@@ -87,6 +92,17 @@ export class PriceService {
     const response = await this.prisma.registrationPrice.delete({
       where: {
         id,
+      },
+    });
+
+    return response;
+  }
+
+  async getPrice(query: GetPriceDto) {
+    const response = await this.prisma.registrationPrice.findFirst({
+      where: {
+        classId: query.classId,
+        courseId: query.courseId,
       },
     });
 

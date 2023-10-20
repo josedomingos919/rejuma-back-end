@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsNotEmpty, IsOptional, IsInt } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsInt, IsNumber } from 'class-validator';
 
 export class UpdatePricesDto {
   @Transform(({ value }) => Number.parseInt(value))
@@ -21,4 +21,14 @@ export class UpdatePricesDto {
   @Transform(({ value }) => Number.parseFloat(value))
   @IsInt()
   monthPrice: number;
+
+  @IsOptional()
+  @Transform(({ value }) => Number.parseFloat(value))
+  @IsInt()
+  registrationMulta: number;
+
+  @Transform(({ value }) => Number(value))
+  @IsOptional()
+  @IsNumber()
+  examePrice: number;
 }

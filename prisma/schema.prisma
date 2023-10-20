@@ -69,7 +69,7 @@ model Student {
   updatedAt DateTime @updatedAt
 
   name         String
-  bi           String?        
+  bi           String?
   birthDay     DateTime?
   civilState   String?
   gender       String?
@@ -96,6 +96,8 @@ model Student {
   work                String?
   workStation         String?
   sponsorOfEducation  String?
+
+  balance Float @default(0)
 
   @@map("student")
 }
@@ -128,6 +130,7 @@ model Employee {
   teacher      Teacher[]
   Registration Registration[]
   payment      Payment[]
+  Invoice      Invoice[]
 
   @@map("employees")
 }
@@ -161,6 +164,7 @@ model Status {
   ClassTeam    ClassTeam[]
   Registration Registration[]
   payment      Payment[]
+  Invoice      Invoice[]
 
   @@map("status")
 }
@@ -259,9 +263,11 @@ model RegistrationPrice {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  registrationPrice   Float
-  reregistrationPrice Float
-  monthPrice          Float
+  registrationPrice   Float?
+  reregistrationPrice Float?
+  monthPrice          Float?
+  examePrice          Float?
+  registrationMulta   Float?
 
   courseId Int?
   course   Course? @relation(fields: [courseId], references: [id])
@@ -351,6 +357,7 @@ model Registration {
   studentId   Int
   productSale ProductSale[]
   payment     Payment[]
+  Invoice     Invoice[]
 
   @@map("registration")
 }
@@ -420,6 +427,8 @@ model Payment {
 
   type           String
   value          Float
+  multa          Float
+  total          Float
   employee       Employee         @relation(fields: [employeeId], references: [id])
   status         Status           @relation(fields: [statusId], references: [id])
   registration   Registration     @relation(fields: [registrationId], references: [id])
@@ -429,6 +438,9 @@ model Payment {
   SchoolFees     SchoolFees[]
   Exam           Exam[]
   SchoolResource SchoolResource[]
+
+  invoice   Invoice @relation(fields: [invoiceId], references: [id])
+  invoiceId Int
 
   @@map("payment")
 }
@@ -487,4 +499,29 @@ model Setting {
   value     String
 
   @@map("setting")
+}
+
+model Invoice {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  number         String?
+  registration   Registration @relation(fields: [registrationId], references: [id])
+  registrationId Int
+  subTotal       Float
+  descontoSaldo  Float
+  total          Float
+  valorDado      Float
+  troco          Float
+
+  status   Status @relation(fields: [statusId], references: [id])
+  statusId Int
+
+  employee   Employee @relation(fields: [employeeId], references: [id])
+  employeeId Int
+
+  Payment Payment[]
+
+  @@map("invoice")
 }
