@@ -1,5 +1,6 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { AddMonthDto } from './dto/addMonthDto';
 
 @Injectable()
 export class MonthsService {
@@ -16,5 +17,32 @@ export class MonthsService {
         status: false,
       });
     }
+  }
+
+  async addMonth(dto: AddMonthDto) {
+    try {
+      const response = await this.prisma.months.create({
+        data: dto,
+      });
+
+      return response;
+    } catch (error) {
+      throw new ForbiddenException({
+        error,
+        status: false,
+      });
+    }
+  }
+
+  async getMonths(year: number) {
+    const response = await this.prisma.months.findMany({
+      where: {
+        schoolYear: {
+          year,
+        },
+      },
+    });
+
+    return response;
   }
 }
