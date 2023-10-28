@@ -5,6 +5,7 @@ import {
   Param,
   ParseIntPipe,
   Body,
+  Delete,
 } from '@nestjs/common';
 import { MonthsService } from './months.service';
 import { AddMonthDto } from './dto/addMonthDto';
@@ -26,5 +27,10 @@ export class MonthsController {
   @Get('/:year')
   getMonths(@Param('year', ParseIntPipe) year: number) {
     return this.monthsService.getMonths(year);
+  }
+
+  @Delete('/:id')
+  removeMonth(@Param('id', ParseIntPipe) id: number) {
+    return this.monthsService.removeMonth(id);
   }
 }

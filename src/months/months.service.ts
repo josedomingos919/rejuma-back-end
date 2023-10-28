@@ -41,8 +41,24 @@ export class MonthsService {
           year,
         },
       },
+      include: {
+        schoolYear: true,
+      },
     });
 
     return response;
+  }
+
+  async removeMonth(id: number) {
+    try {
+      const response = await this.prisma.months.delete({ where: { id } });
+
+      return response;
+    } catch (error) {
+      throw new ForbiddenException({
+        error,
+        status: false,
+      });
+    }
   }
 }
