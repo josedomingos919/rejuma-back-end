@@ -18,6 +18,7 @@ export class PaymentService {
       include: {
         registration: {
           include: {
+            SchoolYear: true,
             payment: {
               include: {
                 Exam: true,
@@ -34,6 +35,9 @@ export class PaymentService {
                 },
               },
             },
+            class: true,
+            course: true,
+            classTeam: true,
           },
           where: {
             status: {

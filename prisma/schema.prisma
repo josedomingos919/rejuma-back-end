@@ -224,6 +224,7 @@ model SchoolYear {
   description  String
   classTeam    ClassTeam[]
   registration Registration[]
+  Months       Months[]
 
   @@map("schoolyear")
 }
@@ -413,8 +414,14 @@ model Months {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name       String
-  number     Int
+  name        String
+  number      Int
+  initialDate DateTime
+  limitDate   DateTime
+
+  schoolYear   SchoolYear @relation(fields: [schoolYearId], references: [id])
+  schoolYearId Int
+
   SchoolFees SchoolFees[]
 
   @@map("months")
