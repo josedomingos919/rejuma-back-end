@@ -5,4 +5,5 @@ export const statusTypes = {
   SUSPENDED: 'SUSP',
   TRANSFERRED: 'TRAN',
   EXPELLED: 'EXP',
+  ANNULLED: 'ANUL',
 };

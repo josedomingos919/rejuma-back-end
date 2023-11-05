@@ -322,4 +322,38 @@ export class PaymentService {
       payment,
     };
   }
+
+  async cancelPayment(id: number) {
+    // Get status
+    const status = await this.prisma.status.findFirst({
+      where: {
+        code: statusTypes.ANNULLED,
+      },
+    });
+
+    // Invalid invoice
+    const responseInvoice = await this.prisma.invoice.update({
+      where: {
+        id,
+      },
+      data: {
+        statusId: status.id,
+      },
+    });
+
+    // Invalida payments
+    const responsePayment = await this.prisma.payment.updateMany({
+      where: {
+        invoiceId: id,
+      },
+      data: {
+        statusId: status.id,
+      },
+    });
+
+    return {
+      responseInvoice,
+      responsePayment,
+    };
+  }
 }
