@@ -331,6 +331,49 @@ export class PaymentService {
       },
     });
 
+    // Invoice
+    const invoice = await this.prisma.invoice.findFirst({
+      where: {
+        id,
+      },
+      include: {
+        status: true,
+        registration: {
+          include: {
+            student: true,
+          },
+        },
+      },
+    });
+
+    if (!invoice)
+      throw new ForbiddenException({
+        error: 'invoice-not-found',
+        status: false,
+      });
+
+    if (invoice?.status?.code == status?.code)
+      throw new ForbiddenException({
+        error: 'payment-already-cancelled',
+        status: false,
+      });
+
+    // Calc balance
+    const updatedBalance =
+      invoice?.registration?.student?.balance -
+      invoice?.troco +
+      invoice?.descontoSaldo;
+
+    // Updated Balance
+    await this.prisma.student.update({
+      where: {
+        id: invoice?.registration?.student?.id,
+      },
+      data: {
+        balance: updatedBalance,
+      },
+    });
+
     // Invalid invoice
     const responseInvoice = await this.prisma.invoice.update({
       where: {
