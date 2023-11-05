@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { PaymentService } from './payment.service';
 import { AddPaymentDto } from './dto/addPaymentDto';
 import { GetAllMatriculationDto } from 'src/matriculation/dto/getAllMatriculationDto';
@@ -20,5 +28,10 @@ export class PaymentController {
   @Get('all')
   getAll(@Query() dto: GetAllMatriculationDto) {
     return this.paymentService.getAllPayment(dto);
+  }
+
+  @Post('cancel/:id')
+  cancelPayment(@Param('id', ParseIntPipe) id: number) {
+    return this.paymentService.cancelPayment(id);
   }
 }
