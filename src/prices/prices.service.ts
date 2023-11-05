@@ -8,9 +8,8 @@ export class PriceService {
   constructor(private prisma: PrismaService) {}
 
   async isExistingPrice(dto: AddPricesDto) {
-    const where = {
+    const where: any = {
       classId: dto.classId,
-      courseId: null,
     };
 
     if (dto?.courseId) {
