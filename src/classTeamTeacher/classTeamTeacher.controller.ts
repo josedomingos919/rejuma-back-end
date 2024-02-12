@@ -15,9 +15,9 @@ import { AddClassTeamTeacherDto, UpdateClassTeamTeacherDto } from './dto';
 export class ClassTeamTeacherController {
   constructor(private classTeamTeacherService: ClassTeamsTeacherService) {}
 
-  @Get()
-  get() {
-    return this.classTeamTeacherService.get();
+  @Get('/:classTeamId')
+  get(@Param('classTeamId', ParseIntPipe) classTeamId: number) {
+    return this.classTeamTeacherService.get(classTeamId);
   }
 
   @Post()

@@ -6,8 +6,11 @@ import { AddClassTeamTeacherDto, UpdateClassTeamTeacherDto } from './dto';
 export class ClassTeamsTeacherService {
   constructor(private prisma: PrismaService) {}
 
-  async get() {
+  async get(classTeamId: number) {
     const response = await this.prisma.classTeamTeacher.findMany({
+      where: {
+        classTeamId,
+      },
       include: {
         teacher: {
           include: {
