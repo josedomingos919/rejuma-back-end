@@ -30,7 +30,7 @@ export class ClassTeamTeacherController {
     return this.classTeamTeacherService.update(data);
   }
 
-  @Delete(':/id')
+  @Delete('/:id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.classTeamTeacherService.remove(id);
   }

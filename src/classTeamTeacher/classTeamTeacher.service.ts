@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AddClassTeamTeacherDto, UpdateClassTeamTeacherDto } from './dto';
 
@@ -11,11 +11,38 @@ export class ClassTeamsTeacherService {
       include: {
         teacher: {
           include: {
-            employee: true,
+            employee: {
+              select: {
+                id: true,
+                bi: true,
+                name: true,
+              },
+            },
           },
         },
-        discipline: true,
-        classTeam: true,
+        discipline: {
+          select: {
+            id: true,
+            name: true,
+            description: true,
+          },
+        },
+        classTeam: {
+          include: {
+            schoolYear: {
+              select: {
+                id: true,
+                year: true,
+              },
+            },
+            class: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -23,30 +50,42 @@ export class ClassTeamsTeacherService {
   }
 
   async add(data: AddClassTeamTeacherDto) {
-    const response = await this.prisma.classTeamTeacher.create({
-      data: {
-        teacherId: data.teacherId,
-        classTeamId: data.classTeamId,
-        disciplineId: data.disciplineId,
-      },
-    });
+    try {
+      const response = await this.prisma.classTeamTeacher.create({
+        data: {
+          teacherId: data.teacherId,
+          classTeamId: data.classTeamId,
+          disciplineId: data.disciplineId,
+        },
+      });
 
-    return response;
+      return response;
+    } catch (error) {
+      throw new ForbiddenException({
+        error,
+      });
+    }
   }
 
   async update(data: UpdateClassTeamTeacherDto) {
-    const response = await this.prisma.classTeamTeacher.update({
-      data: {
-        teacherId: data.teacherId,
-        classTeamId: data.classTeamId,
-        disciplineId: data.disciplineId,
-      },
-      where: {
-        id: data.id,
-      },
-    });
+    try {
+      const response = await this.prisma.classTeamTeacher.update({
+        data: {
+          teacherId: data.teacherId,
+          classTeamId: data.classTeamId,
+          disciplineId: data.disciplineId,
+        },
+        where: {
+          id: data.id,
+        },
+      });
 
-    return response;
+      return response;
+    } catch (error) {
+      throw new ForbiddenException({
+        error,
+      });
+    }
   }
 
   async remove(id: number) {
