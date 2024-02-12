@@ -7,13 +7,20 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { ClassTeamsTeacherService } from './classTeamTeacher.service';
 import { AddClassTeamTeacherDto, UpdateClassTeamTeacherDto } from './dto';
+import { GetAvaliabledDisciplinesDto } from './dto/getAvaliabledDisciplinesDto';
 
 @Controller('class-team-teacher')
 export class ClassTeamTeacherController {
   constructor(private classTeamTeacherService: ClassTeamsTeacherService) {}
+
+  @Get('/avaliable-diciplines')
+  getAvaliabledDisciplines(@Query() queryParams: GetAvaliabledDisciplinesDto) {
+    return this.classTeamTeacherService.getAvaliabledDisciplines(queryParams);
+  }
 
   @Get('/:classTeamId')
   get(@Param('classTeamId', ParseIntPipe) classTeamId: number) {

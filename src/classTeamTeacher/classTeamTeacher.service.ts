@@ -1,6 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AddClassTeamTeacherDto, UpdateClassTeamTeacherDto } from './dto';
+import { GetAvaliabledDisciplinesDto } from './dto/getAvaliabledDisciplinesDto';
 
 @Injectable()
 export class ClassTeamsTeacherService {
@@ -95,6 +96,32 @@ export class ClassTeamsTeacherService {
     const response = await this.prisma.classTeamTeacher.delete({
       where: {
         id,
+      },
+    });
+
+    return response;
+  }
+
+  async getAvaliabledDisciplines(data: GetAvaliabledDisciplinesDto) {
+    const classTeam = await this.prisma.classTeam.findUnique({
+      where: {
+        id: data.classTeamId,
+      },
+    });
+
+    const response = await this.prisma.discipline.findMany({
+      where: {
+        classTeamTeacher: {
+          none: {
+            classTeamId: data.classTeamId,
+          },
+        },
+        CurriculumGrid: {
+          some: {
+            classId: classTeam?.classId,
+            courseId: classTeam?.courseId || null,
+          },
+        },
       },
     });
 
