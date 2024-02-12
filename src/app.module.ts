@@ -26,6 +26,7 @@ import { SchoolFeesModule } from './schoolFees/schoolFees.module';
 import { ExamModule } from './exam/exam.module';
 import { SchoolResourceModule } from './schoolResource/school-resource.module';
 import { PaymentModule } from './payment/payment.module';
+import { ClassTeamsTeacherModule } from './classTeamTeacher/classTeamTeacher.module';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { PaymentModule } from './payment/payment.module';
     ExamModule,
     SchoolResourceModule,
     PaymentModule,
+    ClassTeamsTeacherModule,
   ],
 })
 export class AppModule {}
