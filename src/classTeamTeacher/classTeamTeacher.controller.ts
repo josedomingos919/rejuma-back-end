@@ -17,6 +17,11 @@ import { GetAvaliabledDisciplinesDto } from './dto/getAvaliabledDisciplinesDto';
 export class ClassTeamTeacherController {
   constructor(private classTeamTeacherService: ClassTeamsTeacherService) {}
 
+  @Get('/search')
+  search(@Query('keyword') keyword: string) {
+    return this.classTeamTeacherService.search(keyword);
+  }
+
   @Get('/avaliable-diciplines')
   getAvaliabledDisciplines(@Query() queryParams: GetAvaliabledDisciplinesDto) {
     return this.classTeamTeacherService.getAvaliabledDisciplines(queryParams);

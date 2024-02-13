@@ -103,28 +103,62 @@ export class ClassTeamsTeacherService {
   }
 
   async getAvaliabledDisciplines(data: GetAvaliabledDisciplinesDto) {
+    if (!data.classTeamId)
+      throw new ForbiddenException({ error: 'classTeamId-null' });
+
     const classTeam = await this.prisma.classTeam.findUnique({
       where: {
         id: data.classTeamId,
       },
     });
 
-    const response = await this.prisma.discipline.findMany({
-      where: {
-        classTeamTeacher: {
-          none: {
-            classTeamId: data.classTeamId,
-          },
-        },
-        CurriculumGrid: {
-          some: {
-            classId: classTeam?.classId,
-            courseId: classTeam?.courseId || null,
-          },
-        },
-      },
-    });
+    if (!classTeam)
+      throw new ForbiddenException({ error: 'classTeamId-not-found' });
 
-    return response;
+    try {
+      const response = await this.prisma.discipline.findMany({
+        where: {
+          classTeamTeacher: {
+            none: {
+              classTeamId: data.classTeamId,
+            },
+          },
+          CurriculumGrid: {
+            some: {
+              classId: classTeam?.classId,
+              courseId: classTeam?.courseId || null,
+            },
+          },
+        },
+      });
+
+      return response;
+    } catch (error) {
+      throw new ForbiddenException({ error });
+    }
+  }
+
+  async search(keyword: string) {
+    try {
+      if (!keyword) throw new ForbiddenException({ error: 'empty-keyword' });
+
+      const response = await this.prisma.teacher.findMany({
+        select: {
+          id: true,
+          employee: true,
+        },
+        where: {
+          employee: {
+            name: {
+              contains: keyword,
+            },
+          },
+        },
+      });
+
+      return response;
+    } catch (error) {
+      throw new ForbiddenException({ error });
+    }
   }
 }
