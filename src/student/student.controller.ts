@@ -43,7 +43,6 @@ export class StudentController {
 
   @Get()
   getAll(@Query() queryParams: GetAllStudentDto) {
-    return 'José';
     return this.studentService.getAllStudents(queryParams);
   }
 
