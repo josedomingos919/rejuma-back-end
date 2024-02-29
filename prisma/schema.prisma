@@ -346,6 +346,7 @@ model Schedule {
   classTeamId  Int
   weekDaysId   Int
 
+  @@unique([startTime, endTime, classTeamId, weekDaysId])
   @@map("schedule")
 }
 
