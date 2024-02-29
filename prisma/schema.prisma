@@ -195,6 +195,7 @@ model Discipline {
   CurriculumGrid     CurriculumGrid[]
   Exam               Exam[]
   SchoolResource     SchoolResource[]
+  Schedule           Schedule[]
 
   @@map("discipline")
 }
@@ -305,6 +306,9 @@ model ClassTeam {
   status       Status?        @relation(fields: [statusId], references: [id])
   Registration Registration[]
 
+  classTeamScheduleId Int?
+  Schedule            Schedule[]
+
   @@unique([name, schoolYearId, classId])
   @@map("classteam")
 }
@@ -325,6 +329,37 @@ model ClassTeamTeacher {
 
   @@unique([teacherId, disciplineId, classTeamId])
   @@map("classteamteacher")
+}
+
+model Schedule {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  classTeam  ClassTeam  @relation(fields: [classTeamId], references: [id])
+  discipline Discipline @relation(fields: [disciplineId], references: [id])
+  weekDay    weekDays   @relation(fields: [weekDaysId], references: [id])
+
+  startTime    DateTime
+  endTime      DateTime
+  disciplineId Int
+  classTeamId  Int
+  weekDaysId   Int
+
+  @@map("schedule")
+}
+
+model weekDays {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name     String
+  short    String
+  number   Int
+  Schedule Schedule[]
+
+  @@map("weekdays")
 }
 
 model Registration {
