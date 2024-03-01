@@ -11,8 +11,8 @@ export class ScheduleService {
     try {
       const response = await this.prisma.schedule.create({
         data: {
-          endTime: dto.endTime,
-          startTime: dto.startTime,
+          endTime: new Date(`2024-01-01 ${dto.endTime}:00`).toISOString(),
+          startTime: new Date(`2024-01-01 ${dto.startTime}:00`).toISOString(),
           weekDaysId: dto.weekDaysId,
           classTeamId: dto.classTeamId,
           disciplineId: dto.disciplineId,
