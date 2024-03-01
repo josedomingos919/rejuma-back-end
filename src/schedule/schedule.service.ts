@@ -53,8 +53,16 @@ export class ScheduleService {
   async get(classTeamId: number) {
     try {
       const response = await this.prisma.weekDays.findMany({
+        where: {
+          id: {
+            notIn: [1, 7],
+          },
+        },
         include: {
           Schedule: {
+            include: {
+              discipline: true,
+            },
             where: {
               classTeamId,
             },
