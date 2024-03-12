@@ -172,4 +172,21 @@ export class ClassTeamService {
       });
     }
   }
+
+  async getOne(id: number) {
+    const reponse = await this.prisma.classTeam.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        status: true,
+        class: true,
+        classroom: true,
+        course: true,
+        schoolYear: true,
+      },
+    });
+
+    return reponse;
+  }
 }

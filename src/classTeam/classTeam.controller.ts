@@ -30,6 +30,11 @@ export class ClassTeamController {
     return this.classTeamService.update(dto);
   }
 
+  @Get('one/:classTeamId')
+  getOne(@Param('classTeamId', ParseIntPipe) classTeamId: number) {
+    return this.classTeamService.getOne(classTeamId);
+  }
+
   @Get()
   getAll(@Query() dto: GetAllClassTeamDto) {
     return this.classTeamService.getAll(dto);
