@@ -1,6 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AddMonthDto } from './dto/addMonthDto';
+import { UpdateMonthDto } from './dto/updateMonthDto';
 
 @Injectable()
 export class MonthsService {
@@ -23,6 +24,26 @@ export class MonthsService {
     try {
       const response = await this.prisma.months.create({
         data: dto,
+      });
+
+      return response;
+    } catch (error) {
+      throw new ForbiddenException({
+        error,
+        status: false,
+      });
+    }
+  }
+
+  async update(dto: UpdateMonthDto) {
+    const { id, ...data } = dto;
+
+    try {
+      const response = await this.prisma.months.update({
+        where: {
+          id,
+        },
+        data,
       });
 
       return response;
