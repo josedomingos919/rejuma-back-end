@@ -156,6 +156,8 @@ export class PaymentService {
           include: {
             status: true,
             student: true,
+            class: true,
+            course: true,
           },
         },
         status: true,
@@ -306,6 +308,8 @@ export class PaymentService {
           include: {
             status: true,
             student: true,
+            class: true,
+            course: true,
           },
         },
         status: true,
