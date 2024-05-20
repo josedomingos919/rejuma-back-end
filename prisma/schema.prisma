@@ -568,3 +568,29 @@ model Invoice {
 
   @@map("invoice")
 }
+
+model Permission {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  key                 String                @unique()
+  descricao           String
+  area                String?
+  UserGroupPermission UserGroupPermission[]
+
+  @@map("permission")
+}
+
+model UserGroupPermission {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  permission   Permission @relation(fields: [permissionId], references: [id])
+  permissionId Int
+
+  group String // Admin, Professor
+
+  @@map("userGroupPermission")
+}

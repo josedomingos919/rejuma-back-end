@@ -7,6 +7,7 @@ import * as argon from 'argon2';
 import { SigninDto } from './dto/signinDto';
 import { JwtService } from '@nestjs/jwt/dist';
 import { ConfigService } from '@nestjs/config';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -68,11 +69,14 @@ export class AuthService {
 
       delete user.password;
 
+      const permissions = await this.getUserPermissions(user);
+
       const token = await this.getSignToken(user.id, user.phone);
 
       return {
         user,
         token,
+        permissions,
       };
     } catch (error) {
       throw new ForbiddenException({
@@ -93,5 +97,19 @@ export class AuthService {
       expiresIn: '15m',
       secret: this.config.get('JWT_SECRET'),
     });
+  }
+
+  async getUserPermissions(user: User) {
+    const permissions = await this.prisma.permission.findMany({
+      where: {
+        UserGroupPermission: {
+          some: {
+            group: user.access,
+          },
+        },
+      },
+    });
+
+    return permissions;
   }
 }
