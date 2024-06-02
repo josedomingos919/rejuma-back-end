@@ -15,6 +15,9 @@ export class PropinaService {
     const response = await this.prisma.classTeam.findMany({
       where: {
         ...where,
+        schoolYear: {
+          year: dto.schoolYear,
+        },
         name: {
           contains: dto.classTeam,
         },
