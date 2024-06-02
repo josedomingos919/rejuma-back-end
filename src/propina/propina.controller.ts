@@ -1,6 +1,7 @@
-import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { PropinaService } from './propina.service';
 import { GetPropinaDto } from './dto/getPropinaDto';
+import { GetStudentsDto } from './dto/getStudentsDto';
 
 @Controller('propina')
 export class PropinaController {
@@ -11,8 +12,8 @@ export class PropinaController {
     return this.provinceService.getClassTeam(queryParams);
   }
 
-  @Get('/:countryId')
-  getByCountryId(@Param('countryId', ParseIntPipe) countryId: number) {
-    return this.provinceService.getByCountryId(countryId);
+  @Get('getStudents')
+  getStudents(@Query() queryParams: GetStudentsDto) {
+    return this.provinceService.getStudents(queryParams);
   }
 }

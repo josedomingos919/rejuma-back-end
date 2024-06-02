@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Query } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GetPropinaDto } from './dto/getPropinaDto';
 import { statusTypes } from 'src/helpers';
+import { GetStudentsDto } from './dto/getStudentsDto';
 
 @Injectable()
 export class PropinaService {
@@ -37,15 +38,47 @@ export class PropinaService {
     });
   }
 
-  async getByCountryId(dto: any) {
+  async getStudents(@Query() dto: GetStudentsDto) {
     const months = await this.prisma.months.findMany({
       where: {
         schoolYear: {
           year: dto.schoolYear,
         },
       },
+      orderBy: {
+        initialDate: 'asc',
+      },
     });
 
-    return months;
+    const students = await this.prisma.student.findMany({
+      where: {
+        id: dto.classTeamId,
+        registration: {
+          some: {
+            status: {
+              code: statusTypes.ACTIVE,
+            },
+          },
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        registration: {
+          select: {
+            payment: {
+              select: {
+                SchoolFees: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return {
+      months,
+      students,
+    };
   }
 }
