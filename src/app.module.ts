@@ -28,6 +28,7 @@ import { SchoolResourceModule } from './schoolResource/school-resource.module';
 import { PaymentModule } from './payment/payment.module';
 import { ClassTeamsTeacherModule } from './classTeamTeacher/classTeamTeacher.module';
 import { ScheduleModule } from './schedule/schedule.module';
+import { PropinaModule } from './propina/propina.module';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { ScheduleModule } from './schedule/schedule.module';
     PaymentModule,
     ClassTeamsTeacherModule,
     ScheduleModule,
+    PropinaModule,
   ],
 })
 export class AppModule {}
