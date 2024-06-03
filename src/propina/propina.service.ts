@@ -52,9 +52,9 @@ export class PropinaService {
 
     const students = await this.prisma.student.findMany({
       where: {
-        id: dto.classTeamId,
         registration: {
           some: {
+            classTeamId: dto.classTeamId,
             status: {
               code: statusTypes.ACTIVE,
             },
