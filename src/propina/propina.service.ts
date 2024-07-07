@@ -65,6 +65,12 @@ export class PropinaService {
         id: true,
         name: true,
         registration: {
+          where: {
+            classTeamId: dto.classTeamId,
+            status: {
+              code: statusTypes.ACTIVE,
+            },
+          },
           select: {
             payment: {
               select: {
@@ -74,6 +80,9 @@ export class PropinaService {
           },
         },
       },
+      orderBy: {
+        name:"asc"
+      }
     });
 
     return {
