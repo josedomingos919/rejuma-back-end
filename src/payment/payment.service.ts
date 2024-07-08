@@ -223,9 +223,14 @@ export class PaymentService {
     const where = {
       NOT: {
         status: {
-          code: 'ELIM',
+          code: statusTypes.DELETED
         },
       },
+      registration: {
+        status:{
+          code: statusTypes.ACTIVE
+        }
+      }
     };
 
     const { name } = filter;
