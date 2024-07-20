@@ -17,7 +17,7 @@ export class MatriculationService {
       },
       classId: dto.classId,
       schoolYear: {
-        year: dto.schoolYear,
+        id: dto.schoolYearId,
       },
     };
 
@@ -50,7 +50,7 @@ export class MatriculationService {
   async add(dto: AddMatriculationDto) {
     const year = await this.prisma.schoolYear.findUnique({
       where: {
-        year: dto.schoolYear,
+        id: dto.schoolYearId,
       },
     });
 
