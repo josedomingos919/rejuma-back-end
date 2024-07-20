@@ -55,11 +55,11 @@ export class MonthsService {
     }
   }
 
-  async getMonths(year: number) {
+  async getMonths(schoolYearId: number) {
     const response = await this.prisma.months.findMany({
       where: {
         schoolYear: {
-          year,
+          id: schoolYearId,
         },
       },
       include: {

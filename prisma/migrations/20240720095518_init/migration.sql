@@ -233,6 +233,7 @@ CREATE TABLE `classteam` (
     `classId` INTEGER NOT NULL,
     `classroomId` INTEGER NOT NULL,
     `statusId` INTEGER NULL,
+    `classTeamScheduleId` INTEGER NULL,
 
     UNIQUE INDEX `classteam_name_schoolYearId_classId_key`(`name`, `schoolYearId`, `classId`),
     PRIMARY KEY (`id`)
@@ -248,6 +249,33 @@ CREATE TABLE `classteamteacher` (
     `classTeamId` INTEGER NOT NULL,
 
     UNIQUE INDEX `classteamteacher_teacherId_disciplineId_classTeamId_key`(`teacherId`, `disciplineId`, `classTeamId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `schedule` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+    `startTime` DATETIME(3) NOT NULL,
+    `endTime` DATETIME(3) NOT NULL,
+    `disciplineId` INTEGER NOT NULL,
+    `classTeamId` INTEGER NOT NULL,
+    `weekDaysId` INTEGER NOT NULL,
+
+    UNIQUE INDEX `schedule_startTime_endTime_classTeamId_weekDaysId_key`(`startTime`, `endTime`, `classTeamId`, `weekDaysId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `weekdays` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+    `name` VARCHAR(191) NOT NULL,
+    `short` VARCHAR(191) NOT NULL,
+    `number` INTEGER NOT NULL,
+
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -406,6 +434,30 @@ CREATE TABLE `invoice` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- CreateTable
+CREATE TABLE `permission` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+    `key` VARCHAR(191) NOT NULL,
+    `descricao` VARCHAR(191) NOT NULL,
+    `area` VARCHAR(191) NULL,
+
+    UNIQUE INDEX `permission_key_key`(`key`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `userGroupPermission` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+    `permissionId` INTEGER NOT NULL,
+    `group` VARCHAR(191) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- AddForeignKey
 ALTER TABLE `users` ADD CONSTRAINT `users_employeeId_fkey` FOREIGN KEY (`employeeId`) REFERENCES `employees`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -477,6 +529,15 @@ ALTER TABLE `classteamteacher` ADD CONSTRAINT `classteamteacher_disciplineId_fke
 
 -- AddForeignKey
 ALTER TABLE `classteamteacher` ADD CONSTRAINT `classteamteacher_classTeamId_fkey` FOREIGN KEY (`classTeamId`) REFERENCES `classteam`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `schedule` ADD CONSTRAINT `schedule_classTeamId_fkey` FOREIGN KEY (`classTeamId`) REFERENCES `classteam`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `schedule` ADD CONSTRAINT `schedule_disciplineId_fkey` FOREIGN KEY (`disciplineId`) REFERENCES `discipline`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `schedule` ADD CONSTRAINT `schedule_weekDaysId_fkey` FOREIGN KEY (`weekDaysId`) REFERENCES `weekdays`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `registration` ADD CONSTRAINT `registration_classTeamId_fkey` FOREIGN KEY (`classTeamId`) REFERENCES `classteam`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -555,3 +616,6 @@ ALTER TABLE `invoice` ADD CONSTRAINT `invoice_statusId_fkey` FOREIGN KEY (`statu
 
 -- AddForeignKey
 ALTER TABLE `invoice` ADD CONSTRAINT `invoice_employeeId_fkey` FOREIGN KEY (`employeeId`) REFERENCES `employees`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `userGroupPermission` ADD CONSTRAINT `userGroupPermission_permissionId_fkey` FOREIGN KEY (`permissionId`) REFERENCES `permission`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

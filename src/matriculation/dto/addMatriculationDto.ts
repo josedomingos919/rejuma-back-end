@@ -11,7 +11,7 @@ export class AddMatriculationDto {
   @Transform(({ value }) => Number.parseInt(value))
   @IsNotEmpty()
   @IsNumber()
-  schoolYear: number;
+  schoolYear: string;
 
   @IsInt()
   @IsOptional()

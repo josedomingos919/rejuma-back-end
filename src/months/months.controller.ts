@@ -35,9 +35,9 @@ export class MonthsController {
     return this.monthsService.update(dto);
   }
 
-  @Get('/:year')
-  getMonths(@Param('year', ParseIntPipe) year: number) {
-    return this.monthsService.getMonths(year);
+  @Get('/:schoolYearId')
+  getMonths(@Param('schoolYearId', ParseIntPipe) schoolYearId: number) {
+    return this.monthsService.getMonths(schoolYearId);
   }
 
   @Delete('/:id')

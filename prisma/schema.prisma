@@ -165,6 +165,7 @@ model Status {
   Registration Registration[]
   payment      Payment[]
   Invoice      Invoice[]
+  SchoolYear   SchoolYear[]
 
   @@map("status")
 }
@@ -221,11 +222,14 @@ model SchoolYear {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  year         Int            @unique
+  year         String            @unique
   description  String
   classTeam    ClassTeam[]
   registration Registration[]
   Months       Months[]
+
+  statusId Int?
+  status   Status? @relation(fields: [statusId], references: [id])
 
   @@map("schoolyear")
 }

@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsOptional, IsInt } from 'class-validator';
+import { IsOptional, IsInt, IsString } from 'class-validator';
 
 export class GetAllSchoolYearDto {
   @Transform(({ value }) => Number.parseInt(value))
@@ -12,8 +12,7 @@ export class GetAllSchoolYearDto {
   @IsOptional()
   size: number;
 
-  @Transform(({ value }) => Number.parseInt(value))
-  @IsInt()
+  @IsString()
   @IsOptional()
-  year: number;
+  year: string;
 }

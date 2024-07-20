@@ -9,7 +9,7 @@ import {
 
 @Injectable()
 export class SchoolYearService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async addSchoolYear(dto: AddSchoolYearDto) {
     try {
@@ -67,6 +67,9 @@ export class SchoolYearService {
     });
 
     const schoolYears = await this.prisma.schoolYear.findMany({
+      include: {
+        status: true,
+      },
       skip,
       take,
       where,

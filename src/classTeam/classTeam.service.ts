@@ -8,7 +8,7 @@ import { AddClassTeamDto, GetAllClassTeamDto, UpdateClassTeamDto } from './dto';
 export class ClassTeamService {
   constructor(private prisma: PrismaService) {}
 
-  private async getSchoolYear(year: number) {
+  private async getSchoolYear(year: string) {
     const schoolYear = await this.prisma.schoolYear.findUnique({
       where: {
         year,

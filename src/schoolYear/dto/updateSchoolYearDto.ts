@@ -7,11 +7,15 @@ export class UpdateSchoolYearDto {
   @IsNumber()
   id: number;
 
-  @Transform(({ value }) => Number.parseInt(value))
-  @IsNumber()
+  @IsString()
   @IsNotEmpty()
-  year: number;
+  year: string;
 
   @IsString()
   description: string;
+
+  @Transform(({ value }) => Number(value))
+  @IsNumber()
+  @IsNotEmpty()
+  statusId: number;
 }

@@ -5,7 +5,7 @@ export class GetClassTeamDto {
   @Transform(({ value }) => Number.parseInt(value))
   @IsNumber()
   @IsNotEmpty()
-  schoolYear: number;
+  schoolYear: string;
 
   @Transform(({ value }) => Number.parseInt(value))
   @IsNumber()
