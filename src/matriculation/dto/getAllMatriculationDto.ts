@@ -15,4 +15,9 @@ export class GetAllMatriculationDto {
   @IsNumber()
   @IsOptional()
   size: number;
+
+  @Transform(({ value }) => Number.parseInt(value))
+  @IsNumber()
+  @IsOptional()
+  schoolYearId: number;
 }
