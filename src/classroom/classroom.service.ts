@@ -50,6 +50,11 @@ export class ClassroomService {
                 status: {
                   code: statusTypes.ACTIVE,
                 },
+                schoolYear: {
+                  status: {
+                    code: statusTypes.ACTIVE,
+                  },
+                },
                 period,
               },
             },

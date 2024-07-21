@@ -40,7 +40,7 @@ export class UpdateClassTeamDto {
   @Transform(({ value }) => Number.parseInt(value))
   @IsInt()
   @IsNotEmpty()
-  schoolYear: string;
+  schoolYearId: number;
 
   // @IsArray()
   // @IsInt({ each: true })
