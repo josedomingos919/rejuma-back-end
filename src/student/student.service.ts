@@ -24,6 +24,11 @@ export class StudentService {
             status: {
               code: statusTypes.ACTIVE,
             },
+            SchoolYear: {
+              status: {
+                code: statusTypes.ACTIVE,
+              },
+            },
           },
         },
       },

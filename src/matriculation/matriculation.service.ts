@@ -17,7 +17,7 @@ export class MatriculationService {
       },
       classId: dto.classId,
       schoolYear: {
-        year: dto.schoolYear,
+        id: dto.schoolYearId,
       },
     };
 
@@ -50,7 +50,7 @@ export class MatriculationService {
   async add(dto: AddMatriculationDto) {
     const year = await this.prisma.schoolYear.findUnique({
       where: {
-        year: dto.schoolYear,
+        id: dto.schoolYearId,
       },
     });
 
@@ -167,15 +167,16 @@ export class MatriculationService {
 
   //Estou comentando
   private getAllMatriculationFilter(filter: GetAllMatriculationDto) {
+    const { name, schoolYearId } = filter;
+
     const where = {
+      schoolYearId,
       NOT: {
         status: {
           code: 'ELIM',
         },
       },
     };
-
-    const { name } = filter;
 
     if (name) {
       const OR: any = [
@@ -213,7 +214,7 @@ export class MatriculationService {
   }
 
   async getAllMatriculation(filter: GetAllMatriculationDto) {
-    const { page = 1, size = 10 } = filter;
+    const { page = 1, size = 10, schoolYearId = 0 } = filter;
     const { where } = this.getAllMatriculationFilter(filter);
 
     const total = await this.prisma.registration.count({

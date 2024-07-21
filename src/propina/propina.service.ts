@@ -17,7 +17,7 @@ export class PropinaService {
       where: {
         ...where,
         schoolYear: {
-          year: dto.schoolYear,
+          id: dto.schoolYearId,
         },
         name: {
           contains: dto.classTeam,
@@ -42,7 +42,7 @@ export class PropinaService {
     const months = await this.prisma.months.findMany({
       where: {
         schoolYear: {
-          year: dto.schoolYear,
+          id: dto.schoolYearId,
         },
       },
       orderBy: {
@@ -81,8 +81,8 @@ export class PropinaService {
         },
       },
       orderBy: {
-        name:"asc"
-      }
+        name: 'asc',
+      },
     });
 
     return {

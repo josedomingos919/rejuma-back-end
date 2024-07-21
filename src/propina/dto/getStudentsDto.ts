@@ -10,5 +10,5 @@ export class GetStudentsDto {
   @Transform(({ value }) => Number.parseInt(value))
   @IsNumber()
   @IsNotEmpty()
-  schoolYear: number;
+  schoolYearId: number;
 }

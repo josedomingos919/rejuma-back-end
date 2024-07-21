@@ -1,5 +1,4 @@
-import { Transform } from 'class-transformer';
-import { IsInt, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsInt, IsNotEmpty } from 'class-validator';
 
 export class UpdateMatriculationDto {
   @IsInt()

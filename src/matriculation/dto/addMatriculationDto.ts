@@ -1,17 +1,17 @@
 import { Transform } from 'class-transformer';
 import {
   IsInt,
-  IsNotEmpty,
+  IsString,
   IsNumber,
   IsOptional,
-  IsString,
+  IsNotEmpty,
 } from 'class-validator';
 
 export class AddMatriculationDto {
   @Transform(({ value }) => Number.parseInt(value))
   @IsNotEmpty()
   @IsNumber()
-  schoolYear: number;
+  schoolYearId: number;
 
   @IsInt()
   @IsOptional()

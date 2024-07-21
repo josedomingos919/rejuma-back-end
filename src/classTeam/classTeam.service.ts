@@ -8,28 +8,8 @@ import { AddClassTeamDto, GetAllClassTeamDto, UpdateClassTeamDto } from './dto';
 export class ClassTeamService {
   constructor(private prisma: PrismaService) {}
 
-  private async getSchoolYear(year: number) {
-    const schoolYear = await this.prisma.schoolYear.findUnique({
-      where: {
-        year,
-      },
-    });
-
-    if (!schoolYear?.id)
-      throw new ForbiddenException({
-        error: {
-          meta: { target: 'schoolYearId' },
-        },
-        status: false,
-      });
-
-    return schoolYear;
-  }
-
   async add(dto: AddClassTeamDto) {
     try {
-      const schoolYear = await this.getSchoolYear(dto.schoolYear);
-
       const classTeam = await this.prisma.classTeam.create({
         data: {
           name: dto.name,
@@ -37,7 +17,7 @@ export class ClassTeamService {
           classId: dto.classId,
           classroomId: dto.classroomId,
           courseId: dto.courseId,
-          schoolYearId: schoolYear.id,
+          schoolYearId: dto.schoolYearId,
           statusId: dto.statusId,
         },
       });
@@ -53,8 +33,6 @@ export class ClassTeamService {
 
   async update(dto: UpdateClassTeamDto) {
     try {
-      const schoolYear = await this.getSchoolYear(dto.schoolYear);
-
       const classTeam = await this.prisma.classTeam.update({
         where: {
           id: dto.id,
@@ -65,7 +43,8 @@ export class ClassTeamService {
           classId: dto.classId,
           classroomId: dto.classroomId,
           courseId: dto.courseId,
-          schoolYearId: schoolYear.id,
+          schoolYearId: dto.schoolYearId,
+          statusId: dto.statusId,
         },
       });
 
@@ -78,8 +57,14 @@ export class ClassTeamService {
     }
   }
 
-  private getAllFilter(filter: GetAllClassTeamDto) {
+  private async getAllFilter(filter: GetAllClassTeamDto) {
     let where: any = {
+      //Get current year class room
+      schoolYear: {
+        status: {
+          code: statusTypes.ACTIVE,
+        },
+      },
       NOT: {
         status: {
           code: statusTypes.DELETED,
@@ -101,7 +86,7 @@ export class ClassTeamService {
 
   async getAll(filter: GetAllClassTeamDto) {
     const { page = 1, size = 10 } = filter;
-    const { where } = this.getAllFilter(filter);
+    const { where } = await this.getAllFilter(filter);
 
     const total = await this.prisma.classTeam.count({
       where,

@@ -43,6 +43,11 @@ export class PaymentService {
             status: {
               code: statusTypes.ACTIVE,
             },
+            SchoolYear: {
+              status: {
+                code: statusTypes.ACTIVE,
+              },
+            },
           },
         },
       },
@@ -223,14 +228,19 @@ export class PaymentService {
     const where = {
       NOT: {
         status: {
-          code: statusTypes.DELETED
+          code: statusTypes.DELETED,
         },
       },
       registration: {
-        status:{
-          code: statusTypes.ACTIVE
-        }
-      }
+        status: {
+          code: statusTypes.ACTIVE,
+        },
+        SchoolYear: {
+          status: {
+            code: statusTypes.ACTIVE,
+          },
+        },
+      },
     };
 
     const { name } = filter;
