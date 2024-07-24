@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 model User {
@@ -222,7 +223,7 @@ model SchoolYear {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  year         String            @unique
+  year         String         @unique
   description  String
   classTeam    ClassTeam[]
   registration Registration[]
