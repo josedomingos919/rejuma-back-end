@@ -4,3 +4,7 @@ video: https://www.youtube.com/watch?v=TMGHOW8Hzvw
 nodejs: vercell
 
 react: netlyfy
+------------------
+base de dados está na: 
+    https://console.clever-cloud.com/users/me/addons/addon_a95243b8-5237-4a6c-bbd9-17d3756f575c
+back end está na koyeb
