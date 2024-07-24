@@ -10,6 +10,7 @@ export class PriceService {
   async isExistingPrice(dto: AddPricesDto) {
     const where: any = {
       classId: dto.classId,
+      schoolYearId: dto.schoolYearId,
     };
 
     if (dto?.courseId) {
@@ -75,6 +76,7 @@ export class PriceService {
         include: {
           class: true,
           course: true,
+          schoolYear: true,
         },
         where: {
           schoolYearId,
@@ -102,6 +104,11 @@ export class PriceService {
 
   async getPrice(query: GetPriceDto) {
     const response = await this.prisma.registrationPrice.findFirst({
+      include: {
+        class: true,
+        course: true,
+        schoolYear: true,
+      },
       where: {
         classId: query.classId,
         courseId: query.courseId,

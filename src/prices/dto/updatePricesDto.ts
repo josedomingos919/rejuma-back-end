@@ -10,6 +10,11 @@ export class UpdatePricesDto {
   @IsOptional()
   @Transform(({ value }) => Number.parseFloat(value))
   @IsInt()
+  schoolYearId: number;
+
+  @IsOptional()
+  @Transform(({ value }) => Number.parseFloat(value))
+  @IsInt()
   registrationPrice: number;
 
   @IsOptional()
