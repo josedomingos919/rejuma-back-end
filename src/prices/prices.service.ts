@@ -69,12 +69,15 @@ export class PriceService {
     }
   }
 
-  async getAll() {
+  async getAll(schoolYearId: number) {
     try {
       const prices = await this.prisma.registrationPrice.findMany({
         include: {
           class: true,
           course: true,
+        },
+        where: {
+          schoolYearId,
         },
       });
 

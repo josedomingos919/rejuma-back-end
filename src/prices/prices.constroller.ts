@@ -31,9 +31,9 @@ export class PriceController {
     return this.pricesService.update(dto);
   }
 
-  @Get('all')
-  getAll() {
-    return this.pricesService.getAll();
+  @Get('all/:schoolYearId')
+  getAll(@Param('schoolYearId', ParseIntPipe) schoolYearId: number) {
+    return this.pricesService.getAll(schoolYearId);
   }
 
   @Get('filter')
