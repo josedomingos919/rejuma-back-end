@@ -42,7 +42,7 @@ export class SchoolYearService {
         },
       });
 
-      if (active?.id !== dto.id) {
+      if (active?.id && active?.id !== dto.id) {
         throw new ForbiddenException({
           error: 'duplicated-active-year',
           status: false,
