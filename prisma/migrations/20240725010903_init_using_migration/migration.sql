@@ -215,6 +215,7 @@ CREATE TABLE `registrationprice` (
     `monthPrice` DOUBLE NULL,
     `examePrice` DOUBLE NULL,
     `registrationMulta` DOUBLE NULL,
+    `schoolYearId` INTEGER NULL,
     `courseId` INTEGER NULL,
     `classId` INTEGER NOT NULL,
 
@@ -503,6 +504,9 @@ ALTER TABLE `teacherdisciplines` ADD CONSTRAINT `teacherdisciplines_teacherId_fk
 
 -- AddForeignKey
 ALTER TABLE `teacherdisciplines` ADD CONSTRAINT `teacherdisciplines_disciplineId_fkey` FOREIGN KEY (`disciplineId`) REFERENCES `discipline`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `registrationprice` ADD CONSTRAINT `registrationprice_schoolYearId_fkey` FOREIGN KEY (`schoolYearId`) REFERENCES `schoolyear`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `registrationprice` ADD CONSTRAINT `registrationprice_courseId_fkey` FOREIGN KEY (`courseId`) REFERENCES `course`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
