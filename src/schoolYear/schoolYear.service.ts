@@ -1,5 +1,5 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { getPagination } from 'src/helpers';
+import { getPagination, statusTypes } from 'src/helpers';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
   AddSchoolYearDto,
@@ -9,7 +9,7 @@ import {
 
 @Injectable()
 export class SchoolYearService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async addSchoolYear(dto: AddSchoolYearDto) {
     try {
@@ -26,8 +26,35 @@ export class SchoolYearService {
     }
   }
 
+  async validateDuplicateYear(dto: UpdateSchoolYearDto) {
+    const status = await this.prisma.status.findUnique({
+      where: {
+        id: dto.statusId,
+      },
+    });
+
+    if (status?.code == statusTypes.ACTIVE) {
+      const active = await this.prisma.schoolYear.findFirst({
+        where: {
+          status: {
+            code: statusTypes.ACTIVE,
+          },
+        },
+      });
+
+      if (active?.id !== dto.id) {
+        throw new ForbiddenException({
+          error: 'duplicated-active-year',
+          status: false,
+        });
+      }
+    }
+  }
+
   async update(dto: UpdateSchoolYearDto) {
     try {
+      await this.validateDuplicateYear(dto);
+
       const year = await this.prisma.schoolYear.update({
         where: {
           id: dto.id,
