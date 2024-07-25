@@ -47,10 +47,13 @@ export class PriceService {
   async add(dto: AddPricesDto) {
     if (dto?.examePrice) dto.examePrice = Number(dto.examePrice);
 
-    if (await this.isExistingPrice(dto)) {
+    const isExisting = await this.isExistingPrice(dto);
+
+    if (isExisting) {
       throw new ForbiddenException({
         status: false,
         error: 'existing',
+        isExisting,
       });
     }
 

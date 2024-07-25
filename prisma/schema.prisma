@@ -286,7 +286,7 @@ model RegistrationPrice {
   classId Int
   class   Class @relation(fields: [classId], references: [id])
 
-  @@unique([classId, courseId])
+  @@unique([classId, courseId, schoolYearId])
   @@map("registrationprice")
 }
 

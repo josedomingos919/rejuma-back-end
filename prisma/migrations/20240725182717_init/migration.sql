@@ -219,7 +219,7 @@ CREATE TABLE `registrationprice` (
     `courseId` INTEGER NULL,
     `classId` INTEGER NOT NULL,
 
-    UNIQUE INDEX `registrationprice_classId_courseId_key`(`classId`, `courseId`),
+    UNIQUE INDEX `registrationprice_classId_courseId_schoolYearId_key`(`classId`, `courseId`, `schoolYearId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
