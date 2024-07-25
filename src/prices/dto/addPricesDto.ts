@@ -14,6 +14,11 @@ export class AddPricesDto {
   classId: number;
 
   @Transform(({ value }) => Number.parseInt(value))
+  @IsNotEmpty()
+  @IsInt()
+  schoolYearId: number;
+
+  @Transform(({ value }) => Number.parseInt(value))
   @ValidateIf(({ courseId }) => courseId)
   @IsInt()
   courseId: number;

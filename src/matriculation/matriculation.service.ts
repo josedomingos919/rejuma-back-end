@@ -38,7 +38,15 @@ export class MatriculationService {
         classroom: true,
         class: {
           include: {
-            registrationPrice: true,
+            registrationPrice: {
+              where: {
+                schoolYear: {
+                  status: {
+                    code: statusTypes.ACTIVE,
+                  },
+                },
+              },
+            },
           },
         },
       },

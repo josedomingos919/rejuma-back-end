@@ -229,8 +229,9 @@ model SchoolYear {
   registration Registration[]
   Months       Months[]
 
-  statusId Int?
-  status   Status? @relation(fields: [statusId], references: [id])
+  statusId          Int?
+  status            Status?             @relation(fields: [statusId], references: [id])
+  RegistrationPrice RegistrationPrice[]
 
   @@map("schoolyear")
 }
@@ -276,10 +277,14 @@ model RegistrationPrice {
   examePrice          Float?
   registrationMulta   Float?
 
+  schoolYearId Int?
+  schoolYear   SchoolYear? @relation(fields: [schoolYearId], references: [id])
+
   courseId Int?
   course   Course? @relation(fields: [courseId], references: [id])
-  classId  Int
-  class    Class   @relation(fields: [classId], references: [id])
+
+  classId Int
+  class   Class @relation(fields: [classId], references: [id])
 
   @@unique([classId, courseId])
   @@map("registrationprice")
