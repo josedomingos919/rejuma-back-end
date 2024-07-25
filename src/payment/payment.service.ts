@@ -18,7 +18,11 @@ export class PaymentService {
       include: {
         registration: {
           include: {
-            SchoolYear: true,
+            SchoolYear: {
+              include: {
+                status: true,
+              },
+            },
             payment: {
               include: {
                 Exam: true,
@@ -43,11 +47,11 @@ export class PaymentService {
             status: {
               code: statusTypes.ACTIVE,
             },
-            SchoolYear: {
-              status: {
-                code: statusTypes.ACTIVE,
-              },
-            },
+            // SchoolYear: {
+            //   status: {
+            //     code: statusTypes.ACTIVE,
+            //   },
+            // },
           },
         },
       },

@@ -110,6 +110,7 @@ export class PriceService {
         schoolYear: true,
       },
       where: {
+        schoolYearId: query.schoolYearId,
         classId: query.classId,
         courseId: query.courseId,
       },

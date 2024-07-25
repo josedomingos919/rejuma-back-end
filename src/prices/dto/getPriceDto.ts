@@ -7,6 +7,11 @@ export class GetPriceDto {
   @IsInt()
   classId: number;
 
+  @IsNotEmpty()
+  @Transform(({ value }) => Number.parseInt(value))
+  @IsInt()
+  schoolYearId: number;
+
   @IsOptional()
   @Transform(({ value }) => (value ? Number.parseInt(value) : value))
   courseId: number;
