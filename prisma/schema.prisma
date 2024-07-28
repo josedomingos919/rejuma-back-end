@@ -319,7 +319,6 @@ model ClassTeam {
   classTeamScheduleId Int?
   Schedule            Schedule[]
 
-  @@unique([name, schoolYearId, classId])
   @@map("classteam")
 }
 

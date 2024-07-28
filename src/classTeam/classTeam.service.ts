@@ -1,14 +1,35 @@
 import { Injectable } from '@nestjs/common';
-import { ForbiddenException } from '@nestjs/common/exceptions';
 import { getPagination, statusTypes } from 'src/helpers';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ForbiddenException } from '@nestjs/common/exceptions';
 import { AddClassTeamDto, GetAllClassTeamDto, UpdateClassTeamDto } from './dto';
 
 @Injectable()
 export class ClassTeamService {
   constructor(private prisma: PrismaService) {}
 
+  private async isExistingClassTeam(dto: AddClassTeamDto) {
+    const classTeam = await this.prisma.classTeam.findFirst({
+      where: {
+        name: dto.name,
+        classId: dto.classId,
+        schoolYearId: dto.schoolYearId,
+        status: {
+          code: statusTypes.ACTIVE,
+        },
+      },
+    });
+
+    if (classTeam?.id) {
+      throw new ForbiddenException({
+        code: 'duplicated-classteam',
+      });
+    }
+  }
+
   async add(dto: AddClassTeamDto) {
+    await this.isExistingClassTeam(dto);
+
     try {
       const classTeam = await this.prisma.classTeam.create({
         data: {
@@ -32,6 +53,8 @@ export class ClassTeamService {
   }
 
   async update(dto: UpdateClassTeamDto) {
+    await this.isExistingClassTeam(dto);
+
     try {
       const classTeam = await this.prisma.classTeam.update({
         where: {

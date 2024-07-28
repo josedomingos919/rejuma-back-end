@@ -237,7 +237,6 @@ CREATE TABLE `classteam` (
     `statusId` INTEGER NULL,
     `classTeamScheduleId` INTEGER NULL,
 
-    UNIQUE INDEX `classteam_name_schoolYearId_classId_key`(`name`, `schoolYearId`, `classId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
