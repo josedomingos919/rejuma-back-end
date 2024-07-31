@@ -19,9 +19,6 @@ export class PropinaService {
         schoolYear: {
           id: dto.schoolYearId,
         },
-        name: {
-          contains: dto.classTeam,
-        },
         classId: dto.classId,
         status: {
           code: statusTypes.ACTIVE,
