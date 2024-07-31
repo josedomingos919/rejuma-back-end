@@ -1,11 +1,7 @@
 import { Transform } from 'class-transformer';
-import { IsNumber, IsOptional, IsString, IsNotEmpty } from 'class-validator';
+import { IsNumber, IsOptional, IsNotEmpty } from 'class-validator';
 
 export class GetPropinaDto {
-  @IsString()
-  @IsNotEmpty()
-  classTeam: string;
-
   @Transform(({ value }) => Number.parseInt(value))
   @IsNumber()
   @IsNotEmpty()
