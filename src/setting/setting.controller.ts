@@ -1,6 +1,7 @@
 import { UpdateSettingDto } from './dto';
+import { GetKeysDto } from './dto/getKeysDto';
 import { SettingService } from './setting.service';
-import { Body, Controller, Get, Param, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Put, Post } from '@nestjs/common';
 
 @Controller('setting')
 export class SettingController {
@@ -14,6 +15,11 @@ export class SettingController {
   @Get('all')
   getAll() {
     return this.settingService.getAll();
+  }
+
+  @Post('keys')
+  getKeys(@Body() query: GetKeysDto) {
+    return this.settingService.getKeys(query);
   }
 
   @Get(':key')

@@ -1,6 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateSettingDto } from './dto';
+import { GetKeysDto } from './dto/getKeysDto';
 
 @Injectable()
 export class SettingService {
@@ -54,5 +55,27 @@ export class SettingService {
         status: false,
       });
     }
+  }
+
+  converKeystToJson(keys = [], data = []) {
+    let json = {};
+
+    for (let key of keys) {
+      json[key] = data.find((e) => e.key == key);
+    }
+
+    return json;
+  }
+
+  async getKeys(dto: GetKeysDto) {
+    const response = await this.prisma.setting.findMany({
+      where: {
+        key: {
+          in: dto.keys,
+        },
+      },
+    });
+
+    return this.converKeystToJson(dto.keys, response);
   }
 }
