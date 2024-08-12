@@ -411,7 +411,7 @@ CREATE TABLE `setting` (
     `updatedAt` DATETIME(3) NOT NULL,
     `key` VARCHAR(191) NOT NULL,
     `descricao` VARCHAR(191) NOT NULL,
-    `value` VARCHAR(191) NOT NULL,
+    `value` TEXT NOT NULL,
 
     UNIQUE INDEX `setting_key_key`(`key`),
     PRIMARY KEY (`id`)

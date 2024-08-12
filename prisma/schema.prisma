@@ -548,7 +548,7 @@ model Setting {
 
   key       String @unique()
   descricao String
-  value     String
+  value     String @db.LongText
 
   @@map("setting")
 }
