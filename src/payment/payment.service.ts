@@ -422,4 +422,10 @@ export class PaymentService {
       responsePayment,
     };
   }
+
+  async getAllMethods() {
+    const response = await this.prisma.paymentMethod.findMany();
+
+    return response;
+  }
 }

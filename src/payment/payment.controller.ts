@@ -30,6 +30,11 @@ export class PaymentController {
     return this.paymentService.getAllPayment(dto);
   }
 
+  @Get('getAllMethods')
+  getAllMethods() {
+    return this.paymentService.getAllMethods();
+  }
+
   @Post('cancel/:id')
   cancelPayment(@Param('id', ParseIntPipe) id: number) {
     return this.paymentService.cancelPayment(id);
