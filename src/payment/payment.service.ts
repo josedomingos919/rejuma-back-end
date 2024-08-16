@@ -5,6 +5,8 @@ import { AddPaymentDto } from './dto/addPaymentDto';
 import { CartDto } from './dto/cartDto';
 import { PaymentCodeType } from 'src/helpers/consts/paymentCodeType';
 import { GetPaymentDto } from './dto/getPaymentDto';
+import { PaymentMethodDto } from './dto/paymentMethod';
+import { PaymentMethodTypes } from 'src/helpers/consts/paymentMethodsType';
 
 @Injectable()
 export class PaymentService {
@@ -67,7 +69,97 @@ export class PaymentService {
     return `${invoiceYear}${zeroNumber}${id}`;
   }
 
+  async addPaymentMethod(invoiceId: number, data: PaymentMethodDto) {
+    let transferData = {};
+
+    if (data?.paymentMethodId == PaymentMethodTypes.TRANSFERENCIA_BANCARIA) {
+      transferData = {
+        ibanRemitent: data.ibanRemitent,
+        bankAccountId: data.bankAccountId,
+        transactionNumber: data.transactionNumber,
+        date: new Date(data.date).toISOString(),
+      };
+    }
+
+    await this.prisma.paymentMethods.create({
+      data: {
+        invoiceId,
+        value: data.value,
+        paymentMethodId: data.paymentMethodId,
+        ...transferData,
+      },
+    });
+  }
+
+  async validateAllPaymentMethods(methods: PaymentMethodDto[]) {
+    for (const {
+      date,
+      value,
+      ibanRemitent,
+      bankAccountId,
+      paymentMethodId,
+      transactionNumber,
+    } of methods) {
+      if (paymentMethodId == PaymentMethodTypes.DINHEIRO && !value) {
+        throw new ForbiddenException({
+          error: 'erro-payment-method-dinheiro-value',
+          message: 'Verificar o valor do método de pagamento dinheiro!',
+        });
+      }
+
+      if (paymentMethodId == PaymentMethodTypes.TPA && !value) {
+        throw new ForbiddenException({
+          error: 'erro-payment-method-tpa-value',
+          message: 'Verificar o valor do método de pagamento TPA!',
+        });
+      }
+
+      if (paymentMethodId == PaymentMethodTypes.TRANSFERENCIA_BANCARIA) {
+        if (!value) {
+          throw new ForbiddenException({
+            error: 'erro-payment-method-tranferencia-value',
+            message: 'Verificar o valor do método de pagamento Transferência!',
+          });
+        }
+
+        if (!date) {
+          throw new ForbiddenException({
+            error: 'erro-payment-method-data-value',
+            message:
+              'Verificar o campo data do método de pagamento tranferencia!',
+          });
+        }
+
+        if (!ibanRemitent) {
+          throw new ForbiddenException({
+            error: 'erro-payment-method-ibanRemitent-value',
+            message:
+              'Verificar o campo ibanRemitent do método de pagamento tranferencia!',
+          });
+        }
+
+        if (!transactionNumber) {
+          throw new ForbiddenException({
+            error: 'erro-payment-method-transactionNumber',
+            message:
+              'Verificar o campo transactionNumber do método de pagamento tranferencia!',
+          });
+        }
+
+        if (!bankAccountId) {
+          throw new ForbiddenException({
+            error: 'erro-payment-method-bankAccountId',
+            message:
+              'Verificar o campo bankAccountId do método de pagamento tranferencia!',
+          });
+        }
+      }
+    }
+  }
+
   async addPayment(dto: AddPaymentDto) {
+    await this.validateAllPaymentMethods(dto.paymentMethod);
+
     const status = await this.prisma.status.findFirst({
       where: {
         code: statusTypes.ACTIVE,
@@ -99,6 +191,11 @@ export class PaymentService {
         message: 'Falha ao criar a fatura',
         error: 'invoice-not-created',
       });
+
+    // save payment method
+    for (const method of dto.paymentMethod) {
+      await this.addPaymentMethod(invoice?.id, method);
+    }
 
     // set invoice number
     await this.prisma.invoice.update({

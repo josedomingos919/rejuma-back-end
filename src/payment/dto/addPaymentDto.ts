@@ -1,6 +1,7 @@
 import { IsArray, IsInt, IsNotEmpty, IsNumber } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { CartDto } from './cartDto';
+import { PaymentMethodDto } from './paymentMethod';
 
 export class AddPaymentDto {
   @Transform(({ value }) => Number(value))
@@ -48,4 +49,8 @@ export class AddPaymentDto {
   @IsArray()
   @IsNotEmpty()
   cart: CartDto[];
+
+  // Payment method
+  @IsNotEmpty()
+  paymentMethod: PaymentMethodDto[];
 }
