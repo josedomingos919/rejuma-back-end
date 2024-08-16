@@ -428,4 +428,10 @@ export class PaymentService {
 
     return response;
   }
+
+  async getAllBankAccount() {
+    const response = await this.prisma.bankAccount.findMany();
+
+    return response;
+  }
 }

@@ -472,6 +472,18 @@ model Months {
   @@map("months")
 }
 
+model BankAccount {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  number         String           @unique
+  iban           String           @unique
+  titular        String
+  banco          String?
+  PaymentMethods PaymentMethods[]
+}
+
 model PaymentMethod {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
@@ -490,15 +502,16 @@ model PaymentMethods {
 
   paymentMethod PaymentMethod @relation(fields: [paymentMethodId], references: [id])
   payment       Payment       @relation(fields: [paymentId], references: [id])
+  bankAccount   BankAccount   @relation(fields: [bankAccountId], references: [id])
 
   paymentId       Int
   paymentMethodId Int
 
   value             Float
   date              DateTime?
-  ibanDestination   String?
   ibanRemitent      String?
   transactionNumber String?
+  bankAccountId     Int
 }
 
 model Payment {

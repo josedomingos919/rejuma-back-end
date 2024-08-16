@@ -35,6 +35,11 @@ export class PaymentController {
     return this.paymentService.getAllMethods();
   }
 
+  @Get('getAllBankAccount')
+  getAllBankAccount() {
+    return this.paymentService.getAllBankAccount();
+  }
+
   @Post('cancel/:id')
   cancelPayment(@Param('id', ParseIntPipe) id: number) {
     return this.paymentService.cancelPayment(id);
