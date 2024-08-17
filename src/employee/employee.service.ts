@@ -29,10 +29,12 @@ export class EmployeeService {
     try {
       const employees = await this.prisma.employee.findMany({
         where: {
-          name: {
-            contains: keword,
-          },
-        },
+          OR:[
+            { name: { contains: keword } },
+            { phone1: {  contains: keword } },
+            { phone2: {contains: keword } }
+          ]
+        }
       });
 
       return employees;
