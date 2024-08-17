@@ -154,6 +154,13 @@ export class PaymentService {
           });
         }
       }
+
+      if (paymentMethodId == PaymentMethodTypes.SALDO_DA_CONTA && !value) {
+        throw new ForbiddenException({
+          error: 'erro-payment-method-saldo-da-conta-value',
+          message: 'Verificar o valor do método de pagamento Sáldo da conta!',
+        });
+      }
     }
   }
 
@@ -429,6 +436,12 @@ export class PaymentService {
           },
         },
         status: true,
+        PaymentMethods: {
+          include: {
+            bankAccount: true,
+            paymentMethod: true,
+          },
+        },
       },
       orderBy: {
         id: 'desc',

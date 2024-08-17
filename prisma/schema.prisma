@@ -491,6 +491,7 @@ model PaymentMethod {
 
   name   String
   repeat Int    @default(0)
+  show   Int    @default(1)
 
   paymentMethods PaymentMethods[]
 }
