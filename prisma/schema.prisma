@@ -491,6 +491,7 @@ model PaymentMethod {
 
   name   String
   repeat Int    @default(0)
+  show   Int    @default(1)
 
   paymentMethods PaymentMethods[]
 }
@@ -501,17 +502,16 @@ model PaymentMethods {
   updatedAt DateTime @updatedAt
 
   paymentMethod PaymentMethod @relation(fields: [paymentMethodId], references: [id])
-  payment       Payment       @relation(fields: [paymentId], references: [id])
-  bankAccount   BankAccount   @relation(fields: [bankAccountId], references: [id])
+  invoice       Invoice       @relation(fields: [invoiceId], references: [id])
+  bankAccount   BankAccount?  @relation(fields: [bankAccountId], references: [id])
 
-  paymentId       Int
-  paymentMethodId Int
-
+  paymentMethodId   Int
   value             Float
   date              DateTime?
   ibanRemitent      String?
   transactionNumber String?
-  bankAccountId     Int
+  bankAccountId     Int?
+  invoiceId         Int
 }
 
 model Payment {
@@ -533,9 +533,8 @@ model Payment {
   Exam           Exam[]
   SchoolResource SchoolResource[]
 
-  invoice        Invoice          @relation(fields: [invoiceId], references: [id])
-  invoiceId      Int
-  PaymentMethods PaymentMethods[]
+  invoice   Invoice @relation(fields: [invoiceId], references: [id])
+  invoiceId Int
 
   @@map("payment")
 }
@@ -616,7 +615,8 @@ model Invoice {
   employee   Employee @relation(fields: [employeeId], references: [id])
   employeeId Int
 
-  Payment Payment[]
+  Payment        Payment[]
+  PaymentMethods PaymentMethods[]
 
   @@map("invoice")
 }
