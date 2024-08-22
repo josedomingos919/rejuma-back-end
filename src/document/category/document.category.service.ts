@@ -51,6 +51,9 @@ export class DocumentCategoryService {
       skip,
       take,
       where,
+      include: {
+        status: true,
+      },
     });
 
     return {
@@ -62,7 +65,11 @@ export class DocumentCategoryService {
   }
 
   private async getAllFilter(dto: GetAllDocumentCategoryDto) {
-    let where: any = {};
+    let where: any = {
+      status: {
+        code: statusTypes.ACTIVE,
+      },
+    };
 
     const { name } = dto;
 

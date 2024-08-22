@@ -35,7 +35,7 @@ export class DocumentCategoryController {
     return this.documentCategoryService.getAll(dto);
   }
 
-  @Delete(':/id')
+  @Delete('/:id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.documentCategoryService.remove(id);
   }
