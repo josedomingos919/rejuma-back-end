@@ -13,14 +13,7 @@ export class DocumentCategoryService {
 
   async add(dto: AddDocumentCategoryDto) {
     const response = await this.prisma.documentCategory.create({
-      data: {
-        ...dto,
-        status: {
-          connect: {
-            code: statusTypes.ACTIVE,
-          },
-        },
-      },
+      data: dto,
     });
 
     return response;
@@ -67,7 +60,9 @@ export class DocumentCategoryService {
   private async getAllFilter(dto: GetAllDocumentCategoryDto) {
     let where: any = {
       status: {
-        code: statusTypes.ACTIVE,
+        code: {
+          notIn: [statusTypes.DELETED],
+        },
       },
     };
 

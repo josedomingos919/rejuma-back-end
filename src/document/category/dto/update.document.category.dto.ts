@@ -10,4 +10,9 @@ export class UpdateDocumentCategoryDto {
   @IsString()
   @IsNotEmpty()
   name: string;
+
+  @Transform(({ value }) => Number(value))
+  @IsNumber()
+  @IsNotEmpty()
+  statusId: number;
 }
