@@ -29,6 +29,7 @@ import { PaymentModule } from './payment/payment.module';
 import { ClassTeamsTeacherModule } from './classTeamTeacher/classTeamTeacher.module';
 import { ScheduleModule } from './schedule/schedule.module';
 import { PropinaModule } from './propina/propina.module';
+import { DocumentCategoryModule } from './document/category/document.category.module';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { PropinaModule } from './propina/propina.module';
     ClassTeamsTeacherModule,
     ScheduleModule,
     PropinaModule,
+    DocumentCategoryModule,
   ],
 })
 export class AppModule {}
