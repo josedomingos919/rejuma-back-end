@@ -30,6 +30,7 @@ import { ClassTeamsTeacherModule } from './classTeamTeacher/classTeamTeacher.mod
 import { ScheduleModule } from './schedule/schedule.module';
 import { PropinaModule } from './propina/propina.module';
 import { DocumentCategoryModule } from './document/category/document.category.module';
+import { DocumentTypeModule } from './document/type/document.type.module';
 
 @Module({
   imports: [
@@ -64,6 +65,7 @@ import { DocumentCategoryModule } from './document/category/document.category.mo
     ScheduleModule,
     PropinaModule,
     DocumentCategoryModule,
+    DocumentTypeModule,
   ],
 })
 export class AppModule {}
