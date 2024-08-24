@@ -244,6 +244,8 @@ export class MatriculationService {
           include: {
             province: true,
             country: true,
+            DiscountsInUse:true,
+            studentSupervisor:true
           },
         },
         classTeam: {

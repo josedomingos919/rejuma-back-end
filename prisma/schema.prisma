@@ -467,6 +467,12 @@ model Registration {
   Invoice         Invoice[]
   DocumentRequest DocumentRequest[]
 
+  previousClass String?
+  previousGroup String?
+  previousRoom String?
+  previousNumber String?
+  previousSchoolsName String?
+
   @@map("registration")
 }
 
