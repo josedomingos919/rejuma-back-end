@@ -64,6 +64,57 @@ model Office {
   @@map("office")
 }
 
+model StudentSupervisor {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name           String
+  bi             String?
+  degree         String? //Grau de Parentesco
+  phone1         String?
+  phone2         String?
+  DiscountsInUse DiscountsInUse[]
+  Student        Student[]
+
+  @@map("studentsupervisor")
+}
+
+// Tabela para asociação de desconto para tudo encarregado, aluno, etc
+model DiscountsInUse {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  studenty  Student? @relation(fields: [studentId], references: [id])
+  studentId Int?
+
+  studentSupervisor   StudentSupervisor? @relation(fields: [studentSupervisorId], references: [id])
+  studentSupervisorId Int?
+
+  paymentDiscountId Int
+  discount          PaymentDiscount @relation(fields: [paymentDiscountId], references: [id])
+
+  statusId Int
+  status   Status @relation(fields: [statusId], references: [id])
+}
+
+model PaymentDiscount {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  value          Float?
+  percentage     Int?
+  discountType   String // Percentage, Value
+  paymentType    String
+  DiscountsInUse DiscountsInUse[]
+
+  statusId                Int
+  status                  Status                    @relation(fields: [statusId], references: [id])
+  InvoicePaymentDiscounts InvoicePaymentDiscounts[]
+}
+
 model Student {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
@@ -86,6 +137,10 @@ model Student {
   province     Province       @relation(fields: [provinceId], references: [id])
   registration Registration[]
 
+  //Encarregado
+  studentSupervisor   StudentSupervisor? @relation(fields: [studentSupervisorId], references: [id])
+  studentSupervisorId Int?
+
   parentAffiliation   String?
   maternalAffiliation String?
   residence           String?
@@ -100,6 +155,7 @@ model Student {
 
   balance         Float             @default(0)
   DocumentRequest DocumentRequest[]
+  DiscountsInUse  DiscountsInUse[]
 
   @@map("student")
 }
@@ -171,6 +227,8 @@ model Status {
   DocumentRequest  DocumentRequest[]
   DocumentType     DocumentType[]
   DocumentCategory DocumentCategory[]
+  DiscountsInUse   DiscountsInUse[]
+  PaymentDiscount  PaymentDiscount[]
 
   @@map("status")
 }
@@ -538,10 +596,31 @@ model Payment {
   Exam           Exam[]
   SchoolResource SchoolResource[]
 
-  invoice   Invoice @relation(fields: [invoiceId], references: [id])
-  invoiceId Int
+  invoice                 Invoice                   @relation(fields: [invoiceId], references: [id])
+  invoiceId               Int
+  InvoicePaymentDiscounts InvoicePaymentDiscounts[]
 
   @@map("payment")
+}
+
+model InvoicePaymentDiscounts {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  payment   Payment @relation(fields: [paymentId], references: [id])
+  paymentId Int
+
+  paymentDiscount   PaymentDiscount @relation(fields: [paymentDiscountId], references: [id])
+  paymentDiscountId Int
+
+  discountName String
+  discountType String
+  percentage   Float?
+  value        Float?
+  total        Float?
+
+  @@map("invoiceDiscounts")
 }
 
 model SchoolFees {
