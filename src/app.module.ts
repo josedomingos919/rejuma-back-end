@@ -31,6 +31,10 @@ import { ScheduleModule } from './schedule/schedule.module';
 import { PropinaModule } from './propina/propina.module';
 import { DocumentCategoryModule } from './document/category/document.category.module';
 import { DocumentTypeModule } from './document/type/document.type.module';
+import { StudentSupervisorModule } from './studentSupervisor/student-supervisor.module';
+import { DiscountsInUseModule } from './discountsInUse/discounts-in-use.module';
+import { PaymentDiscountModule } from './paymentDiscount/student-supervisor.module';
+import { InvoicePaymentDiscountsModule } from './invoicePaymentDiscounts/invoice-payment-discounts.module';
 
 @Module({
   imports: [
@@ -66,6 +70,10 @@ import { DocumentTypeModule } from './document/type/document.type.module';
     PropinaModule,
     DocumentCategoryModule,
     DocumentTypeModule,
+    StudentSupervisorModule,
+    DiscountsInUseModule,
+    PaymentDiscountModule,
+    InvoicePaymentDiscountsModule
   ],
 })
 export class AppModule {}

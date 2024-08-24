@@ -5,18 +5,17 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class ExamService {
-    
-    constructor(private prisma: PrismaService){}
+
+    constructor(private prisma: PrismaService) { }
 
     async add(dto: AddExamDto) {
-        try{
+        try {
             const exam = await this.prisma.exam.create({
                 data: dto,
             });
 
             return exam;
-        }catch(error)
-        {
+        } catch (error) {
             throw new ForbiddenException({
                 error,
                 status: false
@@ -25,7 +24,7 @@ export class ExamService {
     }
 
     async update(dto: UpdateExamDto) {
-        try{
+        try {
             const exam = await this.prisma.exam.update({
                 where: {
                     id: dto.id,
@@ -34,8 +33,7 @@ export class ExamService {
             })
 
             return exam;
-        }catch(error)
-        {
+        } catch (error) {
             throw new ForbiddenException({
                 error,
                 status: false
@@ -43,5 +41,5 @@ export class ExamService {
         }
     }
 
-    
+
 }

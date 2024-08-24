@@ -68,7 +68,6 @@ model StudentSupervisor {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
   name           String
   bi             String?
   degree         String? //Grau de Parentesco
