@@ -65,9 +65,9 @@ model Office {
 }
 
 model StudentSupervisor {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             Int              @id @default(autoincrement())
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
   name           String
   bi             String?
   degree         String? //Grau de Parentesco
@@ -467,10 +467,10 @@ model Registration {
   Invoice         Invoice[]
   DocumentRequest DocumentRequest[]
 
-  previousClass String?
-  previousGroup String?
-  previousRoom String?
-  previousNumber String?
+  previousClass       String?
+  previousGroup       String?
+  previousRoom        String?
+  previousNumber      String?
   previousSchoolsName String?
 
   @@map("registration")
@@ -781,6 +781,8 @@ model DocumentRequest {
   registrationId Int
   studentId      Int
   documentTypeId Int
+
+  price Float?
 
   status   Status @relation(fields: [statusId], references: [id])
   statusId Int

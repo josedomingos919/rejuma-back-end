@@ -3,28 +3,29 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 
 import { getPagination, statusTypes } from 'src/helpers';
 import { GetAllDocumentCategoryDto } from '../category/dto';
-import { AddDocumentTypeDto } from './dto/add.document.type.dto';
-import { UpdateDocumentTypeDto } from './dto/update.document.type.dto';
-import { GetAllDocumentTypeDto } from './dto/get-all.document.type.dto';
+import {
+  AddDocumentRequestDto,
+  GetAllDocumentRequestDto,
+  UpdateDocumentRequestDto,
+} from './dto';
 
 @Injectable()
-export class DocumentTypeService {
+export class DocumentRequestService {
   constructor(private prisma: PrismaService) {}
 
-  async add(dto: AddDocumentTypeDto) {
-    const response = await this.prisma.documentType.create({
+  async add(dto: AddDocumentRequestDto) {
+    const response = await this.prisma.documentRequest.create({
       data: {
-        name: dto.name,
-        price: dto.price,
-        statusId: dto.statusId,
-        documentCategoryId: dto.categoryId,
+        studentId: dto.statusId,
+        registrationId: dto.registrationId,
+        documentTypeId: dto.documentTypeId,
       },
     });
 
     return response;
   }
 
-  async update(dto: UpdateDocumentTypeDto) {
+  async update(dto: UpdateDocumentRequestDto) {
     const response = await this.prisma.documentType.update({
       where: {
         id: dto.id,
@@ -51,7 +52,7 @@ export class DocumentTypeService {
     return types;
   }
 
-  async getAll(dto: GetAllDocumentTypeDto) {
+  async getAll(dto: GetAllDocumentRequestDto) {
     const { page = 1, size = 10 } = dto;
     const { where } = await this.getAllFilter(dto);
 
@@ -119,6 +120,30 @@ export class DocumentTypeService {
           status: {
             connect: {
               code: statusTypes.DELETED,
+            },
+          },
+        },
+      });
+
+      return student;
+    } catch (error) {
+      throw new ForbiddenException({
+        error,
+        status: false,
+      });
+    }
+  }
+
+  async cancel(id: number) {
+    try {
+      const student = await this.prisma.documentType.update({
+        where: {
+          id,
+        },
+        data: {
+          status: {
+            connect: {
+              code: statusTypes.ANNULLED,
             },
           },
         },
