@@ -35,6 +35,7 @@ import { StudentSupervisorModule } from './studentSupervisor/student-supervisor.
 import { DiscountsInUseModule } from './discountsInUse/discounts-in-use.module';
 import { PaymentDiscountModule } from './paymentDiscount/student-supervisor.module';
 import { InvoicePaymentDiscountsModule } from './invoicePaymentDiscounts/invoice-payment-discounts.module';
+import { DocumentRequestModule } from './document/request/document.request.module';
 
 @Module({
   imports: [
@@ -73,7 +74,8 @@ import { InvoicePaymentDiscountsModule } from './invoicePaymentDiscounts/invoice
     StudentSupervisorModule,
     DiscountsInUseModule,
     PaymentDiscountModule,
-    InvoicePaymentDiscountsModule
+    InvoicePaymentDiscountsModule,
+    DocumentRequestModule,
   ],
 })
 export class AppModule {}

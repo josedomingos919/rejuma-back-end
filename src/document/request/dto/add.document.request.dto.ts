@@ -15,7 +15,7 @@ export class AddDocumentRequestDto {
   @Transform(({ value }) => Number(value))
   @IsNumber()
   @IsNotEmpty()
-  studentyId: number;
+  studentId: number;
 
   @Transform(({ value }) => Number(value))
   @IsNumber()

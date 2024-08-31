@@ -15,11 +15,7 @@ export class DocumentRequestService {
 
   async add(dto: AddDocumentRequestDto) {
     const response = await this.prisma.documentRequest.create({
-      data: {
-        studentId: dto.statusId,
-        registrationId: dto.registrationId,
-        documentTypeId: dto.documentTypeId,
-      },
+      data: dto,
     });
 
     return response;
@@ -30,12 +26,7 @@ export class DocumentRequestService {
       where: {
         id: dto.id,
       },
-      data: {
-        name: dto.name,
-        price: dto.price,
-        statusId: dto.statusId,
-        documentCategoryId: dto.categoryId,
-      },
+      data: dto,
     });
 
     return response;
@@ -56,19 +47,21 @@ export class DocumentRequestService {
     const { page = 1, size = 10 } = dto;
     const { where } = await this.getAllFilter(dto);
 
-    const total = await this.prisma.documentType.count({
+    const total = await this.prisma.documentRequest.count({
       where,
     });
 
     const { skip, take, totalPage } = getPagination({ page, size, total });
 
-    const types = await this.prisma.documentType.findMany({
+    const types = await this.prisma.documentRequest.findMany({
       skip,
       take,
       where,
       include: {
         status: true,
-        document: true,
+        student: true,
+        registration: true,
+        documentType: true,
       },
     });
 

@@ -17,7 +17,7 @@ import {
 } from './dto';
 
 @Controller('document/request')
-export class DocumentTypeController {
+export class DocumentRequestController {
   constructor(private documentRequestService: DocumentRequestService) {}
 
   @Post()
