@@ -22,7 +22,7 @@ export class DocumentRequestService {
   }
 
   async update(dto: UpdateDocumentRequestDto) {
-    const response = await this.prisma.documentType.update({
+    const response = await this.prisma.documentRequest.update({
       where: {
         id: dto.id,
       },
@@ -30,17 +30,6 @@ export class DocumentRequestService {
     });
 
     return response;
-  }
-
-  async getAllSelect() {
-    const types = await this.prisma.documentType.findMany({
-      include: {
-        status: true,
-        document: true,
-      },
-    });
-
-    return types;
   }
 
   async getAll(dto: GetAllDocumentRequestDto) {
@@ -59,13 +48,24 @@ export class DocumentRequestService {
       where,
       include: {
         status: true,
-        student: true,
+        student: {
+          include: {
+            registration: {
+              include: {
+                SchoolYear: true,
+              },
+            },
+          },
+        },
         registration: {
           include: {
             SchoolYear: true,
           },
         },
         documentType: true,
+      },
+      orderBy: {
+        id: 'desc',
       },
     });
 
@@ -90,18 +90,9 @@ export class DocumentRequestService {
 
     if (name)
       where = {
-        OR: [
-          {
-            name: { contains: name },
-          },
-          {
-            document: {
-              name: {
-                contains: name,
-              },
-            },
-          },
-        ],
+        student: {
+          name: { contains: name },
+        },
       };
 
     return { where };
@@ -109,7 +100,7 @@ export class DocumentRequestService {
 
   async remove(id: number) {
     try {
-      const student = await this.prisma.documentType.update({
+      const student = await this.prisma.documentRequest.update({
         where: {
           id,
         },
@@ -133,7 +124,7 @@ export class DocumentRequestService {
 
   async cancel(id: number) {
     try {
-      const student = await this.prisma.documentType.update({
+      const student = await this.prisma.documentRequest.update({
         where: {
           id,
         },

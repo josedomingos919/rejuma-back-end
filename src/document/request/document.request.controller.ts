@@ -35,11 +35,6 @@ export class DocumentRequestController {
     return this.documentRequestService.getAll(dto);
   }
 
-  @Get('all/select')
-  getAllSelect() {
-    return this.documentRequestService.getAllSelect();
-  }
-
   @Delete('/:id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.documentRequestService.remove(id);
