@@ -53,14 +53,18 @@ export class DocumentRequestService {
 
     const { skip, take, totalPage } = getPagination({ page, size, total });
 
-    const types = await this.prisma.documentRequest.findMany({
+    const requests = await this.prisma.documentRequest.findMany({
       skip,
       take,
       where,
       include: {
         status: true,
         student: true,
-        registration: true,
+        registration: {
+          include: {
+            SchoolYear: true,
+          },
+        },
         documentType: true,
       },
     });
@@ -68,7 +72,7 @@ export class DocumentRequestService {
     return {
       page,
       total,
-      types,
+      requests,
       totalPage,
     };
   }
