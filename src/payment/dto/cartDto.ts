@@ -36,4 +36,8 @@ export class CartDto {
   @IsOptional()
   @IsString()
   reference: string;
+
+  @Transform(({ value }) => (value ? Number(value) : null))
+  @IsOptional()
+  documentRequestId: number;
 }

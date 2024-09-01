@@ -328,6 +328,12 @@ export class PaymentService {
         },
       });
     } else if (payment.type == PaymentCodeType.Solicitacoes) {
+      await this.prisma.documentRequestPayments.create({
+        data: {
+          paymentId: paymentResponse.id,
+          documentRequestId: payment?.documentRequestId,
+        },
+      });
     }
 
     return paymentResponse;

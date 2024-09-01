@@ -64,6 +64,15 @@ export class DocumentRequestService {
           },
         },
         documentType: true,
+        DocumentRequestPayments: {
+          where: {
+            payment: {
+              status: {
+                code: statusTypes.ACTIVE,
+              },
+            },
+          },
+        },
       },
       orderBy: {
         id: 'desc',
@@ -106,6 +115,15 @@ export class DocumentRequestService {
         registrationId: dto.registrationId,
         status: {
           code: statusTypes.PENDING,
+        },
+        DocumentRequestPayments: {
+          none: {
+            payment: {
+              status: {
+                code: statusTypes.ACTIVE,
+              },
+            },
+          },
         },
       },
       include: {
