@@ -300,6 +300,7 @@ export class PaymentService {
         value: payment.value,
         multa: payment.multa,
         total: payment.total,
+        reference: payment.reference,
       },
     });
 
@@ -326,6 +327,7 @@ export class PaymentService {
           paymentId: paymentResponse.id,
         },
       });
+    } else if (payment.type == PaymentCodeType.Solicitacoes) {
     }
 
     return paymentResponse;

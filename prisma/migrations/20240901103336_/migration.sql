@@ -607,6 +607,17 @@ CREATE TABLE `documentRequest` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- CreateTable
+CREATE TABLE `DocumentRequestPayments` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+    `documentRequestId` INTEGER NOT NULL,
+    `paymentId` INTEGER NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- AddForeignKey
 ALTER TABLE `users` ADD CONSTRAINT `users_employeeId_fkey` FOREIGN KEY (`employeeId`) REFERENCES `employees`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -828,3 +839,9 @@ ALTER TABLE `documentRequest` ADD CONSTRAINT `documentRequest_documentTypeId_fke
 
 -- AddForeignKey
 ALTER TABLE `documentRequest` ADD CONSTRAINT `documentRequest_statusId_fkey` FOREIGN KEY (`statusId`) REFERENCES `status`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `DocumentRequestPayments` ADD CONSTRAINT `DocumentRequestPayments_documentRequestId_fkey` FOREIGN KEY (`documentRequestId`) REFERENCES `documentRequest`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `DocumentRequestPayments` ADD CONSTRAINT `DocumentRequestPayments_paymentId_fkey` FOREIGN KEY (`paymentId`) REFERENCES `payment`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

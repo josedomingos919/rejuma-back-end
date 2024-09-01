@@ -600,10 +600,12 @@ model Payment {
   SchoolFees     SchoolFees[]
   Exam           Exam[]
   SchoolResource SchoolResource[]
+  reference      String?
 
   invoice                 Invoice                   @relation(fields: [invoiceId], references: [id])
   invoiceId               Int
   InvoicePaymentDiscounts InvoicePaymentDiscounts[]
+  DocumentRequestPayments DocumentRequestPayments[]
 
   @@map("payment")
 }
@@ -787,7 +789,19 @@ model DocumentRequest {
   status   Status @relation(fields: [statusId], references: [id])
   statusId Int
 
-  payed Int @default(0) // pagou ou não
+  payed                   Int                       @default(0) // pagou ou não
+  DocumentRequestPayments DocumentRequestPayments[]
 
   @@map("documentRequest")
+}
+
+model DocumentRequestPayments {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  documentRequest   DocumentRequest @relation(fields: [documentRequestId], references: [id])
+  payment           Payment         @relation(fields: [paymentId], references: [id])
+  documentRequestId Int
+  paymentId         Int
 }

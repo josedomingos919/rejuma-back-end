@@ -32,4 +32,8 @@ export class CartDto {
   @Transform(({ value }) => (value ? Number(value) : null))
   @IsOptional()
   disciplineId: number;
+
+  @IsOptional()
+  @IsString()
+  reference: string;
 }
