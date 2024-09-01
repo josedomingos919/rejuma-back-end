@@ -8,6 +8,7 @@ import {
   GetAllDocumentRequestDto,
   UpdateDocumentRequestDto,
 } from './dto';
+import { GetNotPayedRequestsDto } from './dto/get-not-payed-requests.document.request.dto';
 
 @Injectable()
 export class DocumentRequestService {
@@ -96,6 +97,24 @@ export class DocumentRequestService {
       };
 
     return { where };
+  }
+
+  async getNotPayedRequests(dto: GetNotPayedRequestsDto) {
+    const requests = await this.prisma.documentRequest.findMany({
+      where: {
+        payed: 0,
+        studentId: dto.studentId,
+        registrationId: dto.registrationId,
+        status: {
+          code: statusTypes.PENDING,
+        },
+      },
+      include: {
+        documentType: true,
+      },
+    });
+
+    return requests;
   }
 
   async remove(id: number) {

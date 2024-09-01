@@ -15,6 +15,7 @@ import {
   UpdateDocumentRequestDto,
   GetAllDocumentRequestDto,
 } from './dto';
+import { GetNotPayedRequestsDto } from './dto/get-not-payed-requests.document.request.dto';
 
 @Controller('document/request')
 export class DocumentRequestController {
@@ -33,6 +34,11 @@ export class DocumentRequestController {
   @Get('all')
   getAll(@Query() dto: GetAllDocumentRequestDto) {
     return this.documentRequestService.getAll(dto);
+  }
+
+  @Get('get-not-payed-requests')
+  getNotPayedRequests(@Query() dto: GetNotPayedRequestsDto) {
+    return this.documentRequestService.getNotPayedRequests(dto);
   }
 
   @Delete('/:id')
