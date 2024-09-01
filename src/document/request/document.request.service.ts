@@ -102,7 +102,6 @@ export class DocumentRequestService {
   async getNotPayedRequests(dto: GetNotPayedRequestsDto) {
     const requests = await this.prisma.documentRequest.findMany({
       where: {
-        payed: 0,
         studentId: dto.studentId,
         registrationId: dto.registrationId,
         status: {
