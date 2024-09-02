@@ -8,7 +8,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
 model User {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
@@ -65,6 +64,56 @@ model Office {
   @@map("office")
 }
 
+model StudentSupervisor {
+  id             Int              @id @default(autoincrement())
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  name           String
+  bi             String?
+  degree         String? //Grau de Parentesco
+  phone1         String?
+  phone2         String?
+  DiscountsInUse DiscountsInUse[]
+  Student        Student[]
+
+  @@map("studentsupervisor")
+}
+
+// Tabela para asociação de desconto para tudo encarregado, aluno, etc
+model DiscountsInUse {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  studenty  Student? @relation(fields: [studentId], references: [id])
+  studentId Int?
+
+  studentSupervisor   StudentSupervisor? @relation(fields: [studentSupervisorId], references: [id])
+  studentSupervisorId Int?
+
+  paymentDiscountId Int
+  discount          PaymentDiscount @relation(fields: [paymentDiscountId], references: [id])
+
+  statusId Int
+  status   Status @relation(fields: [statusId], references: [id])
+}
+
+model PaymentDiscount {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  value          Float?
+  percentage     Int?
+  discountType   String // Percentage, Value
+  paymentType    String
+  DiscountsInUse DiscountsInUse[]
+
+  statusId                Int
+  status                  Status                    @relation(fields: [statusId], references: [id])
+  InvoicePaymentDiscounts InvoicePaymentDiscounts[]
+}
+
 model Student {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
@@ -87,6 +136,10 @@ model Student {
   province     Province       @relation(fields: [provinceId], references: [id])
   registration Registration[]
 
+  //Encarregado
+  studentSupervisor   StudentSupervisor? @relation(fields: [studentSupervisorId], references: [id])
+  studentSupervisorId Int?
+
   parentAffiliation   String?
   maternalAffiliation String?
   residence           String?
@@ -99,7 +152,9 @@ model Student {
   workStation         String?
   sponsorOfEducation  String?
 
-  balance Float @default(0)
+  balance         Float             @default(0)
+  DocumentRequest DocumentRequest[]
+  DiscountsInUse  DiscountsInUse[]
 
   @@map("student")
 }
@@ -155,19 +210,24 @@ model Status {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name         String
-  code         String         @unique
-  description  String?
-  user         User[]
-  show         Boolean        @default(true)
-  employee     Employee[]
-  teacher      Teacher[]
-  student      Student[]
-  ClassTeam    ClassTeam[]
-  Registration Registration[]
-  payment      Payment[]
-  Invoice      Invoice[]
-  SchoolYear   SchoolYear[]
+  name             String
+  code             String             @unique
+  description      String?
+  user             User[]
+  show             Boolean            @default(true)
+  employee         Employee[]
+  teacher          Teacher[]
+  student          Student[]
+  ClassTeam        ClassTeam[]
+  Registration     Registration[]
+  payment          Payment[]
+  Invoice          Invoice[]
+  SchoolYear       SchoolYear[]
+  DocumentRequest  DocumentRequest[]
+  DocumentType     DocumentType[]
+  DocumentCategory DocumentCategory[]
+  DiscountsInUse   DiscountsInUse[]
+  PaymentDiscount  PaymentDiscount[]
 
   @@map("status")
 }
@@ -400,11 +460,18 @@ model Registration {
   employeeId Int?
   employee   Employee? @relation(fields: [employeeId], references: [id])
 
-  student     Student       @relation(fields: [studentId], references: [id])
-  studentId   Int
-  productSale ProductSale[]
-  payment     Payment[]
-  Invoice     Invoice[]
+  student         Student           @relation(fields: [studentId], references: [id])
+  studentId       Int
+  productSale     ProductSale[]
+  payment         Payment[]
+  Invoice         Invoice[]
+  DocumentRequest DocumentRequest[]
+
+  previousClass       String?
+  previousGroup       String?
+  previousRoom        String?
+  previousNumber      String?
+  previousSchoolsName String?
 
   @@map("registration")
 }
@@ -533,11 +600,34 @@ model Payment {
   SchoolFees     SchoolFees[]
   Exam           Exam[]
   SchoolResource SchoolResource[]
+  reference      String?
 
-  invoice   Invoice @relation(fields: [invoiceId], references: [id])
-  invoiceId Int
+  invoice                 Invoice                   @relation(fields: [invoiceId], references: [id])
+  invoiceId               Int
+  InvoicePaymentDiscounts InvoicePaymentDiscounts[]
+  DocumentRequestPayments DocumentRequestPayments[]
 
   @@map("payment")
+}
+
+model InvoicePaymentDiscounts {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  payment   Payment @relation(fields: [paymentId], references: [id])
+  paymentId Int
+
+  paymentDiscount   PaymentDiscount @relation(fields: [paymentDiscountId], references: [id])
+  paymentDiscountId Int
+
+  discountName String
+  discountType String
+  percentage   Float?
+  value        Float?
+  total        Float?
+
+  @@map("invoiceDiscounts")
 }
 
 model SchoolFees {
@@ -646,4 +736,71 @@ model UserGroupPermission {
   group String // Admin, Professor
 
   @@map("userGroupPermission")
+}
+
+model DocumentCategory {
+  id           Int            @id @default(autoincrement())
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  DocumentType DocumentType[]
+
+  name String @unique
+
+  status   Status @relation(fields: [statusId], references: [id])
+  statusId Int
+
+  @@map("documentCategory")
+}
+
+model DocumentType {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  document           DocumentCategory @relation(fields: [documentCategoryId], references: [id])
+  documentCategoryId Int
+
+  name            String            @unique
+  price           Float?
+  DocumentRequest DocumentRequest[]
+
+  status   Status @relation(fields: [statusId], references: [id])
+  statusId Int
+
+  @@map("documentType")
+}
+
+model DocumentRequest {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  student      Student      @relation(fields: [studentId], references: [id])
+  registration Registration @relation(fields: [registrationId], references: [id])
+  documentType DocumentType @relation(fields: [documentTypeId], references: [id])
+
+  registrationId Int
+  studentId      Int
+  documentTypeId Int
+
+  price Float?
+
+  status   Status @relation(fields: [statusId], references: [id])
+  statusId Int
+
+  DocumentRequestPayments DocumentRequestPayments[]
+
+  @@map("documentRequest")
+}
+
+model DocumentRequestPayments {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  documentRequest   DocumentRequest @relation(fields: [documentRequestId], references: [id])
+  payment           Payment         @relation(fields: [paymentId], references: [id])
+  documentRequestId Int
+  paymentId         Int
 }

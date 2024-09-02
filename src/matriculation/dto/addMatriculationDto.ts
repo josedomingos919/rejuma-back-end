@@ -17,6 +17,26 @@ export class AddMatriculationDto {
   @IsOptional()
   courseId: number;
 
+  @IsString()
+  @IsOptional()
+  previousClass: string;
+
+  @IsString()
+  @IsOptional()
+  previousGroup: string;
+
+  @IsString()
+  @IsOptional()
+  previousRoom: string;
+
+  @IsString()
+  @IsOptional()
+  previousNumber: string;
+
+  @IsString()
+  @IsOptional()
+  previousSchoolsName: string;
+  
   @IsInt()
   @IsNotEmpty()
   classId: number;

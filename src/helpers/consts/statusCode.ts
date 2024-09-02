@@ -6,4 +6,6 @@ export const statusTypes = {
   TRANSFERRED: 'TRAN',
   EXPELLED: 'EXP',
   ANNULLED: 'ANUL',
+  PENDING: 'PEND',
+  RECEIVED: 'RECE',
 };
