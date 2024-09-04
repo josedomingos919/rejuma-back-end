@@ -49,6 +49,47 @@ CREATE TABLE `office` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `studentsupervisor` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+    `name` VARCHAR(191) NOT NULL,
+    `bi` VARCHAR(191) NULL,
+    `degree` VARCHAR(191) NULL,
+    `phone1` VARCHAR(191) NULL,
+    `phone2` VARCHAR(191) NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `DiscountsInUse` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+    `studentId` INTEGER NULL,
+    `studentSupervisorId` INTEGER NULL,
+    `paymentDiscountId` INTEGER NOT NULL,
+    `statusId` INTEGER NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `PaymentDiscount` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+    `value` DOUBLE NULL,
+    `percentage` INTEGER NULL,
+    `discountType` VARCHAR(191) NOT NULL,
+    `paymentType` VARCHAR(191) NOT NULL,
+    `statusId` INTEGER NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `student` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -65,6 +106,7 @@ CREATE TABLE `student` (
     `countryId` INTEGER NOT NULL,
     `statusId` INTEGER NOT NULL,
     `provinceId` INTEGER NOT NULL,
+    `studentSupervisorId` INTEGER NULL,
     `parentAffiliation` VARCHAR(191) NULL,
     `maternalAffiliation` VARCHAR(191) NULL,
     `residence` VARCHAR(191) NULL,
@@ -295,6 +337,11 @@ CREATE TABLE `registration` (
     `statusId` INTEGER NOT NULL,
     `employeeId` INTEGER NULL,
     `studentId` INTEGER NOT NULL,
+    `previousClass` VARCHAR(191) NULL,
+    `previousGroup` VARCHAR(191) NULL,
+    `previousRoom` VARCHAR(191) NULL,
+    `previousNumber` VARCHAR(191) NULL,
+    `previousSchoolsName` VARCHAR(191) NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -354,6 +401,49 @@ CREATE TABLE `months` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `BankAccount` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+    `number` VARCHAR(191) NOT NULL,
+    `iban` VARCHAR(191) NOT NULL,
+    `titular` VARCHAR(191) NOT NULL,
+    `banco` VARCHAR(191) NULL,
+
+    UNIQUE INDEX `BankAccount_number_key`(`number`),
+    UNIQUE INDEX `BankAccount_iban_key`(`iban`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `PaymentMethod` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+    `name` VARCHAR(191) NOT NULL,
+    `repeat` INTEGER NOT NULL DEFAULT 0,
+    `show` INTEGER NOT NULL DEFAULT 1,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `PaymentMethods` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+    `paymentMethodId` INTEGER NOT NULL,
+    `value` DOUBLE NOT NULL,
+    `date` DATETIME(3) NULL,
+    `ibanRemitent` VARCHAR(191) NULL,
+    `transactionNumber` VARCHAR(191) NULL,
+    `bankAccountId` INTEGER NULL,
+    `invoiceId` INTEGER NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `payment` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -366,6 +456,22 @@ CREATE TABLE `payment` (
     `statusId` INTEGER NOT NULL,
     `registrationId` INTEGER NOT NULL,
     `invoiceId` INTEGER NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `invoiceDiscounts` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+    `paymentId` INTEGER NOT NULL,
+    `paymentDiscountId` INTEGER NOT NULL,
+    `discountName` VARCHAR(191) NOT NULL,
+    `discountType` VARCHAR(191) NOT NULL,
+    `percentage` DOUBLE NULL,
+    `value` DOUBLE NULL,
+    `total` DOUBLE NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -411,7 +517,7 @@ CREATE TABLE `setting` (
     `updatedAt` DATETIME(3) NOT NULL,
     `key` VARCHAR(191) NOT NULL,
     `descricao` VARCHAR(191) NOT NULL,
-    `value` TEXT NOT NULL,
+    `value` LONGTEXT NOT NULL,
 
     UNIQUE INDEX `setting_key_key`(`key`),
     PRIMARY KEY (`id`)
@@ -459,6 +565,59 @@ CREATE TABLE `userGroupPermission` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- CreateTable
+CREATE TABLE `documentCategory` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+    `name` VARCHAR(191) NOT NULL,
+    `statusId` INTEGER NOT NULL,
+
+    UNIQUE INDEX `documentCategory_name_key`(`name`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `documentType` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+    `documentCategoryId` INTEGER NOT NULL,
+    `name` VARCHAR(191) NOT NULL,
+    `price` DOUBLE NULL,
+    `statusId` INTEGER NOT NULL,
+
+    UNIQUE INDEX `documentType_name_key`(`name`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `documentRequest` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+    `deletedAt` DATETIME(3) NULL,
+    `registrationId` INTEGER NOT NULL,
+    `studentId` INTEGER NOT NULL,
+    `documentTypeId` INTEGER NOT NULL,
+    `price` DOUBLE NULL,
+    `statusId` INTEGER NOT NULL,
+    `payed` INTEGER NOT NULL DEFAULT 0,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `DocumentRequestPayments` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+    `documentRequestId` INTEGER NOT NULL,
+    `paymentId` INTEGER NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- AddForeignKey
 ALTER TABLE `users` ADD CONSTRAINT `users_employeeId_fkey` FOREIGN KEY (`employeeId`) REFERENCES `employees`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -469,6 +628,21 @@ ALTER TABLE `users` ADD CONSTRAINT `users_statusId_fkey` FOREIGN KEY (`statusId`
 ALTER TABLE `province` ADD CONSTRAINT `province_countryId_fkey` FOREIGN KEY (`countryId`) REFERENCES `country`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `DiscountsInUse` ADD CONSTRAINT `DiscountsInUse_studentId_fkey` FOREIGN KEY (`studentId`) REFERENCES `student`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `DiscountsInUse` ADD CONSTRAINT `DiscountsInUse_studentSupervisorId_fkey` FOREIGN KEY (`studentSupervisorId`) REFERENCES `studentsupervisor`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `DiscountsInUse` ADD CONSTRAINT `DiscountsInUse_paymentDiscountId_fkey` FOREIGN KEY (`paymentDiscountId`) REFERENCES `PaymentDiscount`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `DiscountsInUse` ADD CONSTRAINT `DiscountsInUse_statusId_fkey` FOREIGN KEY (`statusId`) REFERENCES `status`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `PaymentDiscount` ADD CONSTRAINT `PaymentDiscount_statusId_fkey` FOREIGN KEY (`statusId`) REFERENCES `status`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `student` ADD CONSTRAINT `student_countryId_fkey` FOREIGN KEY (`countryId`) REFERENCES `country`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -476,6 +650,9 @@ ALTER TABLE `student` ADD CONSTRAINT `student_statusId_fkey` FOREIGN KEY (`statu
 
 -- AddForeignKey
 ALTER TABLE `student` ADD CONSTRAINT `student_provinceId_fkey` FOREIGN KEY (`provinceId`) REFERENCES `province`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `student` ADD CONSTRAINT `student_studentSupervisorId_fkey` FOREIGN KEY (`studentSupervisorId`) REFERENCES `studentsupervisor`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `employees` ADD CONSTRAINT `employees_countryId_fkey` FOREIGN KEY (`countryId`) REFERENCES `country`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -586,6 +763,15 @@ ALTER TABLE `curriculumGrid` ADD CONSTRAINT `curriculumGrid_disciplineId_fkey` F
 ALTER TABLE `months` ADD CONSTRAINT `months_schoolYearId_fkey` FOREIGN KEY (`schoolYearId`) REFERENCES `schoolyear`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `PaymentMethods` ADD CONSTRAINT `PaymentMethods_paymentMethodId_fkey` FOREIGN KEY (`paymentMethodId`) REFERENCES `PaymentMethod`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `PaymentMethods` ADD CONSTRAINT `PaymentMethods_invoiceId_fkey` FOREIGN KEY (`invoiceId`) REFERENCES `invoice`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `PaymentMethods` ADD CONSTRAINT `PaymentMethods_bankAccountId_fkey` FOREIGN KEY (`bankAccountId`) REFERENCES `BankAccount`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `payment` ADD CONSTRAINT `payment_employeeId_fkey` FOREIGN KEY (`employeeId`) REFERENCES `employees`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -596,6 +782,12 @@ ALTER TABLE `payment` ADD CONSTRAINT `payment_registrationId_fkey` FOREIGN KEY (
 
 -- AddForeignKey
 ALTER TABLE `payment` ADD CONSTRAINT `payment_invoiceId_fkey` FOREIGN KEY (`invoiceId`) REFERENCES `invoice`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `invoiceDiscounts` ADD CONSTRAINT `invoiceDiscounts_paymentId_fkey` FOREIGN KEY (`paymentId`) REFERENCES `payment`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `invoiceDiscounts` ADD CONSTRAINT `invoiceDiscounts_paymentDiscountId_fkey` FOREIGN KEY (`paymentDiscountId`) REFERENCES `PaymentDiscount`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `schoolFees` ADD CONSTRAINT `schoolFees_paymentId_fkey` FOREIGN KEY (`paymentId`) REFERENCES `payment`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -626,3 +818,30 @@ ALTER TABLE `invoice` ADD CONSTRAINT `invoice_employeeId_fkey` FOREIGN KEY (`emp
 
 -- AddForeignKey
 ALTER TABLE `userGroupPermission` ADD CONSTRAINT `userGroupPermission_permissionId_fkey` FOREIGN KEY (`permissionId`) REFERENCES `permission`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `documentCategory` ADD CONSTRAINT `documentCategory_statusId_fkey` FOREIGN KEY (`statusId`) REFERENCES `status`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `documentType` ADD CONSTRAINT `documentType_documentCategoryId_fkey` FOREIGN KEY (`documentCategoryId`) REFERENCES `documentCategory`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `documentType` ADD CONSTRAINT `documentType_statusId_fkey` FOREIGN KEY (`statusId`) REFERENCES `status`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `documentRequest` ADD CONSTRAINT `documentRequest_studentId_fkey` FOREIGN KEY (`studentId`) REFERENCES `student`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `documentRequest` ADD CONSTRAINT `documentRequest_registrationId_fkey` FOREIGN KEY (`registrationId`) REFERENCES `registration`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `documentRequest` ADD CONSTRAINT `documentRequest_documentTypeId_fkey` FOREIGN KEY (`documentTypeId`) REFERENCES `documentType`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `documentRequest` ADD CONSTRAINT `documentRequest_statusId_fkey` FOREIGN KEY (`statusId`) REFERENCES `status`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `DocumentRequestPayments` ADD CONSTRAINT `DocumentRequestPayments_documentRequestId_fkey` FOREIGN KEY (`documentRequestId`) REFERENCES `documentRequest`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `DocumentRequestPayments` ADD CONSTRAINT `DocumentRequestPayments_paymentId_fkey` FOREIGN KEY (`paymentId`) REFERENCES `payment`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

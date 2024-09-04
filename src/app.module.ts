@@ -36,6 +36,7 @@ import { DiscountsInUseModule } from './discountsInUse/discounts-in-use.module';
 import { PaymentDiscountModule } from './paymentDiscount/student-supervisor.module';
 import { InvoicePaymentDiscountsModule } from './invoicePaymentDiscounts/invoice-payment-discounts.module';
 import { MedicalRecorModule } from './medicalRecord/medical-record.module';
+import { DocumentRequestModule } from './document/request/document.request.module';
 
 @Module({
   imports: [
@@ -76,6 +77,7 @@ import { MedicalRecorModule } from './medicalRecord/medical-record.module';
     PaymentDiscountModule,
     InvoicePaymentDiscountsModule,
     MedicalRecorModule,
+    DocumentRequestModule,
   ],
 })
 export class AppModule {}

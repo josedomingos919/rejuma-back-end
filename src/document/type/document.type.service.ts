@@ -40,6 +40,17 @@ export class DocumentTypeService {
     return response;
   }
 
+  async getAllSelect() {
+    const types = await this.prisma.documentType.findMany({
+      include: {
+        status: true,
+        document: true,
+      },
+    });
+
+    return types;
+  }
+
   async getAll(dto: GetAllDocumentTypeDto) {
     const { page = 1, size = 10 } = dto;
     const { where } = await this.getAllFilter(dto);

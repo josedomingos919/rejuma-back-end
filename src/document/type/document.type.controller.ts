@@ -33,6 +33,11 @@ export class DocumentTypeController {
     return this.documentTypeService.getAll(dto);
   }
 
+  @Get('all/select')
+  getAllSelect() {
+    return this.documentTypeService.getAllSelect();
+  }
+
   @Delete('/:id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.documentTypeService.remove(id);
