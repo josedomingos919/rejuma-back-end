@@ -466,15 +466,43 @@ model Registration {
   payment         Payment[]
   Invoice         Invoice[]
   DocumentRequest DocumentRequest[]
+  MedicalRecord MedicalRecord[]
 
   previousClass String?
   previousGroup String?
   previousRoom String?
-  previousNumber String?
+  previousNumber Int?
   previousSchoolsName String?
 
   @@map("registration")
 }
+
+model MedicalRecord {
+  id                  Int      @id @default(autoincrement())
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  allergiesSpecific   Boolean @default(false) // Alergias
+  allergiesDetails    String?  // Detalhes da alergias específicas do aluno
+  cognitiveDisorder   Boolean  @default(false)// Doença cognitiva
+  asthma              Boolean  @default(false)// Asma
+  epilepsy            Boolean  @default(false)// Epilepsia
+  convulsion          Boolean  @default(false)// Convulsão
+  visualImpairment    Boolean  @default(false)// Deficiência visual
+  specialNeeds        Boolean  @default(false)// Necessidades especiais
+  hemophilia          Boolean  @default(false)// Hemofilia
+  hearingImpairment   Boolean  @default(false)// Deficiência auditiva
+  medicalTreatment    Boolean  @default(false)// Em tratamento médico
+  treatmentDetails    String?  // Detalhes do tratamento médico
+  hospitalName        String?  // Nome do hospital ou clínica
+  hospitalAddress     String?  // Endereço do hospital ou clínica
+
+  registration        Registration @relation(fields: [registrationId], references: [id])
+  registrationId      Int
+
+  @@map("medicalRecord")
+}
+
 
 model Product {
   id          Int           @id @default(autoincrement())
