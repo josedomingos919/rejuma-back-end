@@ -1,7 +1,20 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { StudentSupervisorService } from './student-supervisor.service';
 import { AddStudentSupervisorDto } from './dto/addStudentSupervisorDto';
 import { UpdateStudentSupervisorDto } from './dto/updateStudentSupervisorDto';
+import { GetAllStudentSupervisorDto } from './dto/get-all.student-supervisor.request.dto';
 
 @Controller('student-supervisor')
 export class StudentSupervisorController {
@@ -13,13 +26,15 @@ export class StudentSupervisorController {
     return this.studentSupervisorService.add(dto);
   }
 
-  @Get()
-  getAll() {
-    return this.studentSupervisorService.getAllStudentSupervisor();
+  @Get('all')
+  getAll(@Query() dto: GetAllStudentSupervisorDto) {
+    return this.studentSupervisorService.getAll(dto);
   }
 
   @Get('/:studentSupervisorId')
-  getByStudentSupervisorId(@Param('studentSupervisorId', ParseIntPipe) countryId: number) {
+  getByStudentSupervisorId(
+    @Param('studentSupervisorId', ParseIntPipe) countryId: number,
+  ) {
     return this.studentSupervisorService.getByStudentSupervisorId(countryId);
   }
 
