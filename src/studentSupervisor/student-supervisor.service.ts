@@ -9,32 +9,32 @@ export class StudentSupervisorService {
 
   async add(dto: AddStudentSupervisorDto) {
     try {
-        const studentSupervisor = await this.prisma.studentSupervisor.create({
-            data: dto,
-        });
+      const studentSupervisor = await this.prisma.studentSupervisor.create({
+        data: dto,
+      });
 
-        return studentSupervisor;
+      return studentSupervisor;
     } catch (error) {
-        throw new ForbiddenException({
-            error,
-            status: false
-        });
+      throw new ForbiddenException({
+        error,
+        status: false,
+      });
     }
-}
+  }
 
   getAllStudentSupervisor() {
     return this.prisma.studentSupervisor.findMany({
-      include:{
-        DiscountsInUse:true,
-        Student:true
-      }
+      include: {
+        Student: true,
+        DiscountsInUse: true,
+      },
     });
   }
 
   getByStudentSupervisorId(StudentSupervisorId: number) {
     return this.prisma.studentSupervisor.findMany({
       where: {
-        id:StudentSupervisorId,
+        id: StudentSupervisorId,
       },
     });
   }
