@@ -54,11 +54,13 @@ CREATE TABLE `studentsupervisor` (
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `name` VARCHAR(191) NOT NULL,
-    `bi` VARCHAR(191) NULL,
+    `bi` VARCHAR(191) NOT NULL,
     `degree` VARCHAR(191) NULL,
     `phone1` VARCHAR(191) NULL,
     `phone2` VARCHAR(191) NULL,
+    `statusId` INTEGER NOT NULL,
 
+    UNIQUE INDEX `studentsupervisor_bi_key`(`bi`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -340,8 +342,32 @@ CREATE TABLE `registration` (
     `previousClass` VARCHAR(191) NULL,
     `previousGroup` VARCHAR(191) NULL,
     `previousRoom` VARCHAR(191) NULL,
-    `previousNumber` VARCHAR(191) NULL,
+    `previousNumber` INTEGER NULL,
     `previousSchoolsName` VARCHAR(191) NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `medicalRecord` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+    `allergiesSpecific` BOOLEAN NOT NULL DEFAULT false,
+    `allergiesDetails` VARCHAR(191) NULL,
+    `cognitiveDisorder` BOOLEAN NOT NULL DEFAULT false,
+    `asthma` BOOLEAN NOT NULL DEFAULT false,
+    `epilepsy` BOOLEAN NOT NULL DEFAULT false,
+    `convulsion` BOOLEAN NOT NULL DEFAULT false,
+    `visualImpairment` BOOLEAN NOT NULL DEFAULT false,
+    `specialNeeds` BOOLEAN NOT NULL DEFAULT false,
+    `hemophilia` BOOLEAN NOT NULL DEFAULT false,
+    `hearingImpairment` BOOLEAN NOT NULL DEFAULT false,
+    `medicalTreatment` BOOLEAN NOT NULL DEFAULT false,
+    `treatmentDetails` VARCHAR(191) NULL,
+    `hospitalName` VARCHAR(191) NULL,
+    `hospitalAddress` VARCHAR(191) NULL,
+    `registrationId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -628,6 +654,9 @@ ALTER TABLE `users` ADD CONSTRAINT `users_statusId_fkey` FOREIGN KEY (`statusId`
 ALTER TABLE `province` ADD CONSTRAINT `province_countryId_fkey` FOREIGN KEY (`countryId`) REFERENCES `country`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `studentsupervisor` ADD CONSTRAINT `studentsupervisor_statusId_fkey` FOREIGN KEY (`statusId`) REFERENCES `status`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `DiscountsInUse` ADD CONSTRAINT `DiscountsInUse_studentId_fkey` FOREIGN KEY (`studentId`) REFERENCES `student`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -743,6 +772,9 @@ ALTER TABLE `registration` ADD CONSTRAINT `registration_employeeId_fkey` FOREIGN
 
 -- AddForeignKey
 ALTER TABLE `registration` ADD CONSTRAINT `registration_studentId_fkey` FOREIGN KEY (`studentId`) REFERENCES `student`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `medicalRecord` ADD CONSTRAINT `medicalRecord_registrationId_fkey` FOREIGN KEY (`registrationId`) REFERENCES `registration`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `productSale` ADD CONSTRAINT `productSale_registrationId_fkey` FOREIGN KEY (`registrationId`) REFERENCES `registration`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
