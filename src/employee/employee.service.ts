@@ -1,8 +1,8 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { AddEmployeeDto, UpdateEmployeeDto, GetAllEmployeeDto } from './dto';
-import { getPagination, statusTypes } from 'src/helpers';
-import { officeCode } from 'src/helpers/consts/officeCode';
+import { getPagination, statusTypes } from '../helpers';
+import { officeCode } from '../helpers/consts/officeCode';
 
 @Injectable()
 export class EmployeeService {
@@ -29,12 +29,12 @@ export class EmployeeService {
     try {
       const employees = await this.prisma.employee.findMany({
         where: {
-          OR:[
+          OR: [
             { name: { contains: keword } },
-            { phone1: {  contains: keword } },
-            { phone2: {contains: keword } }
-          ]
-        }
+            { phone1: { contains: keword } },
+            { phone2: { contains: keword } },
+          ],
+        },
       });
 
       return employees;

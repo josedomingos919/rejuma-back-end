@@ -1,6 +1,6 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { getPagination, statusTypes } from 'src/helpers';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { getPagination, statusTypes } from '../helpers';
+import { PrismaService } from '../prisma/prisma.service';
 import {
   AddSchoolYearDto,
   UpdateSchoolYearDto,

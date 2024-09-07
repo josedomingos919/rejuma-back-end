@@ -1,10 +1,10 @@
 import { GetClassTeamDto } from './dto';
 import { Injectable, ForbiddenException } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { AddMatriculationDto } from './dto/addMatriculationDto';
 import { UpdateMatriculationDto } from './dto/updateMatriculationDto';
 import { GetAllMatriculationDto } from './dto/getAllMatriculationDto';
-import { getPagination, statusTypes } from 'src/helpers';
+import { getPagination, statusTypes } from '../helpers';
 
 @Injectable()
 export class MatriculationService {
@@ -244,11 +244,11 @@ export class MatriculationService {
           include: {
             province: true,
             country: true,
-            DiscountsInUse:true,
-            studentSupervisor:true
+            DiscountsInUse: true,
+            studentSupervisor: true,
           },
         },
-        MedicalRecord:true,
+        MedicalRecord: true,
         classTeam: {
           include: {
             class: {

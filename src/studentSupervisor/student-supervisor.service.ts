@@ -1,9 +1,9 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { AddStudentSupervisorDto } from './dto/addStudentSupervisorDto';
 import { UpdateStudentSupervisorDto } from './dto/updateStudentSupervisorDto';
 import { GetAllStudentSupervisorDto } from './dto/get-all.student-supervisor.request.dto';
-import { getPagination, statusTypes } from 'src/helpers';
+import { getPagination, statusTypes } from '../helpers';
 
 @Injectable()
 export class StudentSupervisorService {

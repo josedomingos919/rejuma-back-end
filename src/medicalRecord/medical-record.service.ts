@@ -1,5 +1,5 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { AddMedicalRecordDto } from './dto/addMedicalRecordDto';
 import { UpdateMedicalRecordDto } from './dto/updateMedicalRecordDto';
 
@@ -9,31 +9,31 @@ export class MedicalRecorService {
 
   async add(dto: AddMedicalRecordDto) {
     try {
-        const medicalRecord = await this.prisma.medicalRecord.create({
-            data: dto,
-        });
+      const medicalRecord = await this.prisma.medicalRecord.create({
+        data: dto,
+      });
 
-        return medicalRecord;
+      return medicalRecord;
     } catch (error) {
-        throw new ForbiddenException({
-            error,
-            status: false
-        });
+      throw new ForbiddenException({
+        error,
+        status: false,
+      });
     }
-}
+  }
 
   getAllMedicalRecord() {
     return this.prisma.medicalRecord.findMany({
-      include:{
-        registration:true
-      }
+      include: {
+        registration: true,
+      },
     });
   }
 
   getByMedicalRecordId(MedicalRecordId: number) {
     return this.prisma.medicalRecord.findMany({
       where: {
-        id:MedicalRecordId,
+        id: MedicalRecordId,
       },
     });
   }

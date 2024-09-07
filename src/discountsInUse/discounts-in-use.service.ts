@@ -1,5 +1,5 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { AddDiscountsInUseDto } from './dto/addDiscountsInUseDto';
 import { UpdateDiscountsInUseDto } from './dto/updateDiscountsInUseDto';
 
@@ -9,34 +9,34 @@ export class DiscountsInUseService {
 
   async add(dto: AddDiscountsInUseDto) {
     try {
-        const discountsInUse = await this.prisma.discountsInUse.create({
-            data: dto,
-        });
+      const discountsInUse = await this.prisma.discountsInUse.create({
+        data: dto,
+      });
 
-        return discountsInUse;
+      return discountsInUse;
     } catch (error) {
-        throw new ForbiddenException({
-            error,
-            status: false
-        });
+      throw new ForbiddenException({
+        error,
+        status: false,
+      });
     }
-}
+  }
 
   getAllStudentSupervisor() {
     return this.prisma.discountsInUse.findMany({
-      include:{
-        discount:true,
-        status:true,
-        studentSupervisor:true,
-        studenty:true
-      }
+      include: {
+        discount: true,
+        status: true,
+        studentSupervisor: true,
+        studenty: true,
+      },
     });
   }
 
   getByStudentSupervisorId(discountsInUseId: number) {
     return this.prisma.discountsInUse.findMany({
       where: {
-        id:discountsInUseId,
+        id: discountsInUseId,
       },
     });
   }

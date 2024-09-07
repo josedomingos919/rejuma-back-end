@@ -1,12 +1,12 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { getPagination, statusTypes } from 'src/helpers';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { getPagination, statusTypes } from '../helpers';
+import { PrismaService } from '../prisma/prisma.service';
 import { AddPaymentDto } from './dto/addPaymentDto';
 import { CartDto } from './dto/cartDto';
-import { PaymentCodeType } from 'src/helpers/consts/paymentCodeType';
+import { PaymentCodeType } from '../helpers/consts/paymentCodeType';
 import { GetPaymentDto } from './dto/getPaymentDto';
 import { PaymentMethodDto } from './dto/paymentMethod';
-import { PaymentMethodTypes } from 'src/helpers/consts/paymentMethodsType';
+import { PaymentMethodTypes } from '../helpers/consts/paymentMethodsType';
 
 @Injectable()
 export class PaymentService {

@@ -11,7 +11,7 @@ import {
   Param,
   ParseIntPipe,
 } from '@nestjs/common';
-import { GetAllEmployeeDto } from 'src/employee/dto';
+import { GetAllEmployeeDto } from '../employee/dto';
 import { UpdateTeacherDto } from './dto';
 import { AddTeacherDto } from './dto/addTeacherDto';
 import { TeacherService } from './teacher.service';

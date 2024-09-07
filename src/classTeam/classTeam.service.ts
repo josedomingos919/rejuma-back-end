@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { getPagination, statusTypes } from 'src/helpers';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { getPagination, statusTypes } from '../helpers';
+import { PrismaService } from '../prisma/prisma.service';
 import { ForbiddenException } from '@nestjs/common/exceptions';
 import { AddClassTeamDto, GetAllClassTeamDto, UpdateClassTeamDto } from './dto';
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ForbiddenException } from '@nestjs/common/exceptions';
-import { getPagination, statusTypes } from 'src/helpers';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { getPagination, statusTypes } from '../helpers';
+import { PrismaService } from '../prisma/prisma.service';
 import { GetAllTeacherDto, UpdateTeacherDto } from './dto';
 import { AddTeacherDto } from './dto/addTeacherDto';
 

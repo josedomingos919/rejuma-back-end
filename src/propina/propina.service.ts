@@ -1,7 +1,7 @@
 import { Injectable, Query } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { GetPropinaDto } from './dto/getPropinaDto';
-import { statusTypes } from 'src/helpers';
+import { statusTypes } from '../helpers';
 import { GetStudentsDto } from './dto/getStudentsDto';
 
 @Injectable()

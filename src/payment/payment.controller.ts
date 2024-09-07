@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { PaymentService } from './payment.service';
 import { AddPaymentDto } from './dto/addPaymentDto';
-import { GetAllMatriculationDto } from 'src/matriculation/dto/getAllMatriculationDto';
+import { GetAllMatriculationDto } from '../matriculation/dto/getAllMatriculationDto';
 
 @Controller('payment')
 export class PaymentController {
