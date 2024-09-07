@@ -1,11 +1,11 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from './../../prisma/prisma.service';
 import {
   AddDocumentCategoryDto,
   UpdateDocumentCategoryDto,
   GetAllDocumentCategoryDto,
 } from './dto';
-import { getPagination, statusTypes } from '../helpers';
+import { getPagination, statusTypes } from './../../helpers';
 
 @Injectable()
 export class DocumentCategoryService {

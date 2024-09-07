@@ -1,7 +1,7 @@
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from './../../prisma/prisma.service';
 import { ForbiddenException, Injectable } from '@nestjs/common';
 
-import { getPagination, statusTypes } from '../helpers';
+import { getPagination, statusTypes } from './../../helpers';
 import { GetAllDocumentCategoryDto } from '../category/dto';
 import { AddDocumentTypeDto } from './dto/add.document.type.dto';
 import { UpdateDocumentTypeDto } from './dto/update.document.type.dto';
