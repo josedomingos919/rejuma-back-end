@@ -248,6 +248,7 @@ export class MatriculationService {
             studentSupervisor:true
           },
         },
+        MedicalRecord:true,
         classTeam: {
           include: {
             class: {

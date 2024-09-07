@@ -4,10 +4,10 @@ import {
   IsNumber,
   IsOptional,
   IsNotEmpty,
+  IsInt,
 } from 'class-validator';
 
 export class AddStudentSupervisorDto {
-
   @IsString()
   @IsNotEmpty()
   name: string;
@@ -28,4 +28,8 @@ export class AddStudentSupervisorDto {
   @IsOptional()
   phone2: string;
 
+  @Transform(({ value }) => Number(value))
+  @IsInt()
+  @IsOptional()
+  statusId: number;
 }

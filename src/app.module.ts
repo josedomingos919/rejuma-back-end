@@ -35,6 +35,7 @@ import { StudentSupervisorModule } from './studentSupervisor/student-supervisor.
 import { DiscountsInUseModule } from './discountsInUse/discounts-in-use.module';
 import { PaymentDiscountModule } from './paymentDiscount/student-supervisor.module';
 import { InvoicePaymentDiscountsModule } from './invoicePaymentDiscounts/invoice-payment-discounts.module';
+import { MedicalRecorModule } from './medicalRecord/medical-record.module';
 import { DocumentRequestModule } from './document/request/document.request.module';
 
 @Module({
@@ -75,6 +76,7 @@ import { DocumentRequestModule } from './document/request/document.request.modul
     DiscountsInUseModule,
     PaymentDiscountModule,
     InvoicePaymentDiscountsModule,
+    MedicalRecorModule,
     DocumentRequestModule,
   ],
 })

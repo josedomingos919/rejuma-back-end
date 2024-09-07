@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import { IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class UpdateStudentSupervisorDto {
@@ -24,4 +25,9 @@ export class UpdateStudentSupervisorDto {
   @IsString()
   @IsOptional()
   phone2: string;
+
+  @Transform(({ value }) => Number(value))
+  @IsInt()
+  @IsOptional()
+  statusId: number;
 }
