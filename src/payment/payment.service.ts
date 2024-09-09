@@ -1,5 +1,5 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { getPagination, statusTypes } from '../helpers';
+import { getPagination, statusID, statusTypes } from '../helpers';
 import { PrismaService } from '../prisma/prisma.service';
 import { AddPaymentDto } from './dto/addPaymentDto';
 import { CartDto } from './dto/cartDto';
@@ -69,25 +69,34 @@ export class PaymentService {
     return `${invoiceYear}${zeroNumber}${id}`;
   }
 
-  async addPaymentMethod(invoiceId: number, data: PaymentMethodDto) {
-    let transferData = {};
+  async addPaymentMethod(
+    invoiceId: number,
+    paymentMethods: PaymentMethodDto[],
+  ) {
+    const data = paymentMethods.map((method) => {
+      let transferData = {};
 
-    if (data?.paymentMethodId == PaymentMethodTypes.TRANSFERENCIA_BANCARIA) {
-      transferData = {
-        ibanRemitent: data.ibanRemitent,
-        bankAccountId: data.bankAccountId,
-        transactionNumber: data.transactionNumber,
-        date: new Date(data.date).toISOString(),
-      };
-    }
+      if (
+        method?.paymentMethodId == PaymentMethodTypes.TRANSFERENCIA_BANCARIA
+      ) {
+        transferData = {
+          ibanRemitent: method.ibanRemitent,
+          bankAccountId: method.bankAccountId,
+          transactionNumber: method.transactionNumber,
+          date: new Date(method.date).toISOString(),
+        };
+      }
 
-    await this.prisma.paymentMethods.create({
-      data: {
+      return {
         invoiceId,
-        value: data.value,
-        paymentMethodId: data.paymentMethodId,
+        value: method.value,
+        paymentMethodId: method.paymentMethodId,
         ...transferData,
-      },
+      };
+    });
+
+    await this.prisma.paymentMethods.createMany({
+      data,
     });
   }
 
@@ -167,18 +176,6 @@ export class PaymentService {
   async addPayment(dto: AddPaymentDto) {
     await this.validateAllPaymentMethods(dto.paymentMethod);
 
-    const status = await this.prisma.status.findFirst({
-      where: {
-        code: statusTypes.ACTIVE,
-      },
-    });
-
-    if (!status?.id)
-      throw new ForbiddenException({
-        message: 'Estado não encontrado',
-        error: 'error-status-not-found',
-      });
-
     const invoice = await this.prisma.invoice.create({
       data: {
         number: '',
@@ -188,7 +185,7 @@ export class PaymentService {
         troco: dto.troco,
         valorDado: dto.valorDado,
         registrationId: dto.registrationId,
-        statusId: status.id,
+        statusId: statusID.ACTIVE,
         employeeId: dto.employeeId,
       },
     });
@@ -200,9 +197,7 @@ export class PaymentService {
       });
 
     // save payment method
-    for (const method of dto.paymentMethod) {
-      await this.addPaymentMethod(invoice?.id, method);
-    }
+    await this.addPaymentMethod(invoice?.id, dto?.paymentMethod);
 
     // set invoice number
     await this.prisma.invoice.update({
@@ -218,15 +213,13 @@ export class PaymentService {
     });
 
     // register invoice payment
-    for (const payment of dto.cart) {
-      await this.addInvoicePayment(
-        payment,
-        status.id,
-        invoice.id,
-        dto.employeeId,
-        dto.registrationId,
-      );
-    }
+    await this.addInvoicePayment(
+      dto.cart,
+      statusID.ACTIVE,
+      invoice.id,
+      dto.employeeId,
+      dto.registrationId,
+    );
 
     await this.prisma.student.update({
       where: {
@@ -284,57 +277,59 @@ export class PaymentService {
   }
 
   async addInvoicePayment(
-    payment: CartDto,
+    payments: CartDto[],
     statusId: number,
     invoiceId: number,
     employeeId: number,
     registrationId: number,
   ) {
-    const paymentResponse = await this.prisma.payment.create({
-      data: {
-        statusId,
-        invoiceId,
-        employeeId,
-        registrationId,
-        type: payment.type,
-        value: payment.value,
-        multa: payment.multa,
-        total: payment.total,
-        reference: payment.reference,
-      },
-    });
+    const paymentResponse = await this.prisma.payment.createMany({
+      data: payments.map((payment) => {
+        let item: any = {
+          statusId,
+          invoiceId,
+          employeeId,
+          registrationId,
+          type: payment.type,
+          value: payment.value,
+          multa: payment.multa,
+          total: payment.total,
+          reference: payment.reference,
+        };
 
-    // add extra data
-    if (payment.type == PaymentCodeType.Propina) {
-      await this.prisma.schoolFees.create({
-        data: {
-          monthsId: payment.monthsId,
-          schoolFine: payment.hasMulta,
-          paymentId: paymentResponse.id,
-        },
-      });
-    } else if (payment.type == PaymentCodeType.Recurso) {
-      await this.prisma.schoolResource.create({
-        data: {
-          disciplineId: payment.disciplineId,
-          paymentId: paymentResponse.id,
-        },
-      });
-    } else if (payment.type == PaymentCodeType.ExameEspecial) {
-      await this.prisma.exam.create({
-        data: {
-          disciplineId: payment.disciplineId,
-          paymentId: paymentResponse.id,
-        },
-      });
-    } else if (payment.type == PaymentCodeType.Solicitacoes) {
-      await this.prisma.documentRequestPayments.create({
-        data: {
-          paymentId: paymentResponse.id,
-          documentRequestId: payment?.documentRequestId,
-        },
-      });
-    }
+        // add extra data
+        if (payment?.type == PaymentCodeType.Propina)
+          item.SchoolFees = {
+            create: {
+              monthsId: payment.monthsId,
+              schoolFine: payment.hasMulta,
+            },
+          };
+
+        if (payment?.type == PaymentCodeType.Recurso)
+          item.SchoolResource = {
+            create: {
+              disciplineId: payment.disciplineId,
+            },
+          };
+
+        if (payment?.type == PaymentCodeType.ExameEspecial)
+          item.Exam = {
+            create: {
+              disciplineId: payment.disciplineId,
+            },
+          };
+
+        if (payment.type == PaymentCodeType.Solicitacoes)
+          item.DocumentRequestPayments = {
+            create: {
+              documentRequestId: payment?.documentRequestId,
+            },
+          };
+
+        return item;
+      }),
+    });
 
     return paymentResponse;
   }
