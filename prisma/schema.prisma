@@ -714,7 +714,7 @@ model Setting {
 
   key       String @unique()
   descricao String
-  value     String @db.LongText
+  value     String // @db.LongText is for mysql
 
   @@map("setting")
 }
