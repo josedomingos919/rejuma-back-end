@@ -1,5 +1,5 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { getPagination, statusTypes } from '../helpers';
+import { getPagination, statusID, statusTypes } from '../helpers';
 import { PrismaService } from '../prisma/prisma.service';
 import { AddPaymentDto } from './dto/addPaymentDto';
 import { CartDto } from './dto/cartDto';
@@ -15,7 +15,10 @@ export class PaymentService {
   async searchStudent(search: string) {
     const response = await this.prisma.student.findMany({
       where: {
-        OR: [{ name: { contains: search } }, { bi: { contains: search } }],
+        OR: [
+          { name: { mode: 'insensitive', contains: search } },
+          { bi: { mode: 'insensitive', contains: search } },
+        ],
       },
       include: {
         registration: {
@@ -167,18 +170,6 @@ export class PaymentService {
   async addPayment(dto: AddPaymentDto) {
     await this.validateAllPaymentMethods(dto.paymentMethod);
 
-    const status = await this.prisma.status.findFirst({
-      where: {
-        code: statusTypes.ACTIVE,
-      },
-    });
-
-    if (!status?.id)
-      throw new ForbiddenException({
-        message: 'Estado não encontrado',
-        error: 'error-status-not-found',
-      });
-
     const invoice = await this.prisma.invoice.create({
       data: {
         number: '',
@@ -188,7 +179,7 @@ export class PaymentService {
         troco: dto.troco,
         valorDado: dto.valorDado,
         registrationId: dto.registrationId,
-        statusId: status.id,
+        statusId: statusID.ACTIVE,
         employeeId: dto.employeeId,
       },
     });
@@ -366,19 +357,19 @@ export class PaymentService {
         {
           registration: {
             student: {
-              name: { contains: name },
+              name: { mode: 'insensitive', contains: name },
             },
           },
         },
         {
           registration: {
             student: {
-              bi: { contains: name },
+              bi: { mode: 'insensitive', contains: name },
             },
           },
         },
         {
-          number: { contains: name },
+          number: { mode: 'insensitive', contains: name },
         },
       ];
 

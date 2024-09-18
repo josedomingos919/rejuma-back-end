@@ -56,6 +56,7 @@ export class UserService {
     if (name)
       where['employee'] = {
         name: {
+          mode: 'insensitive',
           contains: name,
         },
       };
@@ -69,6 +70,7 @@ export class UserService {
         where: {
           employee: {
             name: {
+              mode: 'insensitive',
               contains: keword,
             },
           },

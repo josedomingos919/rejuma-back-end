@@ -150,6 +150,7 @@ export class ClassTeamsTeacherService {
         where: {
           employee: {
             name: {
+              mode: 'insensitive',
               contains: keyword,
             },
           },

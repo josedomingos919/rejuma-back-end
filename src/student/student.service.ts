@@ -12,6 +12,7 @@ export class StudentService {
     const response = await this.prisma.student.findMany({
       where: {
         name: {
+          mode: 'insensitive',
           contains: search,
         },
         status: {
@@ -49,6 +50,7 @@ export class StudentService {
     } catch (error) {
       throw new ForbiddenException({
         error,
+        dto,
         status: false,
       });
     }
@@ -59,6 +61,7 @@ export class StudentService {
       const students = await this.prisma.student.findMany({
         where: {
           name: {
+            mode: 'insensitive',
             contains: keword,
           },
         },
@@ -123,7 +126,7 @@ export class StudentService {
 
     const { name, classteamId } = filter;
 
-    if (name) where['name'] = { contains: name };
+    if (name) where['name'] = { mode: 'insensitive', contains: name };
 
     if (classteamId > 0) {
       where['registration'] = {
