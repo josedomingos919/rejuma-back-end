@@ -212,7 +212,7 @@ export class PaymentService {
     for (const payment of dto.cart) {
       await this.addInvoicePayment(
         payment,
-        status.id,
+        statusID.ACTIVE,
         invoice.id,
         dto.employeeId,
         dto.registrationId,
