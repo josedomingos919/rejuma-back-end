@@ -9,3 +9,7 @@ export const statusTypes = {
   PENDING: 'PEND',
   RECEIVED: 'RECE',
 };
+
+export const statusID = {
+  ACTIVE: 1,
+};
