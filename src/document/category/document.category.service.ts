@@ -71,7 +71,7 @@ export class DocumentCategoryService {
     if (name)
       where = {
         AND: {
-          name: { contains: name },
+          name: { mode: 'insensitive', contains: name },
         },
       };
 

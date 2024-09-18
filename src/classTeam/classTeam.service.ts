@@ -100,7 +100,7 @@ export class ClassTeamService {
     if (name)
       where = {
         AND: {
-          name: { contains: name },
+          name: { mode: 'insensitive', contains: name },
         },
       };
 

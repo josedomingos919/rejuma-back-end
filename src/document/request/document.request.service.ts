@@ -101,7 +101,7 @@ export class DocumentRequestService {
     if (name)
       where = {
         student: {
-          name: { contains: name },
+          name: { mode: 'insensitive', contains: name },
         },
       };
 

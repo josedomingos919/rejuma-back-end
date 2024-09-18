@@ -191,6 +191,7 @@ export class MatriculationService {
         {
           student: {
             name: {
+              mode: 'insensitive',
               contains: name,
             },
           },
@@ -198,6 +199,7 @@ export class MatriculationService {
         {
           student: {
             bi: {
+              mode: 'insensitive',
               contains: name,
             },
           },

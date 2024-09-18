@@ -30,9 +30,9 @@ export class EmployeeService {
       const employees = await this.prisma.employee.findMany({
         where: {
           OR: [
-            { name: { contains: keword } },
-            { phone1: { contains: keword } },
-            { phone2: { contains: keword } },
+            { name: { mode: 'insensitive', contains: keword } },
+            { phone1: { mode: 'insensitive', contains: keword } },
+            { phone2: { mode: 'insensitive', contains: keword } },
           ],
         },
       });
@@ -57,7 +57,7 @@ export class EmployeeService {
 
     const { name } = filter;
 
-    if (name) where['name'] = { contains: name };
+    if (name) where['name'] = { mode: 'insensitive', contains: name };
 
     return { where };
   }
@@ -152,6 +152,7 @@ export class EmployeeService {
       const employees = await this.prisma.employee.findMany({
         where: {
           name: {
+            mode: 'insensitive',
             contains: keword,
           },
           officeId: teacherOffice.id,

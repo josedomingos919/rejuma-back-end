@@ -67,7 +67,7 @@ export class StudentSupervisorService {
 
     if (name)
       where = {
-        name: { contains: name },
+        name: { mode: 'insensitive', contains: name },
       };
 
     return { where };

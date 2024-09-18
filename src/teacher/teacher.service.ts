@@ -72,7 +72,8 @@ export class TeacherService {
 
     const { name } = filter;
 
-    if (name) where = { employee: { name: { contains: name } } };
+    if (name)
+      where = { employee: { name: { mode: 'insensitive', contains: name } } };
 
     return { where };
   }

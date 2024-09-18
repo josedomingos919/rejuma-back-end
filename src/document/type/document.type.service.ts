@@ -94,11 +94,12 @@ export class DocumentTypeService {
       where = {
         OR: [
           {
-            name: { contains: name },
+            name: { mode: 'insensitive', contains: name },
           },
           {
             document: {
               name: {
+                mode: 'insensitive',
                 contains: name,
               },
             },
