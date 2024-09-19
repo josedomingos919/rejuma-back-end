@@ -13,21 +13,12 @@ export class PaymentService {
   constructor(private prisma: PrismaService) {}
 
   async searchStudent(search: string) {
-    const OR: any = [
-      { name: { mode: 'insensitive', contains: search } },
-      { bi: { mode: 'insensitive', contains: search } },
-    ];
-
     const response = await this.prisma.student.findMany({
       where: {
-<<<<<<< HEAD
-        OR,
-=======
         OR: [
           { name: { mode: 'insensitive', contains: search } },
           { bi: { mode: 'insensitive', contains: search } },
         ],
->>>>>>> deploy
       },
       include: {
         registration: {

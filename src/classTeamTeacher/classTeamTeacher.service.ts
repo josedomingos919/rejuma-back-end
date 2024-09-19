@@ -142,23 +142,11 @@ export class ClassTeamsTeacherService {
     try {
       if (!keyword) throw new ForbiddenException({ error: 'empty-keyword' });
 
-      const where: any = {
-        employee: {
-          name: {
-            mode: 'insensitive',
-            contains: keyword,
-          },
-        },
-      };
-
       const response = await this.prisma.teacher.findMany({
         select: {
           id: true,
           employee: true,
         },
-<<<<<<< HEAD
-        where,
-=======
         where: {
           employee: {
             name: {
@@ -167,7 +155,6 @@ export class ClassTeamsTeacherService {
             },
           },
         },
->>>>>>> deploy
       });
 
       return response;
