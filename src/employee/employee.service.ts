@@ -27,13 +27,15 @@ export class EmployeeService {
 
   async search(keword: string) {
     try {
+      const OR: any = [
+        { name: { mode: 'insensitive', contains: keword } },
+        { phone1: { mode: 'insensitive', contains: keword } },
+        { phone2: { mode: 'insensitive', contains: keword } },
+      ];
+
       const employees = await this.prisma.employee.findMany({
         where: {
-          OR: [
-            { name: { mode: 'insensitive', contains: keword } },
-            { phone1: { mode: 'insensitive', contains: keword } },
-            { phone2: { mode: 'insensitive', contains: keword } },
-          ],
+          OR,
         },
       });
 
@@ -149,14 +151,16 @@ export class EmployeeService {
         where: { code: officeCode.TEACHER },
       });
 
-      const employees = await this.prisma.employee.findMany({
-        where: {
-          name: {
-            mode: 'insensitive',
-            contains: keword,
-          },
-          officeId: teacherOffice.id,
+      const where = {
+        name: {
+          mode: 'insensitive',
+          contains: keword,
         },
+        officeId: teacherOffice.id,
+      };
+
+      const employees = await this.prisma.employee.findMany({
+        where,
       });
 
       return employees;
