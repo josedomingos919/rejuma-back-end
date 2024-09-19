@@ -156,7 +156,18 @@ export class ClassTeamsTeacherService {
           id: true,
           employee: true,
         },
+<<<<<<< HEAD
         where,
+=======
+        where: {
+          employee: {
+            name: {
+              mode: 'insensitive',
+              contains: keyword,
+            },
+          },
+        },
+>>>>>>> deploy
       });
 
       return response;

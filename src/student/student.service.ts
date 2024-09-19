@@ -9,10 +9,22 @@ export class StudentService {
   constructor(private prisma: PrismaService) {}
 
   async autocomplete(search = '') {
+<<<<<<< HEAD
     const where: any = {
       name: {
         mode: 'insensitive',
         contains: search,
+=======
+    const response = await this.prisma.student.findMany({
+      where: {
+        name: {
+          mode: 'insensitive',
+          contains: search,
+        },
+        status: {
+          code: statusTypes.ACTIVE,
+        },
+>>>>>>> deploy
       },
       status: {
         code: statusTypes.ACTIVE,
@@ -60,10 +72,19 @@ export class StudentService {
 
   async search(keword: string) {
     try {
+<<<<<<< HEAD
       const where = {
         name: {
           mode: 'insensitive',
           contains: keword,
+=======
+      const students = await this.prisma.student.findMany({
+        where: {
+          name: {
+            mode: 'insensitive',
+            contains: keword,
+          },
+>>>>>>> deploy
         },
       };
 

@@ -20,7 +20,14 @@ export class PaymentService {
 
     const response = await this.prisma.student.findMany({
       where: {
+<<<<<<< HEAD
         OR,
+=======
+        OR: [
+          { name: { mode: 'insensitive', contains: search } },
+          { bi: { mode: 'insensitive', contains: search } },
+        ],
+>>>>>>> deploy
       },
       include: {
         registration: {

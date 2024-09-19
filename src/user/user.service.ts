@@ -66,11 +66,21 @@ export class UserService {
 
   async search(keword: string) {
     try {
+<<<<<<< HEAD
       const where: any = {
         employee: {
           name: {
             mode: 'insensitive',
             contains: keword,
+=======
+      const users = await this.prisma.user.findMany({
+        where: {
+          employee: {
+            name: {
+              mode: 'insensitive',
+              contains: keword,
+            },
+>>>>>>> deploy
           },
         },
       };
