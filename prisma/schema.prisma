@@ -714,7 +714,11 @@ model Setting {
 
   key       String @unique()
   descricao String
+  <<<<<<< HEAD
   value     String // @db.LongText is for mysql
+  =======
+  value     String // @db.LongText
+  >>>>>>> deploy-gammadc
 
   @@map("setting")
 }

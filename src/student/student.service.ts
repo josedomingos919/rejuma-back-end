@@ -170,7 +170,7 @@ export class StudentService {
       },
       orderBy: [
         {
-          name: 'asc',
+          id: 'desc',
         },
       ],
     });

@@ -3,4 +3,5 @@ export const PaymentCodeType = {
   Recurso: 'Recurso',
   Solicitacoes: 'Solicitações',
   ExameEspecial: 'Exame Especial',
+  MatriculationRematriculation: 'Matricula/Confirmação',
 };
