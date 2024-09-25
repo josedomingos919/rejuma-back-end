@@ -325,6 +325,8 @@ export class PaymentService {
           documentRequestId: payment?.documentRequestId,
         },
       });
+    } else if (payment.type == PaymentCodeType.MatriculationRematriculation) {
+      //Por enquanto não faz nada
     }
 
     return paymentResponse;

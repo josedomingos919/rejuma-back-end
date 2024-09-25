@@ -5,6 +5,7 @@ import { AddMatriculationDto } from './dto/addMatriculationDto';
 import { UpdateMatriculationDto } from './dto/updateMatriculationDto';
 import { GetAllMatriculationDto } from './dto/getAllMatriculationDto';
 import { getPagination, statusTypes } from '../helpers';
+import { PaymentCodeType } from 'src/helpers/consts/paymentCodeType';
 
 @Injectable()
 export class MatriculationService {
@@ -261,6 +262,11 @@ export class MatriculationService {
           },
         },
         SchoolYear: true,
+        payment: {
+          where: {
+            type: PaymentCodeType?.MatriculationRematriculation,
+          },
+        },
       },
       orderBy: {
         id: 'desc',
