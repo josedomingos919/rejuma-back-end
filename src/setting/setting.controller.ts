@@ -26,4 +26,9 @@ export class SettingController {
   getOne(@Param('key') key: string) {
     return this.settingService.getOne(key);
   }
+
+  @Post('setting-up')
+  settingUp() {
+    return this.settingService.settingUp();
+  }
 }
