@@ -1,0 +1,7 @@
+export enum UserRoleEnum {
+  ADMINISTRADOR_DO_SISTEMA,
+  DIRIGENTE_DO_CLUBE,
+  TREINADOR,
+  ATLETA,
+  VISITANTE,
+}

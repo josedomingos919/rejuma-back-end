@@ -24,10 +24,10 @@ export class AuthService {
       const user = await this.prisma.user.create({
         data: {
           password,
-          phone: dto.phone,
-          access: dto.access,
-          employeeId: dto.employeeId,
-          statusId: dto.statusId,
+          email: 'sss',
+          access: 'ADMINISTRADOR_DO_SISTEMA',
+          //phone: dto.phone,
+          //access: dto.access,
         },
       });
 
@@ -45,11 +45,9 @@ export class AuthService {
   async signin(dto: SigninDto) {
     try {
       const user = await this.prisma.user.findUnique({
-        include: {
-          employee: true,
-        },
         where: {
-          phone: dto.phone,
+          email: 'ss',
+          // phone: dto.phone,
         },
       });
 
@@ -69,14 +67,11 @@ export class AuthService {
 
       delete user.password;
 
-      const permissions = await this.getUserPermissions(user);
-
-      const token = await this.getSignToken(user.id, user.phone);
+      const token = await this.getSignToken(user.id, user.email);
 
       return {
         user,
         token,
-        permissions,
       };
     } catch (error) {
       throw new ForbiddenException({
@@ -97,19 +92,5 @@ export class AuthService {
       expiresIn: '15m',
       secret: this.config.get('JWT_SECRET'),
     });
-  }
-
-  async getUserPermissions(user: User) {
-    const permissions = await this.prisma.permission.findMany({
-      where: {
-        UserGroupPermission: {
-          some: {
-            group: user.access,
-          },
-        },
-      },
-    });
-
-    return permissions;
   }
 }
