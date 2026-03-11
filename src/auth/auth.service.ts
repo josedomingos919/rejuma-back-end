@@ -114,15 +114,15 @@ export class AuthService {
   }
 
   async startup() {
-    let employee: Employee;
-
     try {
       await this.prisma.country.create({
         data: {
+          id: 1,
           code: 'ANG',
           name: 'Angola',
           province: {
             create: {
+              id: 1,
               name: 'Luanda',
             },
           },
@@ -134,44 +134,55 @@ export class AuthService {
       await this.prisma.status.createMany({
         data: [
           {
+            id: 1,
             code: 'ACTI',
             name: 'Activo',
           },
           {
+            id: 2,
             code: 'INACT',
             name: 'Inactivo',
           },
           {
+            id: 3,
             code: 'SUSP',
             name: 'Suspenso',
           },
           {
+            id: 4,
             code: 'ANUL',
             name: 'Anualdo',
           },
           {
+            id: 5,
             code: 'PEND',
             name: 'Pendente',
           },
           {
+            id: 6,
             code: 'RECE',
             name: 'Recebido',
           },
         ],
       });
+    } catch (err) {}
 
+    try {
       await this.prisma.office.createMany({
         data: [
-          { code: 'ADM', name: 'Administrador' },
-          { code: 'DG', name: 'Director Geral' },
-          { code: 'DG', name: 'Pedagógico' },
-          { code: 'PROF', name: 'Professor' },
-          { code: 'FLIMPEZA', name: 'Funcionário Da Limpeza' },
+          { id: 1, code: 'ADM', name: 'Administrador' },
+          { id: 2, code: 'DG', name: 'Director Geral' },
+          { id: 3, code: 'DPG', name: 'Director Pedagógico' },
+          { id: 4, code: 'PROF', name: 'Professor' },
+          { id: 5, code: 'FLIMPEZA', name: 'Funcionário Da Limpeza' },
         ],
       });
+    } catch (err) {}
 
-      employee = await this.prisma.employee.create({
+    try {
+      await this.prisma.employee.create({
         data: {
+          id: 1,
           name: 'José Ndonge',
           bi: '007234682LA040',
           birthDay: '2001-01-19T16:32:19.801Z',
@@ -189,7 +200,9 @@ export class AuthService {
           provinceId: 1,
         },
       });
-    } catch (err) {}
+    } catch (err) {
+      console.log('ERRO:[employee]: ', err);
+    }
 
     try {
       const password = await argon.hash('Domingos.1');
@@ -199,7 +212,7 @@ export class AuthService {
           phone: '944666640',
           access: 'Admin',
           password: password,
-          employeeId: employee.id,
+          employeeId: 1,
           statusId: 1,
         },
       });
@@ -233,19 +246,50 @@ export class AuthService {
         data: [
           {
             permissionId: 1,
-            group: 'admin',
+            group: 'Admin',
           },
           {
             permissionId: 2,
-            group: 'admin',
+            group: 'Admin',
           },
           {
             permissionId: 3,
-            group: 'admin',
+            group: 'Admin',
           },
           {
             permissionId: 4,
-            group: 'admin',
+            group: 'Admin',
+          },
+        ],
+      });
+    } catch (err) {}
+
+    try {
+      await this.prisma.paymentMethod.createMany({
+        data: [
+          {
+            id: 1,
+            name: 'DINHEIRO',
+            repeat: 0,
+            show: 1,
+          },
+          {
+            id: 2,
+            name: 'TPA',
+            repeat: 0,
+            show: 1,
+          },
+          {
+            id: 3,
+            name: 'TRANSFERÊNCIA BANCÁRIA',
+            repeat: 1,
+            show: 1,
+          },
+          {
+            id: 4,
+            name: 'SALDO DA CONTA',
+            repeat: 0,
+            show: 1,
           },
         ],
       });
