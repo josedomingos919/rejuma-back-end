@@ -1,3 +1,3 @@
 export const officeCode = {
-  TEACHER: 'PF',
+  TEACHER: 'PROF',
 };
